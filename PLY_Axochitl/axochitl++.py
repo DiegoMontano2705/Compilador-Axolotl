@@ -18,7 +18,7 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
 t_DIVIDE = r'/'
-t_EQUAL = r'\='
+t_EQUAL = r'='
 t_DIFFERENT = r'!='
 t_GREATER_THAN = r'>'
 t_SMALLER_THAN = r'<'
@@ -98,20 +98,20 @@ def p_programa(p):
                 | comentario STARTPROGRAMA ID SEMICOLON PRINCIPAL LP RP LCB estatutos RCB
     '''
 def p_comentario(p):
-    ''' comentario : COMMENT comentarioPalabras COMMENT
+    ''' comentario : COMMENT comentarioPalabras COMMENT comentario
+                    | COMMENT comentarioPalabras COMMENT 
     '''
 def p_comentarioPalabras(p):
     ''' comentarioPalabras : CTEC
                             | CTEC comentarioPalabras
     '''
 def p_programaAux(p):
-    ''' programaAux : clases dec_vars funciones
-                    | clases funciones
-                    | clases dec_vars
-                    | dec_vars funciones
-                    | clases
-                    | dec_vars
-                    | funciones
+    ''' programaAux : clases programaAux
+                        | dec_vars programaAux
+                        | funciones programaAux
+                        | clases
+                        | dec_vars
+                        | funciones
     '''
 
 def p_dec_vars(p):
@@ -123,10 +123,14 @@ def p_form_vars(p):
     ''' form_vars : ID COLON tipo SEMICOLON
                     | ID form_vars_aux COLON tipo SEMICOLON
                     | ID form_vars_aux COLON tipo SEMICOLON comentario
+                    | ID COLON tipo SEMICOLON form_vars
+                    | ID form_vars_aux COLON tipo SEMICOLON form_vars
+                    | ID form_vars_aux COLON tipo SEMICOLON comentario form_vars
+                    
     '''
 
 def p_form_vars_aux(p):
-    ''' form_vars_aux : COMMA dec_vars
+    ''' form_vars_aux : COMMA form_vars
                         | LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
     '''
@@ -134,31 +138,37 @@ def p_form_vars_aux(p):
 def p_clases(p):
     ''' clases : CLASE ID LCB RCB SEMICOLON
                 | CLASE ID LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE ID LCB METODOS funciones RCB SEMICOLON
-                | CLASE ID LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | CLASE ID LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE ID LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
                 | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
                 | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funciones RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
                 | comentario CLASE ID LCB RCB SEMICOLON
                 | comentario CLASE ID LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | comentario CLASE ID LCB METODOS funciones RCB SEMICOLON
-                | comentario CLASE ID LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | comentario CLASE ID LCB METODOS funcionesAux RCB SEMICOLON
+                | comentario CLASE ID LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
                 | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
                 | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funciones RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
+                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
+    '''
+def p_funcionesAux(p):
+    ''' funcionesAux : funciones
+                        | funciones funcionesAux
     '''
 
+## Checa esta padre, esta diferente a los diagramas sobre todo la parte de los semicolons
+## SOLUCIONADO
 def p_funciones(p):
-    ''' funciones : tipo_retorno FUNCION ID LP RP SEMICOLON LCB RCB SEMICOLON LCB estatutos RCB
-            | tipo_retorno FUNCION ID LP parametros RP SEMICOLON LCB RCB SEMICOLON dec_vars LCB estatutos RCB
-            | tipo_retorno FUNCION ID LP parametros RP SEMICOLON LCB RCB SEMICOLON LCB estatutos RCB
-            | tipo_retorno FUNCION ID LP RP SEMICOLON LCB RCB SEMICOLON dec_vars LCB estatutos RCB
-            | comentario tipo_retorno FUNCION ID LP RP SEMICOLON LCB RCB SEMICOLON LCB estatutos RCB
-            | comentario tipo_retorno FUNCION ID LP parametros RP SEMICOLON LCB RCB SEMICOLON dec_vars LCB estatutos RCB
-            | comentario tipo_retorno FUNCION ID LP parametros RP SEMICOLON LCB RCB SEMICOLON LCB estatutos RCB
-            | comentario tipo_retorno FUNCION ID LP RP SEMICOLON LCB RCB SEMICOLON dec_vars LCB estatutos RCB
+    ''' funciones : tipo_retorno FUNCION ID LP RP dec_vars LCB estatutosAux RCB
+                    | tipo_retorno FUNCION ID LP parametros RP dec_vars LCB estatutosAux RCB
+                    | tipo_retorno FUNCION ID LP RP LCB estatutosAux RCB
+                    | tipo_retorno FUNCION ID LP parametros RP LCB estatutosAux RCB
+                    | comentario tipo_retorno FUNCION ID LP RP dec_vars LCB estatutosAux RCB
+                    | comentario tipo_retorno FUNCION ID LP parametros RP dec_vars LCB estatutosAux RCB
+                    | comentario tipo_retorno FUNCION ID LP RP LCB estatutosAux RCB
+                    | comentario tipo_retorno FUNCION ID LP parametros RP LCB estatutosAux RCB
     '''
 
 def p_tipo(p):
@@ -235,17 +245,17 @@ def p_decision(p):
                 | IF LP exp RP THEN LCB estatutosAux RCB ELSE LCB estatutosAux RCB
     '''
 
-def p_estatutosAux(p):
-    ''' estatutosAux : estatutos
-                        | estatutos estatutosAux
-    '''
-
 def p_rep_condicional(p):
     ''' rep_condicional : MIENTRAS LP exp RP HACER LCB estatutosAux RCB
     '''
 
 def p_rep_no_condicional(p):
     ''' rep_no_condicional : DESDE ID EQUAL exp HASTA exp HACER LCB estatutosAux RCB
+    '''
+
+def p_estatutosAux(p):
+    ''' estatutosAux : estatutos
+                        | estatutos estatutosAux
     '''
 
 def p_estatutos(p):
@@ -257,6 +267,7 @@ def p_estatutos(p):
                     | rep_condicional
                     | retorno_fun
                     | rep_no_condicional
+                    | dec_vars
                     | comentario
     '''
 
@@ -312,7 +323,7 @@ yacc.yacc()
 
 #to check if file exists
 try:
-    namef = "PLY_Axochitl/fail.txt" 
+    namef = "PLY_Axochitl/test.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()
