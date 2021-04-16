@@ -9,23 +9,44 @@ from Tabla import Tabla
 
 class TablaManager:
 
-    def __init__(self):
+    def __init__(self, nameProgram):
+        self.nameProgram = nameProgram
         self.dirFun = Tabla("dirFun") #Tabla encargada de administar demas tablas.
+        self.currentTablaId = "void" #Tabla en la que se encuentra.
+        self.wN = 0 #contador de whiles
+        self.fN = 0 #contador de for's
 
-    def printDirFun(self):
-        self.dirFun.printDic()
-    
+    #sets and gets
+    def get_currentTablaId(self):
+        return self.currentTablaId
+
+    def set_currentTablaId(self, id):
+        self.currentTablaId = id
+
+    def get_wN(self):
+        self.wN=self.wN+1
+        return self.wN
+
+    def get_fN(self):
+        self.fN=self.fN+1
+        return self.fN
+
     #Crea una row en Tabla dir fun.
     def crearTabla(self, id, **kwargs):
         if(not self.dirFun.existRow(id)): #Si no existe se crea la tabla
             tablaAux = Tabla(id)
             self.dirFun.insertRow(id, **kwargs, pointer=tablaAux) #Siempre se va a generar el pointer
 
+    #Al terminar, se elimina dirFun.
+    def eraseDirFun(self):
+        self.dirFun = Tabla("dirFun")
+
     #Crea una row en Tabla existente y almacena en tabla interna.
     def insertRowToTabla(self, idTabla, idRow, **kwargs):
         if(not self.getTabla(idTabla).existRow(idRow)):
             self.getTabla(idTabla).insertRow(idRow, **kwargs)
             return True
+        print(idRow, " anteriormente declarada en la tabla ", idTabla)
         return False
     
     #Borrar una row en Tabla existente y actualiza en tabla interna.
@@ -33,6 +54,7 @@ class TablaManager:
         if(self.getTabla(idTabla).existRow(idRow)):
             self.getTabla(idTabla).deleteRow(idRow)
             return True
+        print(idRow, " no existe en la tabla ", idTabla)
         return False
 
     #Buscar en que tabla existe la variable.
@@ -43,23 +65,19 @@ class TablaManager:
                 keys.append(key)
         return keys
 
-    def printTabla(self, idTabla):
-        self.getTabla(idTabla).printDic()
-
     #Regresa una tabla en especifico
     def getTabla(self, idTabla):
         return self.dirFun.findRow(idTabla)["pointer"]
 
-    #TODO: 
-    #son del mismo tipo?
-    # def sameType(self, idTabla, *args):
-    # types = []
-    #     for idVar in args:
-    #         self.getTabla(idTabla).
-    # result = all(element == List[0] for element in List)
+    #Testing
+    def printDirFun(self):
+        self.dirFun.printDic()
+
+    def printTabla(self, idTabla):
+        self.getTabla(idTabla).printDic()
 
 def main():
-    dirFun = TablaManager()
+    dirFun = TablaManager("myProgram")
     dirFun.crearTabla("Global", tipo_retorno="void") #Crea una row en tabla dir fun.
     dirFun.crearTabla("Fun1", tipo_retorno="entero")
     print("---dir Fun---")
@@ -68,10 +86,14 @@ def main():
     dirFun.insertRowToTabla("Global", "k", tipo="entero")
     dirFun.insertRowToTabla("Global", "x", tipo="float")
     dirFun.insertRowToTabla("Fun1", "k", tipo="float")
+    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
+    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
     dirFun.eraseRowToTabla("Global", "x")
     dirFun.printTabla("Global")
+    dirFun.printTabla("Fun1")
     print(dirFun.whereExist("k"))
+    dirFun.eraseDirFun()
+    dirFun.printDirFun()
 
-    
 main()
 
