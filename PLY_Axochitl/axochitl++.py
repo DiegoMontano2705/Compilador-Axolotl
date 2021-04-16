@@ -91,12 +91,16 @@ lex.lex()
 
 #Grammatic rules
 def p_programa(p):
-    ''' programa : STARTPROGRAMA ID SEMICOLON programaAux PRINCIPAL LP RP LCB estatutos RCB
-                | comentario STARTPROGRAMA ID SEMICOLON programaAux comentario PRINCIPAL LP RP LCB estatutos RCB
-                | comentario STARTPROGRAMA ID SEMICOLON programaAux PRINCIPAL LP RP LCB estatutos RCB
-                | STARTPROGRAMA ID SEMICOLON programaAux comentario PRINCIPAL LP RP LCB estatutos RCB
-                | STARTPROGRAMA ID SEMICOLON comentario PRINCIPAL LP RP LCB estatutos RCB
-                | comentario STARTPROGRAMA ID SEMICOLON PRINCIPAL LP RP LCB estatutos RCB
+    ''' programa : STARTPROGRAMA ID SEMICOLON main
+                | STARTPROGRAMA ID SEMICOLON programaAux main
+                | comentario STARTPROGRAMA ID SEMICOLON programaAux comentario main
+                | comentario STARTPROGRAMA ID SEMICOLON programaAux main
+                | STARTPROGRAMA ID SEMICOLON programaAux comentario main
+                | STARTPROGRAMA ID SEMICOLON comentario main
+                | comentario STARTPROGRAMA ID SEMICOLON main
+    '''
+def p_main(p):
+    ''' main : PRINCIPAL LP RP LCB estatutosAux RCB
     '''
 def p_comentario(p):
     ''' comentario : COMMENT comentarioPalabras COMMENT comentario
@@ -121,19 +125,24 @@ def p_dec_vars(p):
     '''
 
 def p_form_vars(p):
-    ''' form_vars : ID COLON tipo SEMICOLON
-                    | ID form_vars_aux COLON tipo SEMICOLON
-                    | ID form_vars_aux COLON tipo SEMICOLON comentario
-                    | ID COLON tipo SEMICOLON form_vars
-                    | ID form_vars_aux COLON tipo SEMICOLON form_vars
-                    | ID form_vars_aux COLON tipo SEMICOLON comentario form_vars
-                    
+    ''' form_vars : tipo COLON form_vars_aux
     '''
 
 def p_form_vars_aux(p):
-    ''' form_vars_aux : COMMA form_vars
+    ''' form_vars_aux : ID SEMICOLON
+                        | ID form_vars_aux2 SEMICOLON
+                        | ID form_vars_aux2 SEMICOLON comentario
+                        | ID SEMICOLON form_vars 
+                        | ID form_vars_aux2 SEMICOLON form_vars 
+                        | ID form_vars_aux2 SEMICOLON comentario form_vars
+    '''
+
+def p_form_vars_aux2(p):
+    ''' form_vars_aux2 : COMMA form_vars_aux
                         | LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
+                        | LSB CTEI RSB COMMA form_vars_aux
+                        | LSB CTEI COMMA CTEI RSB COMMA form_vars_aux
     '''
 
 def p_clases(p):
@@ -214,6 +223,12 @@ def p_llamada_fun(p):
                     | ID LP exp RP SEMICOLON
     '''
 
+# Para uso en operaciones
+def p_llamada_fun_exp(p):
+    ''' llamada_fun_exp : ID LP RP 
+                    | ID LP exp RP 
+    '''
+
 def p_retorno_fun(p):
     ''' retorno_fun :  RETURN LP exp RP SEMICOLON
     '''
@@ -228,10 +243,7 @@ def p_lecturaaux(p):
                     | var COMMA lecturaaux
     '''
 def p_escritura(p):
-    ''' escritura : PRINT LP exp RP SEMICOLON
-                    | PRINT LP STRING RP SEMICOLON
-                    | PRINT LP exp COMMA escrituraAux RP SEMICOLON
-                    | PRINT LP STRING COMMA escrituraAux RP SEMICOLON
+    ''' escritura : PRINT LP escrituraAux RP SEMICOLON
     '''
 
 def p_escrituraAux(p):
@@ -291,24 +303,40 @@ def p_g_exp(p):
     '''
 
 def p_m_exp(p):
-    ''' m_exp : PLUS
-                | MINUS
-                | t
+    ''' m_exp : t
+                | t m_exp2 
+    '''
+
+def p_m_exp2(p):
+    ''' m_exp2 : PLUS m_exp
+                | MINUS m_exp
     '''
 
 def p_t(p):
-    ''' t : TIMES
-            | DIVIDE
-            | f
+    ''' t : f 
+          | f t2
+    '''
+
+def p_t2(p):
+    ''' t2 : TIMES t
+            | DIVIDE t
     '''
 
 def p_f(p):
-    ''' f : LP exp RP
+    ''' f : f2
+            | PLUS f2
+            | MINUS f2
+            | TIMES f2
+            | DIVIDE f2 
+    '''
+
+def p_f2(p):
+    ''' f2 : LP exp RP
             | CTEI
             | CTEF
             | CTEC
             | var
-            | llamada_fun
+            | llamada_fun_exp
     '''
 
 
