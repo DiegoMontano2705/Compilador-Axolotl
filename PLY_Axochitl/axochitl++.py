@@ -2,6 +2,7 @@
 # Axochitlt++ Praser
 #---
 import sys
+import os
 import ply.lex as lex 
 import ply.yacc as yacc
 
@@ -323,7 +324,8 @@ yacc.yacc()
 
 #to check if file exists
 try:
-    namef = "PLY_Axochitl/test.txt" 
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    namef = ROOT_DIR+"/test.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()
