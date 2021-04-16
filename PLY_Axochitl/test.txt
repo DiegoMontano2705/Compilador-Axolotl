@@ -1,18 +1,18 @@
 programa test;
 clase creando {
     atributos
-        a : entero;
-        b : flotante;
+        entero : a;
+        flotante : b;
     metodos
         entero funcion regresaValores(entero k, flotante h){
-            a = 8;
+            a = 8 * 2 + 2;
             b = 10.5;
         } 
     
 };
 
 entero funcion pruebaUno(){
-    variables hola : char;
+    variables char : hola;
 
     regresa(hola);
 }
@@ -23,7 +23,7 @@ flotante funcion pruebaDos(char i){
     escribe("probando codigo", 1+2);
 }
 
-variables j,y : entero;
+variables entero : j;
 
 principal() {
     j = 4;
