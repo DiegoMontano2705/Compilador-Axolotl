@@ -1,5 +1,5 @@
 #---
-# Axochitlt++ Praser
+# Axolotl++ Praser
 #---
 import sys
 import os
@@ -52,6 +52,7 @@ reserved = {
     'entero' : 'INT',
     'flotante':'FLOAT',
     'char' : 'CHAR',
+    'bool' : 'BOOL',
     'principal' : 'PRINCIPAL',
     '%%' : 'COMMENT',
     'void' : 'VOID',
@@ -190,6 +191,7 @@ def p_tipo_simple(p):
     ''' tipo_simple : INT
                     | FLOAT
                     | CHAR
+                    | BOOL
     '''
 
 def p_tipo_retorno(p):
