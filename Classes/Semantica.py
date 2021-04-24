@@ -8,37 +8,38 @@
 class Semantica:
 
     #Entero,+,-: 0
-    # Float,*,/: 1
+    # Float, /: 1
     # Char,>,<,<=,>=: 2
     # Bool, =: 3
     # &, | : 4
+    # * : 5
     # Err = -1
     #[leftOperando][righOperando][operador]
     def __init__(self):       
         self.cuboSemantico = (
-                                (   #+ * > = &
-                                    (0,1,3,0, -1), #entero entero
-                                    (-1,-1,-1,-1,-1), #entero float
-                                    (-1,-1,-1,-1,-1), #entero char
-                                    (-1,-1,-1,-1,-1), #entero bool
+                                (   #+ / > = & *
+                                    (0,1,3,0, -1, 0), #entero entero
+                                    (-1,-1,-1,-1,-1,-1), #entero float
+                                    (-1,-1,-1,-1,-1,-1), #entero char
+                                    (-1,-1,-1,-1,-1,-1), #entero bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1), #float entero
-                                    (1,1,3,1,-1), #float float
-                                    (-1,-1,-1,-1,-1), #float char
-                                    (-1,-1,-1,-1,-1), #float bool
+                                    (-1,-1,-1,-1,-1,-1), #float entero
+                                    (1,1,3,1,-1,1), #float float
+                                    (-1,-1,-1,-1,-1,-1), #float char
+                                    (-1,-1,-1,-1,-1,-1), #float bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1), #char entero
-                                    (-1,-1,-1,-1,-1), #char float
-                                    (-1,-1,-1,2,-1), #char char
-                                    (-1,-1,-1,-1,-1), #char bool
+                                    (-1,-1,-1,-1,-1,-1), #char entero
+                                    (-1,-1,-1,-1,-1,-1), #char float
+                                    (-1,-1,-1,2,-1,-1), #char char
+                                    (-1,-1,-1,-1,-1,-1), #char bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1), #Bool entero
-                                    (-1,-1,-1,-1,-1), #Bool float
-                                    (-1,-1,-1,-1,-1), #Bool char
-                                    (-1,-1,3,3,3), #Bool bool
+                                    (-1,-1,-1,-1,-1,-1), #Bool entero
+                                    (-1,-1,-1,-1,-1,-1), #Bool float
+                                    (-1,-1,-1,-1,-1,-1), #Bool char
+                                    (-1,-1,3,3,3,-1), #Bool bool
                                 ),
                              )
     
@@ -59,33 +60,35 @@ class Semantica:
     def equivalent(self, stm):
         if(stm=="entero" or stm=="+" or stm=="-"): #Entero,+,-: 0
             return 0
-        elif(stm=="float" or stm=="*" or stm=="/"): # Float,*,/: 1
+        elif(stm=="*"): # * : 5
+            return 5  
+        elif(stm=="float" or stm=="/"): # Float,*,/: 1
             return 1
         elif(stm=="bool" or stm=="="): # Bool, =: 3
             return 3
         elif(stm=="char" or stm==">" or stm=="<", stm=="<=" or stm==">=" or stm=="&" or stm=="|"): # Char,>,<,<=,>=, &, |: 2
             return 2
         elif(stm=="&" or stm=="|"): # &, |: 4
-            return 4        
+            return 4      
         else:
             print("Error: Atributos no disponibles en cubo semantico.")        
 
     #Regresa el tipo del resultado entre leftOp op rightOp
-    def resTipo(self,leftOp, rightOp, op):
+    def resTipo(self,op, leftOp, rightOp):
         leftOp = self.equivalent(leftOp)
         rightOp = self.equivalent(rightOp)
         op = self.equivalent(op)
         return self.equivalentReturn(self.cuboSemantico[leftOp][rightOp][op])
 
-def main():
-    sem = Semantica()
-    print(sem.resTipo("entero","entero","="))
-    print(sem.resTipo("float","float","="))
-    print(sem.resTipo("float","float","+"))
-    print(sem.resTipo("bool","bool","&"))
-    print(sem.resTipo("entero","float","="))
+# def main():
+#     sem = Semantica()
+#     print(sem.resTipo("*", "entero","entero"))
+#     # print(sem.resTipo("=","float","float"))
+#     # print(sem.resTipo("+","float","float"))
+#     # print(sem.resTipo("&","bool","bool"))
+#     # print(sem.resTipo("=","entero","float"))
 
 
-main()
+# main()
 
     

@@ -1,5 +1,5 @@
 # 
-#     Clase Temporal: estructura de datos .
+#     Clase Temporal: estructura de datos para la administracion de espacios en memoria para los temporales.
 #     Compiladores
 #     Diego Fernando Montaño Pérez
 #     Jose Alberto Gonzalez 
@@ -35,15 +35,15 @@ class Temporal:
     def printTmp(self):
         print(self.tmp)
 
-def main():
-    t = Temporal()
-    t.next()
-    idx = t.next()
-    t.clearTmp(idx)
-    t.next()
-    t.next()
-    t.printTmp()
+# def main():
+#     t = Temporal()
+#     t.next()
+#     idx = t.next()
+#     t.clearTmp(idx)
+#     t.next()
+#     t.next()
+#     t.printTmp()
 
-main()
+# main()
 
 

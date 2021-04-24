@@ -5,7 +5,7 @@
 #     Jose Alberto Gonzalez 
 # 
 
-from Tabla import Tabla
+from Tabla import *
 
 class TablaManager:
 
