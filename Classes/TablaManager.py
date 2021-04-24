@@ -76,24 +76,24 @@ class TablaManager:
     def printTabla(self, idTabla):
         self.getTabla(idTabla).printDic()
 
-def main():
-    dirFun = TablaManager("myProgram")
-    dirFun.crearTabla("Global", tipo_retorno="void") #Crea una row en tabla dir fun.
-    dirFun.crearTabla("Fun1", tipo_retorno="entero")
-    print("---dir Fun---")
-    dirFun.printDirFun()
-    print("---specific tabla---")
-    dirFun.insertRowToTabla("Global", "k", tipo="entero")
-    dirFun.insertRowToTabla("Global", "x", tipo="float")
-    dirFun.insertRowToTabla("Fun1", "k", tipo="float")
-    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
-    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
-    dirFun.eraseRowToTabla("Global", "x")
-    dirFun.printTabla("Global")
-    dirFun.printTabla("Fun1")
-    print(dirFun.whereExist("k"))
-    dirFun.eraseDirFun()
-    dirFun.printDirFun()
+# def main():
+#     dirFun = TablaManager("myProgram")
+#     dirFun.crearTabla("Global", tipo_retorno="void") #Crea una row en tabla dir fun.
+#     dirFun.crearTabla("Fun1", tipo_retorno="entero")
+#     print("---dir Fun---")
+#     dirFun.printDirFun()
+#     print("---specific tabla---")
+#     dirFun.insertRowToTabla("Global", "k", tipo="entero")
+#     dirFun.insertRowToTabla("Global", "x", tipo="float")
+#     dirFun.insertRowToTabla("Fun1", "k", tipo="float")
+#     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
+#     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
+#     dirFun.eraseRowToTabla("Global", "x")
+#     dirFun.printTabla("Global")
+#     dirFun.printTabla("Fun1")
+#     print(dirFun.whereExist("k"))
+#     dirFun.eraseDirFun()
+#     dirFun.printDirFun()
 
-main()
+# main()
 

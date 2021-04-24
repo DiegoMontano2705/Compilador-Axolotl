@@ -56,7 +56,6 @@ class QuadruplesManager:
     
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
     def fillQuadruples(self):
-        icount = 0
         while(not (self.pilaOperands.empty() or self.pilaOperators.empty())):
             right_op = self.pilaOperands.get_nowait()
             right_type = self.pilaTypes.get_nowait()
