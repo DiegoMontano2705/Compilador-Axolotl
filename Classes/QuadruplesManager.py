@@ -22,7 +22,17 @@ class QuadruplesManager:
     
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self, op):
-        self.pilaOperators.put(op)
+        #Caso de encontrarse + o - ya habiendo un + o - en la pila.
+        # if(self.pilaOperators.qsize()>0):
+        #     pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
+        #     self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
+        #     if((op == "+" or op == "-") and (pilaOperatorsTop== "+" or pilaOperatorsTop == "-")):
+        #         self.generateQuadruple()
+        #         self.pilaOperators.put(op)
+        if(op == ")"):
+            self.solveQuadruplesUntil(op)
+        else:
+            self.pilaOperators.put(op)
 
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
     def id_push(self, idName, idType):
@@ -41,17 +51,25 @@ class QuadruplesManager:
                 elif(self.pilaOperators.qsize()>1):
                     pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
                     pilaOperators2 = self.pilaOperators.get_nowait() #Que operador esta 2do top stack.
-                    self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
                     self.pilaOperators.put(pilaOperators2) #agregar de nuevo el operador a la stack
+                    self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
                     if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (pilaOperators2 == "+" or pilaOperators2 == "-")):
                         self.pilaOperands.get_nowait()     
-                        self.pilaTypes.get_nowait()        
+                        self.pilaTypes.get_nowait() 
+                        self.pilaOperators.get_nowait()
+
                         self.generateQuadruple()
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
+                        self.pilaOperators.put(pilaOperatorsTop)
 
 
-    
+    #Genera cuadruplos cuando se encuentra ), hasta volver a encontra (.
+    def solveQuadruplesUntil(self, op):
+        while(not op == "("):
+            self.generateQuadruple()
+            op = self.pilaOperators.get_nowait()
+
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
     def fillQuadruples(self):
         while(not self.pilaOperators.empty()):
@@ -90,7 +108,7 @@ class QuadruplesManager:
 
 def main():
     qm = QuadruplesManager()
-    #A - (B + C) * D * E ->
+    #A - ( B + C) * D * E ->
     #+ B C t0
     #* t0 D t1
     #* t1 E t2
@@ -107,11 +125,8 @@ def main():
     qm.id_push("D", "float")
     qm.operator_push("*")
     qm.id_push("E", "float")
-
-    # qm.print_stacks()
     qm.fillQuadruples()
     qm.print_quadruples()
-
 main()
 
 
