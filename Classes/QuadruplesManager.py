@@ -22,42 +22,43 @@ class QuadruplesManager:
     
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self, op):
-        if(not self.pilaOperators.empty()): 
-            pilaOperatorsTop = self.pilaOperators.get_nowait() #En caso de no estar vacio, que operador esta pila.
-            self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la pila
-
-            if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (op == "*" or op == "/")):
-                print("arreglar match en:", op)
-                self.generateQuadruple(op)
-                
-            elif(op == "*" or op == "/"):
-                print("arreglar match en:", pilaOperatorsTop)
-                # self.generateQuadruple(op)
-                self.operator_push(op)
-            else:
-                # print("agregar: ", op)
-                self.pilaOperators.put(op)
-        else:
-            # print("agregar: ", op)
-            self.pilaOperators.put(op)
+        self.pilaOperators.put(op)
 
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
     def id_push(self, idName, idType):
+        #push id & type
         self.pilaOperands.put(idName)
         self.pilaTypes.put(idType)
+        
+        if(not self.pilaOperators.empty()): 
+            #check pasados operators
+            pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
+            self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
+
+            if(pilaOperatorsTop == "*" or pilaOperatorsTop == "/"):
+                self.generateQuadruple()
+            elif(self.pilaOperators.qsize()>1):
+                pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
+                pilaOperators2 = self.pilaOperators.get_nowait() #Que operador esta 2do top stack.
+                self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
+                self.pilaOperators.put(pilaOperators2) #agregar de nuevo el operador a la stack
+                
+                if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (pilaOperators2 == "+" or pilaOperators2 == "-")):
+                    self.generateQuadruple()
+        
     
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
     def fillQuadruples(self):
-        while(not (self.pilaOperands.empty() or self.pilaOperators.empty())):
-            self.generateQuadruple(self.pilaOperators.get_nowait())
+        while(not self.pilaOperators.empty()):
+            self.generateQuadruple()
 
     # genera el cuadruplo y lo guarda en la pila de quadruplos.
-    def generateQuadruple(self, op):
+    def generateQuadruple(self):
         right_op = self.pilaOperands.get_nowait()
         right_type = self.pilaTypes.get_nowait()
         left_op = self.pilaOperands.get_nowait()
         left_type = self.pilaTypes.get_nowait()
-        operator = op
+        operator = self.pilaOperators.get_nowait()
         result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
         if(result_type != None):    
             result = self.tmp.next() #preparar temporal
@@ -65,7 +66,6 @@ class QuadruplesManager:
             self.quadruples.put(q)
             self.pilaOperands.put(result)
             self.pilaTypes.put(result_type)
-
 
     
     def print_stacks(self):
@@ -95,13 +95,12 @@ def main():
     qm.operator_push("*")
     qm.id_push("C", "entero")
 
+    qm.operator_push("-")
+    qm.id_push("D", "entero")
     # qm.operator_push("+")
-    # qm.id_push("D", "entero")
-    # qm.operator_push("*")
     # qm.id_push("E", "entero")
     # qm.operator_push("*")
     # qm.id_push("F", "entero")
-
 
     qm.fillQuadruples()
     qm.print_stacks()
