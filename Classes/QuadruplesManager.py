@@ -24,25 +24,17 @@ class QuadruplesManager:
     def operator_push(self, op):
         if(not self.pilaOperators.empty()): 
             pilaOperatorsTop = self.pilaOperators.get_nowait() #En caso de no estar vacio, que operador esta pila.
-            if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (op == "+" or op == "-")):
-                # print("arreglar match en:", op)
-                right_op = self.pilaOperands.get_nowait()
-                right_type = self.pilaTypes.get_nowait()
-                left_op = self.pilaOperands.get_nowait()
-                left_type = self.pilaTypes.get_nowait()
-                operator = pilaOperatorsTop
-                result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
-                if(not result_type == None):
-                    result = self.tmp.next() #preparar temporal
-                    self.generateQuadruple(operator, left_op, right_op, result) #Generar quadruplo y almacenarlo
-                    self.pilaOperands.put(result)
-                    self.pilaTypes.put(result_type)
+            self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la pila
 
-            elif((pilaOperatorsTop == "*" or pilaOperatorsTop == "/") and (op == "*" or op == "/")):
-                # print("arreglar match en:", op)
-                pass
+            if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (op == "*" or op == "/")):
+                print("arreglar match en:", op)
+                self.generateQuadruple(op)
+                
+            elif(op == "*" or op == "/"):
+                print("arreglar match en:", pilaOperatorsTop)
+                # self.generateQuadruple(op)
+                self.operator_push(op)
             else:
-                self.pilaOperators.put(pilaOperatorsTop)
                 # print("agregar: ", op)
                 self.pilaOperators.put(op)
         else:
@@ -57,22 +49,23 @@ class QuadruplesManager:
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
     def fillQuadruples(self):
         while(not (self.pilaOperands.empty() or self.pilaOperators.empty())):
-            right_op = self.pilaOperands.get_nowait()
-            right_type = self.pilaTypes.get_nowait()
-            left_op = self.pilaOperands.get_nowait()
-            left_type = self.pilaTypes.get_nowait()
-            operator = self.pilaOperators.get_nowait()
-            result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
-            if(result_type != None):
-                result = self.tmp.next() #preparar temporal
-                self.generateQuadruple(operator, left_op, right_op, result) #Generar quadruplo y almacenarlo
-                self.pilaOperands.put(result)
-                self.pilaTypes.put(result_type)
+            self.generateQuadruple(self.pilaOperators.get_nowait())
 
     # genera el cuadruplo y lo guarda en la pila de quadruplos.
-    def generateQuadruple(self, operator, leftOp, rightOp, result):
-        q = Quadruples(operator, leftOp, rightOp, result)
-        self.quadruples.put(q)
+    def generateQuadruple(self, op):
+        right_op = self.pilaOperands.get_nowait()
+        right_type = self.pilaTypes.get_nowait()
+        left_op = self.pilaOperands.get_nowait()
+        left_type = self.pilaTypes.get_nowait()
+        operator = op
+        result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
+        if(result_type != None):    
+            result = self.tmp.next() #preparar temporal
+            q = Quadruples(operator, left_op, right_op, result)
+            self.quadruples.put(q)
+            self.pilaOperands.put(result)
+            self.pilaTypes.put(result_type)
+
 
     
     def print_stacks(self):
@@ -91,17 +84,28 @@ class QuadruplesManager:
 
 def main():
     qm = QuadruplesManager()
-    #A + B * C ->
-    #* B C t1
-    #+ A t1 t2
+    #A * B / C + D * E ->
+    #* A B t1
+    #/ t1 C t2
+    #* D E t3
+    #+ t2 t3 t4
     qm.id_push("A", "entero")
     qm.operator_push("+")
     qm.id_push("B", "entero")
     qm.operator_push("*")
     qm.id_push("C", "entero")
+
+    # qm.operator_push("+")
+    # qm.id_push("D", "entero")
+    # qm.operator_push("*")
+    # qm.id_push("E", "entero")
+    # qm.operator_push("*")
+    # qm.id_push("F", "entero")
+
+
     qm.fillQuadruples()
+    qm.print_stacks()
     qm.print_quadruples()
-    
 
 main()
 
