@@ -29,7 +29,7 @@ class QuadruplesManager:
         #push id & type
         self.pilaOperands.put(idName)
         self.pilaTypes.put(idType)
-        
+
         if(not self.pilaOperators.empty()): 
             #check pasados operators
             pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
@@ -44,7 +44,11 @@ class QuadruplesManager:
                 self.pilaOperators.put(pilaOperators2) #agregar de nuevo el operador a la stack
                 
                 if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (pilaOperators2 == "+" or pilaOperators2 == "-")):
+                    self.pilaOperands.get_nowait()     
+                    self.pilaTypes.get_nowait()        
                     self.generateQuadruple()
+                    self.pilaOperands.put(idName)
+                    self.pilaTypes.put(idType)
         
     
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
@@ -89,21 +93,16 @@ def main():
     #/ t1 C t2
     #* D E t3
     #+ t2 t3 t4
-    qm.id_push("A", "entero")
-    qm.operator_push("+")
-    qm.id_push("B", "entero")
+    qm.id_push("A", "float")
     qm.operator_push("*")
-    qm.id_push("C", "entero")
-
-    qm.operator_push("-")
-    qm.id_push("D", "entero")
-    # qm.operator_push("+")
-    # qm.id_push("E", "entero")
-    # qm.operator_push("*")
-    # qm.id_push("F", "entero")
-
+    qm.id_push("B", "float")
+    qm.operator_push("/")
+    qm.id_push("C", "float")
+    qm.operator_push("+")
+    qm.id_push("D", "float")
+    qm.operator_push("*")
+    qm.id_push("E", "float")
     qm.fillQuadruples()
-    qm.print_stacks()
     qm.print_quadruples()
 
 main()
