@@ -13,15 +13,23 @@ from Temporal import *
 class QuadruplesManager:
 
     def __init__(self):
+        self.idNum = -1   # numero de quadruplo, sirve sobre todo para Conditions y Loops
         self.pilaOperands = LifoQueue() #stack que almacena los operandos.
         self.pilaTypes = LifoQueue() #stack que almacena los tipos de los operandos.
         self.pilaOperators = LifoQueue() #stack que almacena operadores.
         self.quadruples = queue.Queue() #queue que almacena los quadruples generados.
         self.semantica = Semantica() #genera cubo semántico para validación de tipos.
         self.tmp = Temporal() #objeto de la clase Temporal, administra los temporales y la memoria.
+        self.pilaSaltos = LifoQueue() #pila que almacena los saltos pendientes
     
+    def getID(self):
+        return self.idNum
+
+    def setID(self,idNum):
+        self.idNum = idNum
+
     #Inspeccionar si ya se tiene almacenado un tipo similar.
-    def operator_push(self, op):
+    def operator_push(self,op):
         #Caso de encontrarse + o - ya habiendo un + o - en la pila.
         # if(self.pilaOperators.qsize()>0):
         #     pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
@@ -33,7 +41,8 @@ class QuadruplesManager:
             self.solveQuadruplesUntil(op)
         else:
             self.pilaOperators.put(op)
-
+        #if(op == "GoToF" or op == "GoTo"):
+        #    self.pilaSaltos.put(id)
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
     def id_push(self, idName, idType):
         #push id & type
@@ -57,7 +66,6 @@ class QuadruplesManager:
                         self.pilaOperands.get_nowait()     
                         self.pilaTypes.get_nowait() 
                         self.pilaOperators.get_nowait()
-
                         self.generateQuadruple()
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
@@ -87,12 +95,16 @@ class QuadruplesManager:
             result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
             if(result_type != None):    
                 result = self.tmp.next() #preparar temporal
-                q = Quadruples(operator, left_op, right_op, result)
+                id_Final = (self.getID() + 1)
+                q = Quadruples(id_Final,operator, left_op, right_op, result)
+                self.setID(self.getID() + 1)
                 self.quadruples.put(q)
                 self.pilaOperands.put(result)
                 self.pilaTypes.put(result_type)
     
-    def print_stacks(self):
+
+
+    def print_stack(self):
         print("pilaOperands: ")
         while not self.pilaOperands.empty():
             print(self.pilaOperands.get(), end=" ")
@@ -113,7 +125,37 @@ def main():
     #* t0 D t1
     #* t1 E t2
     #- A t2 t3
+
+    # if(A + B > C){  # GOTOF t3 8
+    #   C * D
+    # }
+    # else {
+    # C + D
+    # }
     
+    #Test Conditional
+    #qm.id_push("A", "float")
+    #qm.operator_push("+")
+    #qm.id_push("B", "float")
+    #qm.operator_push("*")
+    #qm.id_push("D", "float")
+    #qm.operator_push(")")
+    ##First If
+    #qm.operator_push("GoToF")
+    #qm.id_push("A", "float")
+    #qm.operator_push("+")
+    #qm.id_push("B", "float")
+    ## Else
+    #qm.operator_push("GoTo")
+    #qm.id_push("C", "float")
+    #qm.operator_push("-")
+    #qm.id_push("D", "float")
+    #qm.fillQuadruples()
+    #qm.print_quadruples()
+
+
+
+    #Test operations
     qm.id_push("A", "float")
     qm.operator_push("-")
     qm.operator_push("(")
@@ -127,6 +169,7 @@ def main():
     qm.id_push("E", "float")
     qm.fillQuadruples()
     qm.print_quadruples()
+    
 main()
 
 
