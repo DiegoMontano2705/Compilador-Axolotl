@@ -37,12 +37,13 @@ class QuadruplesManager:
         #     if((op == "+" or op == "-") and (pilaOperatorsTop== "+" or pilaOperatorsTop == "-")):
         #         self.generateQuadruple()
         #         self.pilaOperators.put(op)
+        
         if(op == ")"):
             self.solveQuadruplesUntil(op)
         else:
             self.pilaOperators.put(op)
-        #if(op == "GoToF" or op == "GoTo"):
-        #    self.pilaSaltos.put(id)
+            
+
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
     def id_push(self, idName, idType):
         #push id & type
@@ -87,21 +88,47 @@ class QuadruplesManager:
     def generateQuadruple(self):
         operator = self.pilaOperators.get_nowait()
         if(not (operator=="(" or operator==")")):
-            right_op = self.pilaOperands.get_nowait()
-            right_type = self.pilaTypes.get_nowait()
-            left_op = self.pilaOperands.get_nowait()
-            left_type = self.pilaTypes.get_nowait()
-            # print("my operator", operator)
-            result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
-            if(result_type != None):    
-                result = self.tmp.next() #preparar temporal
+            if (operator == "GoTo"):
+                left_op = self.pilaOperands.get_nowait()
+                operator = "GoToF"   #Se cambia la el operador a su contrario debido al manejor de Pilas que lee las operaciones al reves
+                if(left_op != None): #and self.pilaTypes.get_nowait() == 'bool'):
+                    id_Final = (self.getID() + 1)
+                    q = Quadruples(id_Final,operator, left_op, None, None)
+                    self.setID(self.getID() + 1)
+                    self.pilaSaltos.put(self.getID()) #Guardas id del if en pila de saltos
+                    self.quadruples.put(q)
+
+            elif(operator == "GoToF"):
+                operator = "GoTo"   #Se cambia la el operador a su contrario debido al manejor de Pilas que lee las operaciones al reves
+                saltoFalso = self.pilaSaltos.get_nowait() #Obtener id del salto del if anterior
                 id_Final = (self.getID() + 1)
-                q = Quadruples(id_Final,operator, left_op, right_op, result)
+                q = Quadruples(id_Final,operator,None, None,saltoFalso)
                 self.setID(self.getID() + 1)
+                self.pilaSaltos.put(self.getID()) #Guardas id del else en pila de saltos
                 self.quadruples.put(q)
-                self.pilaOperands.put(result)
-                self.pilaTypes.put(result_type)
-    
+
+
+
+            else :    
+                right_op = self.pilaOperands.get_nowait()
+                right_type = self.pilaTypes.get_nowait()
+                left_op = self.pilaOperands.get_nowait()
+                left_type = self.pilaTypes.get_nowait()
+                # print("my operator", operator)
+                result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
+                if(result_type != None):    
+                    result = self.tmp.next() #preparar temporal
+                    id_Final = (self.getID() + 1)
+                    q = Quadruples(id_Final,operator, left_op, right_op, result)
+                    self.setID(self.getID() + 1)
+                    self.quadruples.put(q)
+                    self.pilaOperands.put(result)
+                    self.pilaTypes.put(result_type)
+
+    #Poner salto de if cuando se termina el condicional       
+    def endCondStatment(self):
+        end = self.pilaSaltos.get_nowait()
+        # Rellenar GoToF con el end -> ver este problema pues no se tienen metodo para acceder a index del Queue de Quedruples
 
 
     def print_stack(self):
@@ -117,6 +144,7 @@ class QuadruplesManager:
     def print_quadruples(self):
         while not self.quadruples.empty():
             self.quadruples.get().printQuad()
+ 
 
 def main():
     qm = QuadruplesManager()
@@ -134,41 +162,40 @@ def main():
     # }
     
     #Test Conditional
-    #qm.id_push("A", "float")
-    #qm.operator_push("+")
-    #qm.id_push("B", "float")
-    #qm.operator_push("*")
-    #qm.id_push("D", "float")
-    #qm.operator_push(")")
+    qm.id_push("A", "float")
+    qm.operator_push("+")
+    qm.id_push("B", "float")
+    qm.operator_push("*")
+    qm.id_push("D", "float")
     ##First If
-    #qm.operator_push("GoToF")
-    #qm.id_push("A", "float")
-    #qm.operator_push("+")
-    #qm.id_push("B", "float")
+    qm.operator_push("GoToF")
+    qm.id_push("A", "float")
+    qm.operator_push("+")
+    qm.id_push("B", "float")
     ## Else
-    #qm.operator_push("GoTo")
-    #qm.id_push("C", "float")
-    #qm.operator_push("-")
-    #qm.id_push("D", "float")
-    #qm.fillQuadruples()
-    #qm.print_quadruples()
+    qm.operator_push("GoTo")
+    qm.id_push("C", "float")
+    qm.operator_push("-")
+    qm.id_push("D", "float")
+    qm.fillQuadruples()
+    qm.print_quadruples()
 
 
 
     #Test operations
-    qm.id_push("A", "float")
-    qm.operator_push("-")
-    qm.operator_push("(")
-    qm.id_push("B", "float")
-    qm.operator_push("+")
-    qm.id_push("C", "float")
-    qm.operator_push(")")
-    qm.operator_push("*")
-    qm.id_push("D", "float")
-    qm.operator_push("*")
-    qm.id_push("E", "float")
-    qm.fillQuadruples()
-    qm.print_quadruples()
+    #qm.id_push("A", "float")
+    #qm.operator_push("-")
+    #qm.operator_push("(")
+    #qm.id_push("B", "float")
+    #qm.operator_push("+")
+    #qm.id_push("C", "float")
+    #qm.operator_push(")")
+    #qm.operator_push("*")
+    #qm.id_push("D", "float")
+    #qm.operator_push("*")
+    #qm.id_push("E", "float")
+    #qm.fillQuadruples()
+    #qm.print_quadruples()
     
 main()
 
