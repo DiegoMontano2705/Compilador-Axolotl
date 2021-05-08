@@ -80,15 +80,15 @@ class Semantica:
         op = self.equivalent(op)
         return self.equivalentReturn(self.cuboSemantico[leftOp][rightOp][op])
 
-def main():
-    sem = Semantica()
-    print(sem.resTipo(">", "float","float"))
-#     # print(sem.resTipo("=","float","float"))
-#     # print(sem.resTipo("+","float","float"))
-#     # print(sem.resTipo("&","bool","bool"))
-#     # print(sem.resTipo("=","entero","float"))
+# def main():
+#     sem = Semantica()
+#     print(sem.resTipo("=", "float","float"))
+# #     # print(sem.resTipo("=","float","float"))
+# #     # print(sem.resTipo("+","float","float"))
+# #     # print(sem.resTipo("&","bool","bool"))
+# #     # print(sem.resTipo("=","entero","float"))
 
 
-main()
+# main()
 
     

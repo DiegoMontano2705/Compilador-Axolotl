@@ -32,14 +32,6 @@ class QuadruplesManager:
 
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self,op):
-        #Caso de encontrarse + o - ya habiendo un + o - en la pila.
-        # if(self.pilaOperators.qsize()>0):
-        #     pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
-        #     self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
-        #     if((op == "+" or op == "-") and (pilaOperatorsTop== "+" or pilaOperatorsTop == "-")):
-        #         self.generateQuadruple()
-        #         self.pilaOperators.put(op)
-        
         if(op == '('):
             self.solveQuadruplesUntil(op)
         elif(op in opUntil):
@@ -186,10 +178,14 @@ def main():
 
     #Test operations
     qm.id_push("A", "float")
-    qm.operator_push(">")
+    qm.operator_push("=")
     qm.id_push("B", "float")
-    qm.operator_push("+")
+    qm.operator_push("*")
     qm.id_push("C", "float")
+    qm.operator_push("+")
+    qm.id_push("D", "float")
+    qm.operator_push("-")
+    qm.id_push("E", "float")
     qm.fillQuadruples()
     qm.print_quadruples()
     
