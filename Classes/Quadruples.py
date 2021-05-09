@@ -22,3 +22,12 @@ class Quadruples:
     
     def getID(self):
         return self.id
+
+    def setResult(self,result):
+        self.result = result
+    
+    def getOperator(self):
+        return self.operator
+    
+    def setOperator(self,operator):
+        self.operator = operator
