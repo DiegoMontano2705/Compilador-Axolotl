@@ -11,7 +11,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE',
     'ID','EQUAL','GREATER_THAN','SMALLER_THAN','IS_EQUAL','AND','OR',
     'DIFFERENT','LP','RP','LCB','RCB','LSB','RSB',
-    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING'
+    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'COMMENT',
 ]
 
 #Regular Expressions for simple tokens
@@ -26,6 +26,7 @@ t_SMALLER_THAN = r'<'
 t_IS_EQUAL = r'=='
 t_AND = r'\&'
 t_OR = r'\|'
+
 t_LP = r'\('
 t_RP = r'\)'
 t_LCB = r'\{'
@@ -54,7 +55,6 @@ reserved = {
     'char' : 'CHAR',
     'bool' : 'BOOL',
     'principal' : 'PRINCIPAL',
-    '%%' : 'COMMENT',
     'void' : 'VOID',
     'regresa' : 'RETURN',
     'atributos' : 'ATRIBUTOS',
@@ -80,12 +80,18 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
 
-#To ignore whitespaces in code file
-t_ignore = r' '
-
 def t_error(t):
     print("Error en caracter '%s' " % t.value[0])
     t.lexer.skip(1)
+
+def t_COMMENT(t):
+    r'\%%.*'
+    pass
+    # No return value. Token discarded
+
+#To ignore whitespaces in code file
+#t_ignore = r' '
+t_ignore=' \t\r\n\f\v' 
 
 # Building the lexer
 lex.lex()
@@ -94,23 +100,11 @@ lex.lex()
 def p_programa(p):
     ''' programa : STARTPROGRAMA ID SEMICOLON main
                 | STARTPROGRAMA ID SEMICOLON programaAux main
-                | comentario STARTPROGRAMA ID SEMICOLON programaAux comentario main
-                | comentario STARTPROGRAMA ID SEMICOLON programaAux main
-                | STARTPROGRAMA ID SEMICOLON programaAux comentario main
-                | STARTPROGRAMA ID SEMICOLON comentario main
-                | comentario STARTPROGRAMA ID SEMICOLON main
     '''
 def p_main(p):
     ''' main : PRINCIPAL LP RP LCB estatutosAux RCB
     '''
-def p_comentario(p):
-    ''' comentario : COMMENT comentarioPalabras COMMENT comentario
-                    | COMMENT comentarioPalabras COMMENT 
-    '''
-def p_comentarioPalabras(p):
-    ''' comentarioPalabras : CTEC
-                            | CTEC comentarioPalabras
-    '''
+
 def p_programaAux(p):
     ''' programaAux : clases programaAux
                         | dec_vars programaAux
@@ -120,31 +114,27 @@ def p_programaAux(p):
                         | funciones
     '''
 
+#### Declarar Variables
 def p_dec_vars(p):
     ''' dec_vars : VARIABLES form_vars
-                | comentario VARIABLES form_vars
     '''
 
 def p_form_vars(p):
-    ''' form_vars : tipo COLON form_vars_aux
+    ''' form_vars : tipo COLON form_vars_aux SEMICOLON form_vars
+                    | tipo COLON form_vars_aux SEMICOLON 
     '''
 
 def p_form_vars_aux(p):
-    ''' form_vars_aux : ID SEMICOLON
-                        | ID form_vars_aux2 SEMICOLON
-                        | ID form_vars_aux2 SEMICOLON comentario
-                        | ID SEMICOLON form_vars 
-                        | ID form_vars_aux2 SEMICOLON form_vars 
-                        | ID form_vars_aux2 SEMICOLON comentario form_vars
+    ''' form_vars_aux : ID
+                    | ID COMMA form_vars_aux
+                    | ID form_vars_aux2
+                    | ID form_vars_aux2 COMMA form_vars_aux
     '''
-
 def p_form_vars_aux2(p):
-    ''' form_vars_aux2 : COMMA form_vars_aux
-                        | LSB CTEI RSB
+    ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
-                        | LSB CTEI RSB COMMA form_vars_aux
-                        | LSB CTEI COMMA CTEI RSB COMMA form_vars_aux
     '''
+####### 
 
 def p_clases(p):
     ''' clases : CLASE ID LCB RCB SEMICOLON
@@ -155,14 +145,6 @@ def p_clases(p):
                 | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
                 | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
                 | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
-                | comentario CLASE ID LCB RCB SEMICOLON
-                | comentario CLASE ID LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | comentario CLASE ID LCB METODOS funcionesAux RCB SEMICOLON
-                | comentario CLASE ID LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
-                | comentario CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
 def p_funcionesAux(p):
     ''' funcionesAux : funciones
@@ -176,10 +158,6 @@ def p_funciones(p):
                     | tipo_retorno FUNCION ID LP parametros RP dec_vars LCB estatutosAux RCB
                     | tipo_retorno FUNCION ID LP RP LCB estatutosAux RCB
                     | tipo_retorno FUNCION ID LP parametros RP LCB estatutosAux RCB
-                    | comentario tipo_retorno FUNCION ID LP RP dec_vars LCB estatutosAux RCB
-                    | comentario tipo_retorno FUNCION ID LP parametros RP dec_vars LCB estatutosAux RCB
-                    | comentario tipo_retorno FUNCION ID LP RP LCB estatutosAux RCB
-                    | comentario tipo_retorno FUNCION ID LP parametros RP LCB estatutosAux RCB
     '''
 
 def p_tipo(p):
@@ -283,7 +261,6 @@ def p_estatutos(p):
                     | retorno_fun
                     | rep_no_condicional
                     | dec_vars
-                    | comentario
     '''
 
 def p_exp(p):
@@ -313,34 +290,51 @@ def p_m_exp2(p):
     ''' m_exp2 : PLUS m_exp
                 | MINUS m_exp
     '''
+    #print(p[1])
 
 def p_t(p):
     ''' t : f 
           | f t2
     '''
+    p[0] = p[1]
 
 def p_t2(p):
     ''' t2 : TIMES t
             | DIVIDE t
     '''
+    print(p[1],p[2])
+
+#def p_f(p):
+#    ''' f : f2
+#            | PLUS f2
+#            | MINUS f2
+#            | TIMES f2
+#            | DIVIDE f2 
+#    '''
+#    print(p[1])
 
 def p_f(p):
-    ''' f : f2
-            | PLUS f2
-            | MINUS f2
-            | TIMES f2
-            | DIVIDE f2 
-    '''
-
-def p_f2(p):
-    ''' f2 : LP exp RP
-            | CTEI
-            | CTEF
-            | CTEC
+    ''' f : LP exp RP
+            | ctei
+            | ctef
+            | ctec
             | var
             | llamada_fun_exp
     '''
+    if len(p) <= 2:
+        p[0] = p[1]
 
+def p_ctei(p):
+    ''' ctei : CTEI '''
+    (p,'i')
+
+def p_ctef(p):
+    ''' ctef : CTEF '''
+    (p,'f')
+
+def p_ctec(p):
+    ''' ctec : CTEC '''
+    (p,'c')
 
 def p_error(p):
     token = f"{p.type}({p.value}) en linea {p.lineno}"
@@ -355,7 +349,7 @@ yacc.yacc()
 #to check if file exists
 try:
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/test.txt" 
+    namef = ROOT_DIR+"/Testing/test1.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()

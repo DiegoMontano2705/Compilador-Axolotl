@@ -1,0 +1,12 @@
+programa test;
+variables entero : a,b,c,d;
+
+%%test comment
+principal() {
+    a = 4; %% una igualacion
+    b = 5 + 5 + 4 - 2 * 3;
+    x = 9.1 - 8.4;
+    c = 4 / 2;
+    d = 8 * 2;
+    d  = (5 + 5);
+}
