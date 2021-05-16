@@ -1,0 +1,5 @@
+program test;
+variables a : entero
+principal() {
+    a = 4;
+}

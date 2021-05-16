@@ -13,33 +13,34 @@ class Semantica:
     # Bool, =: 3
     # &, | : 4
     # * : 5
+    # ==, != : 6
     # Err = -1
     #[leftOperando][righOperando][operador]
     def __init__(self):       
         self.cuboSemantico = (
-                                (   #+ / > = & *
-                                    (0,1,3,0, -1, 0), #entero entero
-                                    (-1,-1,-1,-1,-1,-1), #entero float
-                                    (-1,-1,-1,-1,-1,-1), #entero char
-                                    (-1,-1,-1,-1,-1,-1), #entero bool
+                                (   #+ / > = & * ==
+                                    (0,1,3,0, -1, 0, 3), #entero entero
+                                    (-1,-1,-1,-1,-1,-1, -1), #entero float
+                                    (-1,-1,-1,-1,-1,-1, -1), #entero char
+                                    (-1,-1,-1,-1,-1,-1, -1), #entero bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1,-1), #float entero
-                                    (1,1,3,1,-1,1), #float float
-                                    (-1,-1,-1,-1,-1,-1), #float char
-                                    (-1,-1,-1,-1,-1,-1), #float bool
+                                    (-1,-1,-1,-1,-1,-1, -1), #float entero
+                                    (1,1,3,1,-1,1, 3), #float float
+                                    (-1,-1,-1,-1,-1,-1, -1), #float char
+                                    (-1,-1,-1,-1,-1,-1, -1), #float bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1,-1), #char entero
-                                    (-1,-1,-1,-1,-1,-1), #char float
-                                    (-1,-1,-1,2,-1,-1), #char char
-                                    (-1,-1,-1,-1,-1,-1), #char bool
+                                    (-1,-1,-1,-1,-1,-1, -1), #char entero
+                                    (-1,-1,-1,-1,-1,-1, -1), #char float
+                                    (-1,-1,-1,2,-1,-1, 3), #char char
+                                    (-1,-1,-1,-1,-1,-1, -1), #char bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1,-1), #Bool entero
-                                    (-1,-1,-1,-1,-1,-1), #Bool float
-                                    (-1,-1,-1,-1,-1,-1), #Bool char
-                                    (-1,-1,3,3,3,-1), #Bool bool
+                                    (-1,-1,-1,-1,-1,-1, -1), #Bool entero
+                                    (-1,-1,-1,-1,-1,-1, -1), #Bool float
+                                    (-1,-1,-1,-1,-1,-1, -1), #Bool char
+                                    (-1,-1,3,3,3,-1, 3), #Bool bool
                                 ),
                              )
     
@@ -69,7 +70,9 @@ class Semantica:
         elif(stm=="char" or stm==">" or stm=="<", stm=="<=" or stm==">=" or stm=="&" or stm=="|"): # Char,>,<,<=,>=, &, |: 2
             return 2
         elif(stm=="&" or stm=="|"): # &, |: 4
-            return 4      
+            return 4 
+        elif(stm=="==" or stm=="!="):
+            return 6     
         else:
             print("Error: Atributos no disponibles en cubo semantico.")        
 
@@ -82,12 +85,12 @@ class Semantica:
 
 # def main():
 #     sem = Semantica()
-#     print(sem.resTipo("=", "float","float"))
-# #     # print(sem.resTipo("=","float","float"))
-# #     # print(sem.resTipo("+","float","float"))
-# #     # print(sem.resTipo("&","bool","bool"))
-# #     # print(sem.resTipo("=","entero","float"))
-
+#     print(sem.resTipo("==", "float","float"))
+#     # print(sem.resTipo("=","float","float"))
+#     # print(sem.resTipo("+","float","float"))
+#     # print(sem.resTipo("&","bool","bool"))
+#     # print(sem.resTipo("=","entero","float"))
+ 
 
 # main()
 

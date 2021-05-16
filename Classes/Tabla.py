@@ -74,4 +74,7 @@ class Tabla:
         return False
 
     def printDic(self):
-        print(self.dict)
+        for key, values in self.dict.items():
+            print("--------------------------------------------")
+            print(key, values)
+

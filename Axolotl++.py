@@ -1,19 +1,27 @@
-#---
-# Axolotl++ Praser
-#---
+# 
+#     Axolotl++: parser & lexer.
+#     Compiladores
+#     Diego Fernando Montaño Pérez
+#     Jose Alberto Gonzalez 
+# 
+
 import sys
 import os
 import ply.lex as lex 
 import ply.yacc as yacc
+from Classes.QuadruplesManager import *
+from Classes.TablaManager import *
 
-#Inicital tokens
+######################################################################################
+#Tokens
 tokens = [
     'PLUS','MINUS','TIMES','DIVIDE',
-    'ID','EQUAL','GREATER_THAN','SMALLER_THAN','IS_EQUAL','AND','OR',
+    'ID','EQUAL','GREATER_THAN', 'GREATER_EQUAL_THAN', 'SMALLER_THAN', 'SMALLER_EQUAL_THAN', 'IS_EQUAL','AND','OR',
     'DIFFERENT','LP','RP','LCB','RCB','LSB','RSB',
     'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'COMMENT',
 ]
 
+######################################################################################
 #Regular Expressions for simple tokens
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -22,11 +30,12 @@ t_DIVIDE = r'/'
 t_EQUAL = r'='
 t_DIFFERENT = r'!='
 t_GREATER_THAN = r'>'
+t_GREATER_EQUAL_THAN = r'>='
 t_SMALLER_THAN = r'<'
+t_SMALLER_EQUAL_THAN = r'<='
 t_IS_EQUAL = r'=='
 t_AND = r'\&'
 t_OR = r'\|'
-
 t_LP = r'\('
 t_RP = r'\)'
 t_LCB = r'\{'
@@ -68,6 +77,7 @@ reserved = {
     'desde' : 'DESDE',
 }
 
+######################################################################################
 #Adding reserved words to tokens
 tokens = tokens + list(reserved.values())
 
@@ -96,6 +106,11 @@ t_ignore=' \t\r\n\f\v'
 # Building the lexer
 lex.lex()
 
+#Building managers
+quadruples = QuadruplesManager()
+superTabla = TablaManager()
+
+######################################################################################
 #Grammatic rules
 def p_programa(p):
     ''' programa : STARTPROGRAMA ID SEMICOLON main
@@ -113,8 +128,8 @@ def p_programaAux(p):
                         | dec_vars
                         | funciones
     '''
-
-#### Declarar Variables
+######################################################################################
+#Declarar Variables
 def p_dec_vars(p):
     ''' dec_vars : VARIABLES form_vars
     '''
@@ -134,18 +149,31 @@ def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
     '''
-####### 
 
+######################################################################################
+# Definicion clases
 def p_clases(p):
-    ''' clases : CLASE ID LCB RCB SEMICOLON
-                | CLASE ID LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE ID LCB METODOS funcionesAux RCB SEMICOLON
-                | CLASE ID LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
-                | CLASE ID SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
+    ''' clases : CLASE claseId LCB RCB SEMICOLON
+                | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
+                | CLASE claseId LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
+    superTabla.set_currentTablaId("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
+
+#Auxiliar para identificar clase
+def p_claseId(p):
+    ''' claseId : ID '''
+    p[0] = p[1]
+    superTabla.crearTabla("class_"+p[1], dirInicio="", recursos=[1,2,3], metodosClase="")
+    superTabla.set_currentTablaId("class_"+p[1])
+
+######################################################################################
+#Funciones
+
 def p_funcionesAux(p):
     ''' funcionesAux : funciones
                         | funciones funcionesAux
@@ -154,11 +182,22 @@ def p_funcionesAux(p):
 ## Checa esta padre, esta diferente a los diagramas sobre todo la parte de los semicolons
 ## SOLUCIONADO
 def p_funciones(p):
-    ''' funciones : tipo_retorno FUNCION ID LP RP dec_vars LCB estatutosAux RCB
-                    | tipo_retorno FUNCION ID LP parametros RP dec_vars LCB estatutosAux RCB
-                    | tipo_retorno FUNCION ID LP RP LCB estatutosAux RCB
-                    | tipo_retorno FUNCION ID LP parametros RP LCB estatutosAux RCB
+    ''' funciones : funcionIdAux LP RP dec_vars LCB estatutosAux RCB
+                    | funcionIdAux LP parametros RP dec_vars LCB estatutosAux RCB
+                    | funcionIdAux LP RP LCB estatutosAux RCB
+                    | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
+
+def p_funcionId(p):
+    ''' funcionIdAux : tipo_retorno FUNCION ID'''
+    if 'class_' in superTabla.get_currentTablaId(): #Si esta dentro de clase, es method.
+        print("funcion dentro clase") #Agregar tabla de funcion en tabla methodos.
+    else:
+        superTabla.crearTabla(p[3], retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="")
+        superTabla.set_currentTablaId(p[3])
+
+######################################################################################
+#Tipos variables
 
 def p_tipo(p):
     ''' tipo : tipo_simple
@@ -171,10 +210,16 @@ def p_tipo_simple(p):
                     | CHAR
                     | BOOL
     '''
+    p[0] = p[1]
 
 def p_tipo_retorno(p):
     ''' tipo_retorno : tipo_simple
                     | VOID
+    '''
+    p[0] = p[1]
+
+def p_tipo_compuesto(p):
+    ''' tipo_compuesto : ID
     '''
 
 def p_parametros(p):
@@ -182,21 +227,26 @@ def p_parametros(p):
                     | tipo_simple ID COMMA parametros
     '''
 
-def p_tipo_compuesto(p):
-    ''' tipo_compuesto : ID
-    '''
-
 def p_var(p):
-    ''' var : ID
-            | ID LSB CTEI COMMA CTEI RSB
-            | ID LSB CTEI RSB
-            | ID POINT ID
+    ''' var : idAssignId
+            | idAssignId LSB CTEI COMMA CTEI RSB
+            | idAssignId LSB CTEI RSB
+            | idAssignId POINT ID
     '''
+    # print(p[1])
 
 def p_asign_vars(p):
-    ''' asign_vars : var EQUAL exp SEMICOLON
-                    | var EQUAL CTEC SEMICOLON
+    ''' asign_vars : var equalId exp SEMICOLON
+                    | var equalId CTEC SEMICOLON
     '''
+
+#Auxiliar para identificar id de asignacion.
+def p_idAssignId(p):
+    ''' idAssignId : ID '''
+    p[0] = p[1]
+
+######################################################################################
+#Estatutos
 
 def p_llamada_fun(p):
     ''' llamada_fun : ID LP RP SEMICOLON
@@ -233,6 +283,9 @@ def p_escrituraAux(p):
                     | STRING COMMA escrituraAux
     '''
 
+######################################################################################
+#Condicionales
+
 def p_decision(p):
     ''' decision : IF LP exp RP THEN LCB estatutosAux RCB
                 | IF LP exp RP THEN LCB estatutosAux RCB ELSE LCB estatutosAux RCB
@@ -263,21 +316,28 @@ def p_estatutos(p):
                     | dec_vars
     '''
 
+######################################################################################
+#Expresiones
+
 def p_exp(p):
     ''' exp : OR
             | t_exp
     ''' 
+    p[0] = p[1]
 
 def p_t_exp(p):
     ''' t_exp : AND
                 | g_exp
     '''
+    p[0] = p[1]
 
 def p_g_exp(p):
-    ''' g_exp : m_exp GREATER_THAN m_exp
-            | m_exp SMALLER_THAN m_exp
-            | m_exp IS_EQUAL m_exp
-            | m_exp DIFFERENT m_exp
+    ''' g_exp : m_exp greaterThanId m_exp
+            | m_exp greaterEqualThanId
+            | m_exp smallerThanId m_exp
+            | m_exp smallerEqualThanId m_exp
+            | m_exp isequalId m_exp
+            | m_exp differentId m_exp
             | m_exp
     '''
 
@@ -285,12 +345,12 @@ def p_m_exp(p):
     ''' m_exp : t
                 | t m_exp2 
     '''
+    p[0] = p[1]
 
 def p_m_exp2(p):
-    ''' m_exp2 : PLUS m_exp
-                | MINUS m_exp
+    ''' m_exp2 : plusId m_exp
+                | minusId m_exp
     '''
-    #print(p[1])
 
 def p_t(p):
     ''' t : f 
@@ -299,10 +359,9 @@ def p_t(p):
     p[0] = p[1]
 
 def p_t2(p):
-    ''' t2 : TIMES t
-            | DIVIDE t
+    ''' t2 : timesId t
+            | divideId t
     '''
-    print(p[1],p[2])
 
 #def p_f(p):
 #    ''' f : f2
@@ -313,29 +372,90 @@ def p_t2(p):
 #    '''
 #    print(p[1])
 
-def p_f(p):
-    ''' f : LP exp RP
+
+def p_f(p): #lpid y rpid para identificar ().
+    ''' f : lpId exp rpId 
             | ctei
             | ctef
             | ctec
             | var
             | llamada_fun_exp
     '''
-    if len(p) <= 2:
-        p[0] = p[1]
+    p[0] = p[1]
+    # if(p[1]): #si no esta vacio
+    #     print(p[1])
+
+
+#Auxiliares identificadores expresion
+def p_equalId(p):
+    ''' equalId : EQUAL '''
+    # print("=")
+
+def p_plusId(p):
+    ''' plusId : PLUS '''
+    # print("+")
+
+def p_minusId(p):
+    ''' minusId : MINUS '''
+    # print("-")
+
+def p_timesId(p):
+    ''' timesId : TIMES '''
+    # print("*")
+
+def p_divideId(p):
+    ''' divideId : DIVIDE '''
+    # print("/")
+
+def p_greaterThanId(p):
+    ''' greaterThanId : GREATER_THAN '''
+    # print(">")
+
+def p_greaterEqualThanId(p):
+    ''' greaterEqualThanId : GREATER_EQUAL_THAN '''
+    # print(">=")
+
+def p_smallerThanId(p):
+    ''' smallerThanId : SMALLER_THAN '''
+    # print("<")
+
+def p_smallerEqualThanid(p):
+    ''' smallerEqualThanId : SMALLER_EQUAL_THAN '''
+    # print("<=")
+
+def p_isequalId(p):
+    ''' isequalId : IS_EQUAL '''
+    # print("==")
+
+def p_differentId(p):
+    ''' differentId : DIFFERENT '''
+    # print("!=")
+
+def p_lpId(p):
+    ''' lpId : LP '''
+    # print("(")
+
+def p_rpId(p):
+    ''' rpId : RP '''
+    # print(")")
 
 def p_ctei(p):
     ''' ctei : CTEI '''
-    (p,'i')
+    p[0] = p[1]
+    # (p,'i')
 
 def p_ctef(p):
     ''' ctef : CTEF '''
-    (p,'f')
+    p[0] = p[1]
+    # (p,'f')
 
 def p_ctec(p):
     ''' ctec : CTEC '''
-    (p,'c')
+    p[0] = p[1]
+    # (p,'c')
 
+######################################################################################
+#Manejo errores
 def p_error(p):
     token = f"{p.type}({p.value}) en linea {p.lineno}"
     print(f"Error de sintaxis: error {token}")
@@ -349,7 +469,7 @@ yacc.yacc()
 #to check if file exists
 try:
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/Testing/test1.txt" 
+    namef = ROOT_DIR+"/Testing/test.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()
@@ -357,4 +477,8 @@ except EOFError:
     quit()
 #Prase file using own grammar
 yacc.parse(s)
+
+#print testing
+superTabla.printDirFun()
+
 print("El codigo fue admitido")

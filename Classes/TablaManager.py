@@ -5,14 +5,13 @@
 #     Jose Alberto Gonzalez 
 # 
 
-from Tabla import *
+from Classes.Tabla import *
 
 class TablaManager:
 
-    def __init__(self, nameProgram):
-        self.nameProgram = nameProgram
+    def __init__(self):
         self.dirFun = Tabla("dirFun") #Tabla encargada de administar demas tablas.
-        self.currentTablaId = "void" #Tabla en la que se encuentra.
+        self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.wN = 0 #contador de whiles
         self.fN = 0 #contador de for's
 
@@ -76,24 +75,24 @@ class TablaManager:
     def printTabla(self, idTabla):
         self.getTabla(idTabla).printDic()
 
-def main():
-    dirFun = TablaManager("myProgram")
-    dirFun.crearTabla("Global", tipo_retorno="void", dirInicio=20000, recursos=[1, 2, 3]) #Crea una row en tabla dir fun.
-    dirFun.crearTabla("Fun1", tipo_retorno="entero", dirInicio=20000, recursos=[1, 2, 3], pointer_tablaParams="<dir>")
-    print("---dir Fun---")
-    dirFun.printDirFun()
-    print("---specific tabla---")
-    dirFun.insertRowToTabla("Global", "k", tipo="entero", dirVirutal=1001)
-    dirFun.insertRowToTabla("Global", "x", tipo="float", dirVirutal=2001)
-    dirFun.insertRowToTabla("Fun1", "k", tipo="float", dirVirutal=2002)
-    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
-    dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
-    dirFun.eraseRowToTabla("Global", "x")
-    dirFun.printTabla("Global")
-    dirFun.printTabla("Fun1")
-    print(dirFun.whereExist("k"))
-    dirFun.eraseDirFun()
-    dirFun.printDirFun()
+# def main():
+#     dirFun = TablaManager("myProgram")
+#     dirFun.crearTabla("Global", tipo_retorno="void", dirInicio=20000, recursos=[1, 2, 3]) #Crea una row en tabla dir fun.
+#     dirFun.crearTabla("Fun1", tipo_retorno="entero", dirInicio=20000, recursos=[1, 2, 3], pointer_tablaParams="<dir>")
+#     print("---dir Fun---")
+#     dirFun.printDirFun()
+#     print("---specific tabla---")
+#     dirFun.insertRowToTabla("Global", "k", tipo="entero", dirVirutal=1001)
+#     dirFun.insertRowToTabla("Global", "x", tipo="float", dirVirutal=2001)
+#     dirFun.insertRowToTabla("Fun1", "k", tipo="float", dirVirutal=2002)
+#     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
+#     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
+#     dirFun.eraseRowToTabla("Global", "x")
+#     dirFun.printTabla("Global")
+#     dirFun.printTabla("Fun1")
+#     print(dirFun.whereExist("k"))
+#     dirFun.eraseDirFun()
+#     dirFun.printDirFun()
 
-main()
+# main()
 

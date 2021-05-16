@@ -1,0 +1,108 @@
+#A + B * C ->
+#* B C t1
+#+ A t1 t2
+qm.id_push("A", "entero")
+qm.operator_push("+")
+qm.id_push("B", "entero")
+qm.operator_push("*")
+qm.id_push("C", "entero")
+qm.fillQuadruples()
+qm.print_quadruples()
+------------------------------------
+    #A * B / C + D * E ->
+    #* A B t1
+    #/ t1 C t2
+    #* D E t3
+    #+ t2 t3 t4
+    qm.id_push("A", "float")
+    qm.operator_push("*")
+    qm.id_push("B", "float")
+    qm.operator_push("/")
+    qm.id_push("C", "float")
+    qm.operator_push("+")
+    qm.id_push("D", "float")
+    qm.operator_push("*")
+    qm.id_push("E", "float")
+    qm.fillQuadruples()
+    qm.print_quadruples()
+---------------------------
+#A + B * C - D + E / F ->
+#* B C t0
+#+ A t0 t1
+#- t1 D t2
+#* E F t3
+# t2 t3 t4
+    qm.id_push("A", "entero")
+    qm.operator_push("+")
+    qm.id_push("B", "entero")
+    qm.operator_push("*")
+    qm.id_push("C", "entero")
+
+    qm.operator_push("-")
+    qm.id_push("D", "entero")
+    qm.operator_push("+")
+    qm.id_push("E", "entero")
+    qm.operator_push("*")
+    qm.id_push("F", "entero")
+
+    qm.fillQuadruples()
+    qm.print_quadruples()
+--------------------------------------
+ #A * ( B + C) ->
+    #+ B C t0
+    #* A t0 t1
+    
+    qm.id_push("A", "float")
+    qm.operator_push("*")
+    qm.operator_push("(")
+    qm.id_push("B", "float")
+    qm.operator_push("+")
+    qm.id_push("C", "float")
+    qm.operator_push(")")
+
+    # qm.print_stacks()
+    qm.fillQuadruples()
+    qm.print_quadruples()
+--------------------------------------
+ qm = QuadruplesManager()
+    #A - ( B + C) * D * E ->
+    #+ B C t0
+    #* t0 D t1
+    #* t1 E t2
+    #- A t2 t3
+    
+    qm.id_push("A", "float")
+    qm.operator_push("-")
+    qm.operator_push("(")
+    qm.id_push("B", "float")
+    qm.operator_push("+")
+    qm.id_push("C", "float")
+    qm.operator_push(")")
+    qm.operator_push("*")
+    qm.id_push("D", "float")
+    qm.operator_push("*")
+    qm.id_push("E", "float")
+    qm.fillQuadruples()
+    qm.print_quadruples()
+--------------------------
+    qm = QuadruplesManager()
+    qm.id_push("A", "float")
+    qm.operator_push(">")
+    qm.id_push("B", "float")
+    qm.operator_push("+")
+    qm.id_push("C", "float")
+    qm.fillQuadruples()
+    qm.print_quadruples()
+--------------------------
+    qm = QuadruplesManager()
+    qm.id_push("A", "float")
+    qm.operator_push("=")
+    qm.id_push("B", "float")
+    qm.operator_push("*")
+    qm.id_push("C", "float")
+    qm.operator_push("+")
+    qm.id_push("D", "float")
+    qm.operator_push("-")
+    qm.id_push("E", "float")
+    qm.fillQuadruples()
+    qm.print_quadruples()

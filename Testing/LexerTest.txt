@@ -1,0 +1,44 @@
+programa test;
+clase creando {
+    atributos
+        entero : a;
+        flotante : b;
+    metodos
+        entero funcion regresaValores(entero k, flotante h){
+            a = 8 * 2 + 2;
+            b = 10.5;
+        } 
+    
+};
+
+entero funcion pruebaUno(){
+    variables char : hola;
+    regresa(hola);
+}
+
+flotante funcion pruebaDos(char i){
+    pruebaUno();
+    lee(i);
+    escribe("probando codigo", 1+2);
+}
+
+variables entero : j;
+
+principal() {
+    j = 4;
+    y = 3 * 2 / pruebaUno();
+    si(j > y) entonces {
+
+        mientras (a < 5) hacer {
+            a = a + 1;
+        }
+
+    } sino {
+
+        desde j = 1 hasta j == 10 hacer {
+            j = j + 1;
+        }  
+
+    }
+
+}
