@@ -11,7 +11,9 @@ class TablaManager:
 
     def __init__(self):
         self.dirFun = Tabla("dirFun") #Tabla encargada de administar demas tablas.
+        self.currentScope = "global" #En que scope se encuentra: class or global
         self.currentTablaId = "global" #Tabla en la que se encuentra.
+        self.currentType = "" #Que tipo de variable se encuentra.
         self.wN = 0 #contador de whiles
         self.fN = 0 #contador de for's
 
@@ -21,6 +23,18 @@ class TablaManager:
 
     def set_currentTablaId(self, id):
         self.currentTablaId = id
+
+    def get_currentType(self):
+        return self.currentType
+
+    def set_currentType(self, id):
+        self.currentType = id
+
+    def get_currentScope(self):
+        return self.currentScope
+
+    def set_currentScope(self, id):
+        self.currentScope = id
 
     def get_wN(self):
         self.wN=self.wN+1
@@ -74,6 +88,7 @@ class TablaManager:
 
     def printTabla(self, idTabla):
         self.getTabla(idTabla).printDic()
+        
 
 # def main():
 #     dirFun = TablaManager("myProgram")

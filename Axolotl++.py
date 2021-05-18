@@ -109,6 +109,7 @@ lex.lex()
 #Building managers
 quadruples = QuadruplesManager()
 superTabla = TablaManager()
+superTabla.crearTabla("global", dirInicio="")
 
 ######################################################################################
 #Grammatic rules
@@ -130,13 +131,14 @@ def p_programaAux(p):
     '''
 ######################################################################################
 #Declarar Variables
+
 def p_dec_vars(p):
     ''' dec_vars : VARIABLES form_vars
     '''
 
 def p_form_vars(p):
-    ''' form_vars : tipo COLON form_vars_aux SEMICOLON form_vars
-                    | tipo COLON form_vars_aux SEMICOLON 
+    ''' form_vars : typeAuxId COLON form_vars_aux SEMICOLON form_vars
+                    | typeAuxId COLON form_vars_aux SEMICOLON 
     '''
 
 def p_form_vars_aux(p):
@@ -145,10 +147,19 @@ def p_form_vars_aux(p):
                     | ID form_vars_aux2
                     | ID form_vars_aux2 COMMA form_vars_aux
     '''
+    currTabla = superTabla.get_currentTablaId()
+    currType = superTabla.get_currentType()
+    superTabla.insertRowToTabla(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
+
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
     '''
+    # print("multi")
+
+def p_typeAuxId(p):
+    ''' typeAuxId : tipo'''
+    superTabla.set_currentType(p[1]) #Auxiliar para identificar tipo de variable.
 
 ######################################################################################
 # Definicion clases
@@ -162,14 +173,15 @@ def p_clases(p):
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
-    superTabla.set_currentTablaId("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
+    superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
 #Auxiliar para identificar clase
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla("class_"+p[1], dirInicio="", recursos=[1,2,3], metodosClase="")
-    superTabla.set_currentTablaId("class_"+p[1])
+    superTabla.crearTabla(p[1], scope="class", dirInicio="", recursos=[1,2,3], metodosClase="")
+    superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
+    superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
 
 ######################################################################################
 #Funciones
@@ -179,22 +191,18 @@ def p_funcionesAux(p):
                         | funciones funcionesAux
     '''
 
-## Checa esta padre, esta diferente a los diagramas sobre todo la parte de los semicolons
-## SOLUCIONADO
 def p_funciones(p):
     ''' funciones : funcionIdAux LP RP dec_vars LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP dec_vars LCB estatutosAux RCB
                     | funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
+    superTabla.set_currentTablaId("global")
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
-    if 'class_' in superTabla.get_currentTablaId(): #Si esta dentro de clase, es method.
-        print("funcion dentro clase") #Agregar tabla de funcion en tabla methodos.
-    else:
-        superTabla.crearTabla(p[3], retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="")
-        superTabla.set_currentTablaId(p[3])
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="")
+    superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
 
 ######################################################################################
 #Tipos variables
@@ -203,6 +211,7 @@ def p_tipo(p):
     ''' tipo : tipo_simple
             | tipo_compuesto
     '''
+    p[0] = p[1]
 
 def p_tipo_simple(p):
     ''' tipo_simple : INT
@@ -221,6 +230,7 @@ def p_tipo_retorno(p):
 def p_tipo_compuesto(p):
     ''' tipo_compuesto : ID
     '''
+    p[0] = p[1]
 
 def p_parametros(p):
     ''' parametros : tipo_simple ID
@@ -233,7 +243,6 @@ def p_var(p):
             | idAssignId LSB CTEI RSB
             | idAssignId POINT ID
     '''
-    # print(p[1])
 
 def p_asign_vars(p):
     ''' asign_vars : var equalId exp SEMICOLON
@@ -479,6 +488,10 @@ except EOFError:
 yacc.parse(s)
 
 #print testing
-superTabla.printDirFun()
+# superTabla.printDirFun() #superTabla con funciones/clases/methodos
+# superTabla.printTabla("global")
+# superTabla.printTabla("pruebaUno")
+# superTabla.printTabla("pruebaDos")
+# superTabla.printTabla("regresaValores")
+# superTabla.printTabla("creando")
 
-print("El codigo fue admitido")

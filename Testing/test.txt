@@ -3,17 +3,19 @@ clase creando {
     atributos
         entero : a;
         flotante : b;
+        entero : c[2];
+        flotante : f[4,4];
+        flotante : d, e;
     metodos
         entero funcion regresaValores(entero k, flotante h){
             a = 8 * 2 + 2;
             b = 10.5;
         } 
-    
 };
 
 entero funcion pruebaUno(){
     variables char : hola;
-
+    entero : p;
     regresa(hola);
 }
 
