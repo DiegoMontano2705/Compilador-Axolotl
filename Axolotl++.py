@@ -149,7 +149,7 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
-    superTabla.insertRowToTabla(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
+    superTabla.insertRowToTablaVar(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
 
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
@@ -236,6 +236,9 @@ def p_parametros(p):
     ''' parametros : tipo_simple ID
                     | tipo_simple ID COMMA parametros
     '''
+    currTabla = superTabla.get_currentTablaId()
+    superTabla.insertRowToTablaVar(currTabla, p[2], tipo=p[1], dirVirtual="") #Agregar var tabla variables
+    superTabla.insertRowToListaParms(currTabla, p[1]) #Agregar tipo a lista de parametros
 
 def p_var(p):
     ''' var : idAssignId
@@ -372,16 +375,6 @@ def p_t2(p):
             | divideId t
     '''
 
-#def p_f(p):
-#    ''' f : f2
-#            | PLUS f2
-#            | MINUS f2
-#            | TIMES f2
-#            | DIVIDE f2 
-#    '''
-#    print(p[1])
-
-
 def p_f(p): #lpid y rpid para identificar ().
     ''' f : lpId exp rpId 
             | ctei
@@ -489,9 +482,10 @@ yacc.parse(s)
 
 #print testing
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
-# superTabla.printTabla("global")
-# superTabla.printTabla("pruebaUno")
-# superTabla.printTabla("pruebaDos")
-# superTabla.printTabla("regresaValores")
-# superTabla.printTabla("creando")
+# superTabla.printTablaVars("global")
+# superTabla.printTablaVars("pruebaUno")
+# superTabla.printTablaVars("pruebaDos")
+# superTabla.printTablaVars("regresaValores")
+# superTabla.printTablaVars("creando")
+# superTabla.printListaParms("pruebaDos")
 

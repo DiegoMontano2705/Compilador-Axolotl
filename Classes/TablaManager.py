@@ -5,6 +5,7 @@
 #     Jose Alberto Gonzalez 
 # 
 
+from typing import List
 from Classes.Tabla import *
 
 class TablaManager:
@@ -14,8 +15,6 @@ class TablaManager:
         self.currentScope = "global" #En que scope se encuentra: class or global
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = "" #Que tipo de variable se encuentra.
-        self.wN = 0 #contador de whiles
-        self.fN = 0 #contador de for's
 
     #sets and gets
     def get_currentTablaId(self):
@@ -36,59 +35,65 @@ class TablaManager:
     def set_currentScope(self, id):
         self.currentScope = id
 
-    def get_wN(self):
-        self.wN=self.wN+1
-        return self.wN
-
-    def get_fN(self):
-        self.fN=self.fN+1
-        return self.fN
-
     #Crea una row en Tabla dir fun.
     def crearTabla(self, id, **kwargs):
         if(not self.dirFun.existRow(id)): #Si no existe se crea la tabla
             tablaAux = Tabla(id)
-            self.dirFun.insertRow(id, **kwargs, pointer=tablaAux) #Siempre se va a generar el pointer
+            listaParms = list() #Crear lista orden tipo de parametros.
+            self.dirFun.insertRow(id, **kwargs, tablaVar=tablaAux, listaParms=listaParms) #Siempre se va a generar el pointer
 
     #Al terminar, se elimina dirFun.
     def eraseDirFun(self):
         self.dirFun = Tabla("dirFun")
 
     #Crea una row en Tabla existente y almacena en tabla interna.
-    def insertRowToTabla(self, idTabla, idRow, **kwargs):
-        if(not self.getTabla(idTabla).existRow(idRow)):
-            self.getTabla(idTabla).insertRow(idRow, **kwargs)
+    def insertRowToTablaVar(self, idTabla, idRow, **kwargs):
+        if(not self.getTablaVar(idTabla).existRow(idRow)):
+            self.getTablaVar(idTabla).insertRow(idRow, **kwargs)
             return True
         print(idRow, " anteriormente declarada en la tabla ", idTabla)
         return False
     
+    #Agregar tipo a la lista de paraemtros de una tabla especificada.
+    def insertRowToListaParms(self, idTabla, tipo):
+        self.dirFun.findRow(idTabla)["listaParms"].append(tipo)
+    
     #Borrar una row en Tabla existente y actualiza en tabla interna.
-    def eraseRowToTabla(self, idTabla, idRow):
-        if(self.getTabla(idTabla).existRow(idRow)):
-            self.getTabla(idTabla).deleteRow(idRow)
+    def eraseRowToTablaVar(self, idTabla, idRow):
+        if(self.getTablaVar(idTabla).existRow(idRow)):
+            self.getTablaVar(idTabla).deleteRow(idRow)
             return True
         print(idRow, " no existe en la tabla ", idTabla)
         return False
+    
 
     #Buscar en que tabla existe la variable.
-    def whereExist(self, idRow):
+    def whereExistTablaVar(self, idRow):
         keys = []
         for key in self.dirFun.getDict():
-            if(self.getTabla(key).existRow(idRow)):
+            if(self.getTablaVar(key).existRow(idRow)):
                 keys.append(key)
         return keys
 
     #Regresa una tabla en especifico
-    def getTabla(self, idTabla):
-        return self.dirFun.findRow(idTabla)["pointer"]
+    def getTablaVar(self, idTabla):
+        return self.dirFun.findRow(idTabla)["tablaVar"]
+
+    #Regresa lista de tipos de parametros de una tabla especificada.
+    def getListaParms(self, idTabla):
+        self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
+        return self.dirFun.findRow(idTabla)["listaParms"]
 
     #Testing
     def printDirFun(self):
         self.dirFun.printDic()
 
-    def printTabla(self, idTabla):
-        self.getTabla(idTabla).printDic()
-        
+    #print tabla vars
+    def printTablaVars(self, idTabla):
+        self.getTablaVar(idTabla).printDic()
+    #print tabla parms
+    def printListaParms(self, idTabla):
+        print(self.getListaParms(idTabla))
 
 # def main():
 #     dirFun = TablaManager("myProgram")
