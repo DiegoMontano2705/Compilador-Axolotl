@@ -16,12 +16,21 @@ class Quadruples:
     
     def printQuad(self):
         print(self.id,self.operator, self.leftOp, self.rightOp, self.result)
+    
+    def getLeftOp(self):
+        return self.leftOp
+    
+    def getRightOp(self):
+        return self.rightOp
 
     def setID(self,id):
         self.id = id
     
     def getID(self):
         return self.id
+
+    def getResult(self):
+        return self.result
 
     def setResult(self,result):
         self.result = result
