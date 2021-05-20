@@ -1,0 +1,6 @@
+0 * B D tmp0 
+1 > A tmp0 tmp1 
+2 GoToF tmp1 None None 
+3 + F G tmp2 
+4 GoTo None None None 
+5 * H I tmp3 
