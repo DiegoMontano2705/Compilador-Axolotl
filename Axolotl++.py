@@ -9,8 +9,50 @@ import sys
 import os
 import ply.lex as lex 
 import ply.yacc as yacc
+from Classes.Memoria import *
 from Classes.QuadruplesManager import *
 from Classes.TablaManager import *
+######################################################################################
+#DIRS MEMORIA VIRTUAL
+#G=GLOBAL; CTE=CONSTANTE; TMP=TEMPORAL;
+#E=ENTERO; F=FLOTANTE; C=CHAR; B=BOOL; 
+#INI=INICIA; FIN=TERMINA; 
+#Dir Globales 10,000 - 20,4999 
+G_E_INI=10000
+G_E_FIN=114999
+G_F_INI=15000
+G_F_FIN=12999
+G_C_INI=13000
+G_C_FIN=14499
+G_TMP_E_INI=14500
+G_TMP_E_FIN=15999
+G_TMP_F_INI=16000
+G_TMP_F_FIN=17499
+G_TMP_C_INI=17500
+G_TMP_C_FIN=18999
+G_TMP_B_INI=19000
+G_TMP_B_FIN=20999
+#Dir Constantes 20,500 - 21,499
+CTE_E_INI=20500
+CTE_E_FIN=20999
+CTE_F_INI=21000
+CTE_F_FIN=21499
+#Dir locales 21,500 - 28,499
+L_E_INI=21500
+L_E_FIN=22499
+L_F_INI=22500
+L_F_FIN=23499
+L_C_INI=23500
+L_C_FIN=24499
+L_TMP_E_INI=24500
+L_TMP_E_FIN=25499
+L_TMP_F_INI=25500
+L_TMP_F_FIN=26499
+L_TMP_C_INI=26500
+L_TMP_C_FIN=27499
+L_TMP_B_INI=27500
+L_TMP_B_FIN=28499
+#codigos de operacion
 
 ######################################################################################
 #Tokens
@@ -110,7 +152,7 @@ lex.lex()
 quadruples = QuadruplesManager()
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
-
+ctes_memoria = Memoria("constantes") #crear memoria para constantes
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
@@ -201,7 +243,7 @@ def p_funciones(p):
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
-    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="")
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="", quadIni="")
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
 
 ######################################################################################
@@ -440,21 +482,22 @@ def p_lpId(p):
 def p_rpId(p):
     ''' rpId : RP '''
     # print(")")
-
+######################################################################################
+#Constantes
 def p_ctei(p):
     ''' ctei : CTEI '''
     p[0] = p[1]
-    # (p,'i')
-
+    ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
+    
 def p_ctef(p):
     ''' ctef : CTEF '''
     p[0] = p[1]
-    # (p,'f')
+    ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
-    # (p,'c')
+    ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
 
 ######################################################################################
 #Manejo errores
@@ -471,7 +514,7 @@ yacc.yacc()
 #to check if file exists
 try:
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/Testing/test.txt" 
+    namef = ROOT_DIR+"/Testing/test1.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()
@@ -481,6 +524,7 @@ except EOFError:
 yacc.parse(s)
 
 #print testing
+ctes_memoria.printMemory()
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")

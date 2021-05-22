@@ -34,6 +34,10 @@ class QuadruplesManager:
     def setID(self,idNum):
         self.idNum = idNum
 
+    #Reset a contador de tmps
+    def clearTmps(self):
+        self.tmp.clear()
+
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self,op):
         if(op == '('):
