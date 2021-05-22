@@ -5,6 +5,7 @@
 #     Jose Alberto Gonzalez 
 # 
 
+from re import L
 from typing import List
 from Classes.Tabla import *
 
@@ -15,6 +16,7 @@ class TablaManager:
         self.currentScope = "global" #En que scope se encuentra: class or global
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = "" #Que tipo de variable se encuentra.
+        
 
     #sets and gets
     def get_currentTablaId(self):
@@ -40,12 +42,33 @@ class TablaManager:
         if(not self.dirFun.existRow(id)): #Si no existe se crea la tabla
             tablaAux = Tabla(id)
             listaParms = list() #Crear lista orden tipo de parametros.
-            self.dirFun.insertRow(id, **kwargs, tablaVar=tablaAux, listaParms=listaParms) #Siempre se va a generar el pointer
+            self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms) #Siempre se va a generar el pointer
 
     #Al terminar, se elimina dirFun.
     def eraseDirFun(self):
         self.dirFun = Tabla("dirFun")
 
+    #Add reserva de recursos en contexto
+    def addContRecursos(self, idTabla, tipo):
+        if(tipo == "entero"):
+            self.dirFun.findRow(idTabla)["recursos"]["vars"][0] = self.dirFun.findRow(idTabla)["recursos"]["vars"][0]+1
+        elif(tipo=="flotante"):
+            self.dirFun.findRow(idTabla)["recursos"]["vars"][1] = self.dirFun.findRow(idTabla)["recursos"]["vars"][1]+1
+        elif(tipo=="char"):
+            self.dirFun.findRow(idTabla)["recursos"]["vars"][2] = self.dirFun.findRow(idTabla)["recursos"]["vars"][2]+1
+        elif(tipo=="tmp_entero"):
+            self.dirFun.findRow(idTabla)["recursos"]["tmps"][0] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][0]+1
+        elif(tipo=="tmp_flotante"):
+            self.dirFun.findRow(idTabla)["recursos"]["tmps"][1] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][1]+1
+        elif(tipo=="tmp_char"):
+            self.dirFun.findRow(idTabla)["recursos"]["tmps"][2] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][2]+1
+        elif(tipo=="tmp_bool"):
+            self.dirFun.findRow(idTabla)["recursos"]["tmps"][3] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][3]+1
+    
+    #Regresa recursos utilizados por contexto.
+    def getRecursos(self, idTabla):
+        return self.dirFun.findRow(idTabla)["recursos"]
+    
     #Crea una row en Tabla existente y almacena en tabla interna.
     def insertRowToTablaVar(self, idTabla, idRow, **kwargs):
         if(not self.getTablaVar(idTabla).existRow(idRow)):

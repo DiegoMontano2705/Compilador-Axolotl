@@ -44,18 +44,17 @@ import sys
 
 class Memoria:
     
-    def __init__(self, tipoMemoria):
+    def __init__(self):
         self.memory = {}
         #Contadores para aumentar en dics memoria
-        self.enterosAux = -1 #enteros
-        self.flotantesAux = -1 #flotantes
-        self.charAux = -1 #char
-        self.tmpEnteroAux = -1 #temporal_entero
-        self.tmpFlotanteAux = -1 #temporal_flotante
-        self.tmpCharAux = -1 #temporal_char
-        self.tmpBoolAux = -1 #tempora_bool
-        self.setDicsAux(tipoMemoria) #set dics dependiendo su tipoMemoria
-    
+        self.enterosAux = 0 #enteros
+        self.flotantesAux = 0 #flotantes
+        self.charAux = 0 #char
+        self.tmpEnteroAux = 0 #temporal_entero
+        self.tmpFlotanteAux = 0 #temporal_flotante
+        self.tmpCharAux = 0 #temporal_char
+        self.tmpBoolAux = 0 #tempora_bool
+        
     #set dirs en auxiliares
     def setDicsAux(self, tipoMemoria):
         if tipoMemoria == "global":
@@ -164,10 +163,46 @@ class Memoria:
             else:
                 print("type mismatch: constantes solo enteras, float, char.")
 
+    #Resete contadores de recursos
+    def reseteRecursos(self):
+        self.memory={}
+        self.enterosAux=0
+        self.flotantesAux=0
+        self.charAux=0
+        self.tmpEnteroAux=0
+        self.tmpFlotanteAux=0
+        self.tmpCharAux=0
+        self.tmpBoolAux=0
 
+    # #Contador de recursos
+    # def addMemoriaRes(self, contexto, tipo):
+    #     if(contexto == "vars"):
+    #         if(tipo == "entero"):
+    #             self.enterosAux+=1
+    #         elif(tipo =="float"):
+    #             self.flotantesAux+=1
+    #         elif(tipo=="char"):
+    #             self.charAux+=1
+    #     elif(contexto=="tmps"):
+    #         if(tipo == "entero"):
+    #             self.tmpEnteroAux+=1
+    #         elif(tipo =="float"):
+    #             self.tmpFlotanteAux+=1
+    #         elif(tipo=="char"):
+    #             self.tmpCharAux+=1
+    #         elif(tipo=="bool"):
+    #             self.tmpBoolAux+=1
 
-
-
+    # #Regresa reserva de recursos
+    # def getMemoriaRes(self):
+    #     e = self.enterosAux
+    #     f = self.flotantesAux
+    #     c = self.charAux
+    #     te = self.tmpEnteroAux
+    #     tf = self.tmpFlotanteAux
+    #     tc = self.tmpCharAux
+    #     tb = self.tmpBoolAux
+    #     return ({"vars": [e,f,c], "tmps":[te,tf,tc,tb]})
 
     #Exist value?
     def existVal(self, add):

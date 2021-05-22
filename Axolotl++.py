@@ -152,8 +152,10 @@ lex.lex()
 quadruples = QuadruplesManager()
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
-ctes_memoria = Memoria("constantes") #crear memoria para constantes
-global_memoria = Memoria("global") #crear memoria para globales
+ctes_memoria = Memoria() #crear memoria para constantes
+ctes_memoria.setDicsAux("constantes") #Asignar direcciones default
+global_memoria = Memoria() #crear memoria para globales
+global_memoria.setDicsAux("global") #Asignar direcciones default
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
@@ -196,7 +198,7 @@ def p_form_vars_aux(p):
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
-        
+    superTabla.addContRecursos(superTabla.get_currentTablaId(), currType) #Contabilizar recursos por funcion/clase
 
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
@@ -226,7 +228,7 @@ def p_clases(p):
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla(p[1], scope="class", dirInicio="", recursos=[1,2,3], metodosClase="")
+    superTabla.crearTabla(p[1], scope="class", dirInicio="", metodosClase="")
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     
@@ -245,11 +247,14 @@ def p_funciones(p):
                     | funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
+    #Agregar recursos utilizados.
+    #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
-    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", recursos=[1,2,3], pointerParams="", quadIni="")
+    #crear memoria
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", pointerParams="", quadIni="")
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
 
 ######################################################################################
@@ -520,7 +525,7 @@ yacc.yacc()
 #to check if file exists
 try:
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/Testing/test1.txt" 
+    namef = ROOT_DIR+"/Testing/test.txt" 
     file = open(namef,'r')
     s = file.read()
     file.close()
@@ -532,6 +537,7 @@ yacc.parse(s)
 #print testing
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
+# print(superTabla.getRecursos("creando"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
