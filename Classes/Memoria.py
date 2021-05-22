@@ -81,9 +81,61 @@ class Memoria:
         
 
     #guardar valor en dic direcciones
-    def setVal(self, add, value):
-        self.memory[add] = value
-    
+    #tipo = entero, flotante, char, bool
+    #contexto = vars o tmps
+    def setGlobalVal(self, value, tipo, contexto):
+        if(contexto == "vars"): #Variables
+            if(tipo == "entero"):
+                if self.enterosAux in range(G_E_INI, G_E_FIN):
+                    self.memory[self.enterosAux] = value
+                    self.enterosAux+=1
+                else:
+                    print("overflow memoria: globales enteras.")
+                    sys.exit()
+            elif(tipo == "flotante"):
+                if self.flotantesAux in range(G_F_INI, G_F_FIN):
+                    self.memory[self.flotantesAux] = value
+                    self.flotantesAux+=1
+                else:
+                    print("overflow memoria: globales flotantes.")
+                    sys.exit()
+            elif(tipo == "char"):
+                if self.charAux in range(G_C_INI, G_C_FIN):
+                    self.memory[self.charAux] = value
+                    self.charAux+=1
+                else:
+                    print("overflow memoria: globales chars.")
+                    sys.exit()
+        elif(contexto == "tmps"): #temporales
+            if(tipo=="entero"):
+                if self.tmpEnteroAux in range(G_TMP_E_INI, G_TMP_E_FIN):
+                    self.memory[self.tmpEnteroAux] = value
+                    self.tmpEnteroAux+=1
+                else:
+                    print("overflow memoria: temporales globales enteras.")
+                    sys.exit()
+            elif(tipo=="flotante"):
+                if self.tmpFlotanteAux in range(G_TMP_F_INI, G_TMP_F_FIN):
+                    self.memory[self.tmpFlotanteAux] = value
+                    self.tmpFlotanteAux+=1
+                else:
+                    print("overflow memoria: temporales globales flotantes.")
+                    sys.exit()
+            elif(tipo=="char"):
+                if self.tmpCharAux in range(G_TMP_C_INI, G_TMP_C_FIN):
+                    self.memory[self.tmpCharAux] = value
+                    self.tmpCharAux+=1
+                else:
+                    print("overflow memoria: temporales globales chars.")
+                    sys.exit()
+            elif(tipo=="bool"):
+                if self.tmpBoolAux in range(G_TMP_B_INI, G_TMP_B_FIN):
+                    self.memory[self.tmpBoolAux] = value
+                    self.tmpBoolAux+=1
+                else:
+                    print("overflow memoria: temporales globales chars.")
+                    sys.exit()
+
     #guardar valor en dic que no se repita
     #constantes
     def setConstante(self, value):
@@ -111,7 +163,12 @@ class Memoria:
                     sys.exit()
             else:
                 print("type mismatch: constantes solo enteras, float, char.")
-     
+
+
+
+
+
+
     #Exist value?
     def existVal(self, add):
         return add not in self.memory

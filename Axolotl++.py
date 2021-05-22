@@ -153,6 +153,7 @@ quadruples = QuadruplesManager()
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
 ctes_memoria = Memoria("constantes") #crear memoria para constantes
+global_memoria = Memoria("global") #crear memoria para globales
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
@@ -192,6 +193,10 @@ def p_form_vars_aux(p):
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
     superTabla.insertRowToTablaVar(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
+    #Guardar variables globales
+    if(currTabla == "global"):
+        global_memoria.setGlobalVal(p[1], currType, "vars")
+        
 
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
@@ -224,6 +229,7 @@ def p_claseId(p):
     superTabla.crearTabla(p[1], scope="class", dirInicio="", recursos=[1,2,3], metodosClase="")
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
+    
 
 ######################################################################################
 #Funciones
@@ -524,7 +530,8 @@ except EOFError:
 yacc.parse(s)
 
 #print testing
-ctes_memoria.printMemory()
+# ctes_memoria.printMemory()
+# global_memoria.printMemory()
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
