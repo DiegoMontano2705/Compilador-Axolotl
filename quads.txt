@@ -1,6 +1,5 @@
-0 * B D tmp0 
-1 > A tmp0 tmp1 
-2 GoToF tmp1 None None 
-3 + F G tmp2 
-4 GoTo None None None 
-5 * H I tmp3 
+0 * B C tmp0 
+1 + tmp0 D tmp1 
+2 - tmp1 E tmp2 
+3 = A tmp2 tmp3 
+4 Print None None tmp3 

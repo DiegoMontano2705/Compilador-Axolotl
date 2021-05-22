@@ -1,0 +1,1 @@
+        self.pilaSaltos = LifoQueue() #pila que almacena los saltos pendientes
