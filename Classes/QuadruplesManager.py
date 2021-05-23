@@ -195,38 +195,38 @@ class QuadruplesManager:
 
  
 
-#def main():
+# def main():
 #    qm = QuadruplesManager()
-#     #A - ( B + C) * D * E ->
-#     #+ B C t0
-#     #* t0 D t1
-#     #* t1 E t2
-#     #- A t2 t3
+    #A - ( B + C) * D * E ->
+    #+ B C t0
+    #* t0 D t1
+    #* t1 E t2
+    #- A t2 t3
 
-#     # if(A + B > C){  # GOTOF t3 8
-#     #   C * D
-#     # }
-#     # else {
-#     # C + D
-#     # }
+    # if(A + B > C){  # GOTOF t3 8
+    #   C * D
+    # }
+    # else {
+    # C + D
+    # }
     
-#     #Test Conditional
-#     #qm.id_push("A", "float")
-#     #qm.operator_push("*")                    Op GOTOF
-#     #qm.id_push("B", "float")                 id 
-#     # ##First If                              QUAD * A B T0
-#     #qm.operator_push("GoToF")
-#     #qm.id_push("C", "float")
-#     #qm.operator_push("+")
-#     #qm.id_push("D", "float")
-#     ## Else
-#     #qm.operator_push("GoTo")
-#     #qm.id_push("E", "float")
-#     #qm.operator_push("-")
-#     #qm.id_push("F", "float")
-#     #qm.fillQuadruples()
-#     #qm.print_stack()
-#     #qm.print_quadruples()
+    # #Test Conditional
+    # qm.id_push("A", "float")
+    # qm.operator_push("*")                    #Op GOTOF
+    # qm.id_push("B", "float")                 #id 
+    # ##First If                              QUAD * A B T0
+    # qm.operator_push("GoToF")
+    # qm.id_push("C", "float")
+    # qm.operator_push("+")
+    # qm.id_push("D", "float")
+    # # Else
+    # qm.operator_push("GoTo")
+    # qm.id_push("E", "float")
+    # qm.operator_push("-")
+    # qm.id_push("F", "float")
+    # qm.fillQuadruples()
+    # qm.print_stack()
+    # qm.print_quadruples()
 
     #Test Conditional
 #    qm.operator_push('(')
@@ -277,7 +277,7 @@ class QuadruplesManager:
 #    qm.fillQuadruples()
 #    qm.print_quadruples()
     
-#main()
+# main()
 
 
 
