@@ -382,13 +382,27 @@ def p_startElse(p):
     quads.quadruples[false].setResult(quads.getID())
 
 
-
-
-
-
 def p_rep_condicional(p):
-    ''' rep_condicional : MIENTRAS LP exp RP HACER LCB estatutosAux RCB
+    ''' rep_condicional : MIENTRAS startWhile exp startWhile2 HACER LCB estatutosAux endWhile
     '''
+
+def p_startWhile(p):
+    ''' startWhile : LP '''
+    quads.pilaSaltos.put(quads.getID())
+
+def p_startWhile2(p):
+    ''' starWhile2 : RP '''
+    quads.operator_push('GoToF')
+    quads.pilaSaltos.put(quads.getID()-1)
+
+def p_endWhile(p):
+    ''' endWhile : RCB '''
+    end = quads.pilaSaltos.pop()
+    ret = quads.pilaSaltos.pop()
+    quads.operator_push('GoTo')
+    quads.quadruples[quads.getID() - 1].setResult(ret)
+    quads.quadruples[end].setResult(quads.getID())
+
 
 def p_rep_no_condicional(p):
     ''' rep_no_condicional : DESDE ID EQUAL exp HASTA exp HACER LCB estatutosAux RCB
