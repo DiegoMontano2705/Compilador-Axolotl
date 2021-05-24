@@ -1,0 +1,9 @@
+programa testIf;
+variables entero : a,b,c,d;
+
+%%if comment
+principal() {
+    si (a > b){
+        c = a * d;
+    }
+}

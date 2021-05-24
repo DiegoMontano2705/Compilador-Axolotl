@@ -166,8 +166,8 @@ t_ignore=' \t\r\n\f\v'
 
 
 #Building managers
+quads = QuadruplesManager()
 lex.lex() #Building the lexer
-quadruples = QuadruplesManager()
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
 ctes_memoria = Memoria() #crear memoria para constantes
@@ -182,9 +182,16 @@ def p_programa(p):
     '''
     superTabla.set_nombrePrograma(p[2])
 
+
 def p_main(p):
-    ''' main : PRINCIPAL LP RP LCB estatutosAux RCB
+    ''' main : PRINCIPAL LP RP LCB estatutosAux endprog
     '''
+
+def p_endprog(p):
+    ''' endprog : RCB '''
+    #Print quads to file
+    quads.fillQuadruples()
+    quads.print_quadruples()
 
 def p_programaAux(p):
     ''' programaAux : clases programaAux
@@ -372,13 +379,50 @@ def p_escrituraAux(p):
 #Condicionales
 
 def p_decision(p):
-    ''' decision : IF LP exp RP THEN LCB estatutosAux RCB
-                | IF LP exp RP THEN LCB estatutosAux RCB ELSE LCB estatutosAux RCB
+    ''' decision : IF LP exp startIf THEN LCB estatutosAux endIf_Else
+                | IF LP exp startIf THEN LCB estatutosAux startElse LCB estatutosAux endIf_Else
     '''
 
+def p_startIf(p):
+    ''' startIf : RP '''
+    quads.operator_push('GoToF')
+    quads.pilaSaltos.put(quads.getID()-1)
+
+def p_endIf_Else(p):
+    ''' endIf_Else : RCB '''
+    end = quads.pilaSaltos.pop()
+    nxtQuad = quads.getID()
+    quads.quadruples[end].setResult(nxtQuad)
+
+def p_startElse(p):
+    ''' startElse : ELSE '''
+    quads.operator_push('GoTo')
+    false = quads.pilaSaltos.pop()
+    quads.pilaSaltos.put(quads.getID()-1)
+    quads.quadruples[false].setResult(quads.getID())
+
+
 def p_rep_condicional(p):
-    ''' rep_condicional : MIENTRAS LP exp RP HACER LCB estatutosAux RCB
+    ''' rep_condicional : MIENTRAS startWhile exp startWhile2 HACER LCB estatutosAux endWhile
     '''
+
+def p_startWhile(p):
+    ''' startWhile : LP '''
+    quads.pilaSaltos.put(quads.getID())
+
+def p_startWhile2(p):
+    ''' starWhile2 : RP '''
+    quads.operator_push('GoToF')
+    quads.pilaSaltos.put(quads.getID()-1)
+
+def p_endWhile(p):
+    ''' endWhile : RCB '''
+    end = quads.pilaSaltos.pop()
+    ret = quads.pilaSaltos.pop()
+    quads.operator_push('GoTo')
+    quads.quadruples[quads.getID() - 1].setResult(ret)
+    quads.quadruples[end].setResult(quads.getID())
+
 
 def p_rep_no_condicional(p):
     ''' rep_no_condicional : DESDE ID EQUAL exp HASTA exp HACER LCB estatutosAux RCB
@@ -519,6 +563,7 @@ def p_ctei(p):
     ''' ctei : CTEI '''
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
+
     
 def p_ctef(p):
     ''' ctef : CTEF '''
@@ -537,6 +582,7 @@ def p_error(p):
     print(f"Error de sintaxis: error {token}")
     #print("Error de sintaxis : '%s' " % p.value)
     exit()
+
 ######################################################################################
 #Crear ejecutable .obj
 def crearOutFile():

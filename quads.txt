@@ -1,5 +1,0 @@
-0 * B C tmp0 
-1 + tmp0 D tmp1 
-2 - tmp1 E tmp2 
-3 = A tmp2 tmp3 
-4 Print None None tmp3 
