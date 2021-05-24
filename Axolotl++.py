@@ -537,31 +537,31 @@ def p_error(p):
     #print("Error de sintaxis : '%s' " % p.value)
     exit()
 
-
+######################################################################################
 #Creating praser
 yacc.yacc()
-
-#to check if file exists
-try:
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/Testing/test.txt" 
-    file = open(namef,'r')
-    s = file.read()
-    file.close()
-except EOFError:
-    quit()
-#Prase file using own grammar
-yacc.parse(s)
-
+if __name__ == '__main__':
+    if (len(sys.argv)>1):
+        fileName = sys.argv[1]
+        try:
+            ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+            namef = ROOT_DIR+"/Testing/"+fileName 
+            file = open(namef,'r')
+            s = file.read()
+            file.close()
+        except EOFError:
+            quit()
+    yacc.parse(s) #Parser with grammar
+######################################################################################
 #print testing
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
 # print(superTabla.getRecursos("creando"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
-superTabla.printTablaVars("pruebaUno")
-superTabla.printTablaVars("pruebaDos")
-superTabla.printTablaVars("regresaValores")
-superTabla.printTablaVars("creando")
+# superTabla.printTablaVars("pruebaUno")
+# superTabla.printTablaVars("pruebaDos")
+# superTabla.printTablaVars("regresaValores")
+# superTabla.printTablaVars("creando")
 # superTabla.printListaParms("pruebaDos")
 
