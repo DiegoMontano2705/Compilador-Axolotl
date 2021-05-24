@@ -53,7 +53,26 @@ L_TMP_C_FIN=27499
 L_TMP_B_INI=27500
 L_TMP_B_FIN=28499
 #codigos de operacion
-
+cod_operacion = {
+    '+': 1,
+    '-': 2,
+    '*': 3,
+    '/': 4,
+    '=': 5,
+    '<': 6,
+    '>': 7,
+    '<=': 8,
+    '>=': 9,
+    '==': 10,
+    '&': 11,
+    '|': 12,
+    'print': 13,
+    'goto': 14,
+    'gotof': 15,
+    'gosub': 16,
+    'endproc': 17,
+    'return': 18
+}
 ######################################################################################
 #Tokens
 tokens = [
@@ -194,7 +213,7 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
-    superTabla.insertRowToTablaVar(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
+    superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
@@ -290,7 +309,7 @@ def p_parametros(p):
                     | tipo_simple ID COMMA parametros
     '''
     currTabla = superTabla.get_currentTablaId()
-    superTabla.insertRowToTablaVar(currTabla, p[2], tipo=p[1], dirVirtual="") #Agregar var tabla variables
+    superTabla.insertRowToTablaVar(currTabla, p[2], p[1], "vars") #Agregar var tabla variables
     superTabla.insertRowToListaParms(currTabla, p[1]) #Agregar tipo a lista de parametros
 
 def p_var(p):
@@ -540,9 +559,9 @@ yacc.parse(s)
 # print(superTabla.getRecursos("creando"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
-# superTabla.printTablaVars("pruebaUno")
-# superTabla.printTablaVars("pruebaDos")
-# superTabla.printTablaVars("regresaValores")
-# superTabla.printTablaVars("creando")
+superTabla.printTablaVars("pruebaUno")
+superTabla.printTablaVars("pruebaDos")
+superTabla.printTablaVars("regresaValores")
+superTabla.printTablaVars("creando")
 # superTabla.printListaParms("pruebaDos")
 

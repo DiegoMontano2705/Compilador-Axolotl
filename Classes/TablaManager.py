@@ -8,6 +8,7 @@
 from re import L
 from typing import List
 from Classes.Tabla import *
+from Classes.Memoria import *
 
 class TablaManager:
 
@@ -42,13 +43,18 @@ class TablaManager:
         if(not self.dirFun.existRow(id)): #Si no existe se crea la tabla
             tablaAux = Tabla(id)
             listaParms = list() #Crear lista orden tipo de parametros.
-            self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms) #Siempre se va a generar el pointer
+            memoriaLocal = Memoria() #manejar memoria con dirs para vars.
+            memoriaLocal.setDicsAux("local")
+            self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms, memoriaLocal=memoriaLocal) #Siempre se va a generar el pointer
+
 
     #Al terminar, se elimina dirFun.
-    def eraseDirFun(self):
-        self.dirFun = Tabla("dirFun")
+    def deleteTablaVars(self, idTabla):
+        if(self.dirFun.existRow(idTabla)):
+            self.getTablaVar(idTabla).deleteTabla()
 
     #Add reserva de recursos en contexto
+    # [enteros, flotantes, chars] [enteros,flotantes,chars,bool]
     def addContRecursos(self, idTabla, tipo):
         if(tipo == "entero"):
             self.dirFun.findRow(idTabla)["recursos"]["vars"][0] = self.dirFun.findRow(idTabla)["recursos"]["vars"][0]+1
@@ -70,9 +76,12 @@ class TablaManager:
         return self.dirFun.findRow(idTabla)["recursos"]
     
     #Crea una row en Tabla existente y almacena en tabla interna.
-    def insertRowToTablaVar(self, idTabla, idRow, **kwargs):
+    def insertRowToTablaVar(self, idTabla, idRow, tip, contexto, **kwargs):
         if(not self.getTablaVar(idTabla).existRow(idRow)):
-            self.getTablaVar(idTabla).insertRow(idRow, **kwargs)
+            #Agregar dir a variable por contexto.
+            memoriaLocal = self.getMemoriaLocal(idTabla) 
+            dirAux = memoriaLocal.getLocalDirVirtual(tip, contexto)
+            self.getTablaVar(idTabla).insertRow(idRow, tipo=tip, dirVirtual=dirAux, **kwargs)
             return True
         print(idRow, " anteriormente declarada en la tabla ", idTabla)
         return False
@@ -101,6 +110,10 @@ class TablaManager:
     #Regresa una tabla en especifico
     def getTablaVar(self, idTabla):
         return self.dirFun.findRow(idTabla)["tablaVar"]
+
+    #Regresa memoria en especifico
+    def getMemoriaLocal(self, idTabla):
+        return (self.dirFun.findRow(idTabla)["memoriaLocal"])
 
     #Regresa lista de tipos de parametros de una tabla especificada.
     def getListaParms(self, idTabla):
