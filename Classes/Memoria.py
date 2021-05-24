@@ -1,3 +1,10 @@
+# 
+#     Clase Memoria: Crea y maneja direcciones virutales para la memoria.
+#     Compiladores
+#     Diego Fernando Montaño Pérez
+#     Jose Alberto Gonzalez 
+# 
+
 #DIRS MEMORIA VIRTUAL
 #G=GLOBAL; CTE=CONSTANTE; TMP=TEMPORAL;
 #E=ENTERO; F=FLOTANTE; C=CHAR; B=BOOL; 
@@ -232,15 +239,9 @@ class Memoria:
         self.tmpBoolAux=0
 #######################################################
 
-    #Exist value?
-    def existVal(self, add):
-        return add not in self.memory
-
-    #return value
-    def getVal(self, add):
-        if self.existVal(add):
-            print("No existe direccion")
-        return self.memory[add]
+    #Regresar valores guardados
+    def getMemory(self):
+        return self.memory
 
     #print memory
     def printMemory(self):

@@ -1,4 +1,4 @@
-programa test;
+programa test1;
 variables entero : a,b,c,d;
 
 %%test comment

@@ -1,4 +1,9 @@
-from queue import LifoQueue
+# 
+#     Clase MaquinaVirtual: Ejecuta el archivo obj.
+#     Compiladores
+#     Diego Fernando Montaño Pérez
+#     Jose Alberto Gonzalez 
+# 
 
 #G=GLOBAL; CTE=CONSTANTE; TMP=TEMPORAL;
 #E=ENTERO; F=FLOTANTE; C=CHAR; B=BOOL; 
@@ -38,6 +43,34 @@ L_TMP_C_INI=26500
 L_TMP_C_FIN=27499
 L_TMP_B_INI=27500
 L_TMP_B_FIN=28499
-
+#######################################################   
+import sys
+from queue import LifoQueue
 stackExe = LifoQueue()
-
+#######################################################   
+#ejecutar programa
+def ejecuta():
+    pass
+#######################################################   
+#ejecutar programa
+def prepararData():
+    pass
+#######################################################   
+# print para testing
+def log():
+    pass
+#######################################################   
+if __name__ == '__main__':
+    if (len(sys.argv)>1):
+        file = sys.argv[1]
+        try:
+            f = open("/Testing/"+file, 'r')
+            data = f.readlines()
+            f.close()
+            prepararData(data)
+            ejecuta()
+            log()
+        except EOFError:
+            print(EOFError)
+    else:
+        print(".dout no existente.")
