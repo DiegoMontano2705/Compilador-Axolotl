@@ -47,9 +47,11 @@ class TablaManager:
             memoriaLocal.setDicsAux("local")
             self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms, memoriaLocal=memoriaLocal) #Siempre se va a generar el pointer
 
+
     #Al terminar, se elimina dirFun.
-    def eraseDirFun(self):
-        self.dirFun = Tabla("dirFun")
+    def deleteTablaVars(self, idTabla):
+        if(self.dirFun.existRow(idTabla)):
+            self.getTablaVar(idTabla).deleteTabla()
 
     #Add reserva de recursos en contexto
     # [enteros, flotantes, chars] [enteros,flotantes,chars,bool]
