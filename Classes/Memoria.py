@@ -239,15 +239,9 @@ class Memoria:
         self.tmpBoolAux=0
 #######################################################
 
-    #Exist value?
-    def existVal(self, add):
-        return add not in self.memory
-
-    #return value
-    def getVal(self, add):
-        if self.existVal(add):
-            print("No existe direccion")
-        return self.memory[add]
+    #Regresar valores guardados
+    def getMemory(self):
+        return self.memory
 
     #print memory
     def printMemory(self):

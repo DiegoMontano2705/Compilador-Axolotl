@@ -164,10 +164,9 @@ def t_COMMENT(t):
 #t_ignore = r' '
 t_ignore=' \t\r\n\f\v' 
 
-# Building the lexer
-lex.lex()
 
 #Building managers
+lex.lex() #Building the lexer
 quadruples = QuadruplesManager()
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
@@ -181,6 +180,8 @@ def p_programa(p):
     ''' programa : STARTPROGRAMA ID SEMICOLON main
                 | STARTPROGRAMA ID SEMICOLON programaAux main
     '''
+    superTabla.set_nombrePrograma(p[2])
+
 def p_main(p):
     ''' main : PRINCIPAL LP RP LCB estatutosAux RCB
     '''
@@ -536,7 +537,20 @@ def p_error(p):
     print(f"Error de sintaxis: error {token}")
     #print("Error de sintaxis : '%s' " % p.value)
     exit()
-
+######################################################################################
+#Crear ejecutable .obj
+def crearOutFile():
+    original_stdout = sys.stdout #Referencia original standar output
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    root = ROOT_DIR+"/Testing/objFiles/"
+    nombreProg = superTabla.get_nombrePrograma() 
+    with open(root+nombreProg+".out", 'w') as f:
+        sys.stdout = f #cambiar standar output to the file
+        # print ctes in file
+        print("### CTES ###")
+        for key, value in ctes_memoria.getMemory().items():
+            print(key,value)
+        sys.stdout = original_stdout #resete standar output
 ######################################################################################
 #Creating praser
 yacc.yacc()
@@ -552,6 +566,8 @@ if __name__ == '__main__':
         except EOFError:
             quit()
     yacc.parse(s) #Parser with grammar
+    crearOutFile()
+
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()

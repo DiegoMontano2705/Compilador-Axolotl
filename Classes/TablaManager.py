@@ -17,7 +17,7 @@ class TablaManager:
         self.currentScope = "global" #En que scope se encuentra: class or global
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = "" #Que tipo de variable se encuentra.
-        
+        self.nombrePrograma = "" #Nombre del programa
 
     #sets and gets
     def get_currentTablaId(self):
@@ -25,6 +25,12 @@ class TablaManager:
 
     def set_currentTablaId(self, id):
         self.currentTablaId = id
+
+    def set_nombrePrograma(self, id):
+        self.nombrePrograma = id
+        
+    def get_nombrePrograma(self):
+        return self.nombrePrograma
 
     def get_currentType(self):
         return self.currentType
