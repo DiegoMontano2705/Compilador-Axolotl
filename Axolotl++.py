@@ -550,6 +550,7 @@ def crearOutFile():
         print("### CTES ###")
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
+        
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
 #Creating praser
@@ -559,7 +560,7 @@ if __name__ == '__main__':
         fileName = sys.argv[1]
         try:
             ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-            namef = ROOT_DIR+"/Testing/"+fileName 
+            namef = ROOT_DIR+"/Testing/axFiles/"+fileName 
             file = open(namef,'r')
             s = file.read()
             file.close()
