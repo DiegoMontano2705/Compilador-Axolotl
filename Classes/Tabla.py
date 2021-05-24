@@ -17,6 +17,10 @@ class Tabla:
     def nameTable(self):
         return self.id_tabla
 
+    def deleteTabla(self):
+        self.id_tabla=""
+        self.dict.clear()
+
     #Agrega una nueva row con id y los kwargs pasados.
     def insertRow(self,id, **kwargs):
         self.dict[id] = {}

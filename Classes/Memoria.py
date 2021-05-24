@@ -1,3 +1,10 @@
+# 
+#     Clase Memoria: Crea y maneja direcciones virutales para la memoria.
+#     Compiladores
+#     Diego Fernando Montaño Pérez
+#     Jose Alberto Gonzalez 
+# 
+
 #DIRS MEMORIA VIRTUAL
 #G=GLOBAL; CTE=CONSTANTE; TMP=TEMPORAL;
 #E=ENTERO; F=FLOTANTE; C=CHAR; B=BOOL; 
@@ -54,7 +61,7 @@ class Memoria:
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
         self.tmpBoolAux = 0 #tempora_bool
-        
+#######################################################      
     #set dirs en auxiliares
     def setDicsAux(self, tipoMemoria):
         if tipoMemoria == "global":
@@ -78,7 +85,7 @@ class Memoria:
             self.tmpCharAux = L_TMP_C_INI
             self.tmpBoolAux = L_TMP_B_INI
         
-
+#######################################################
     #guardar valor en dic direcciones
     #tipo = entero, flotante, char, bool
     #contexto = vars o tmps
@@ -134,7 +141,7 @@ class Memoria:
                 else:
                     print("overflow memoria: temporales globales chars.")
                     sys.exit()
-
+#######################################################
     #guardar valor en dic que no se repita
     #constantes
     def setConstante(self, value):
@@ -162,7 +169,64 @@ class Memoria:
                     sys.exit()
             else:
                 print("type mismatch: constantes solo enteras, float, char.")
+#######################################################
+#Locales
+#Regresa direccion virutal para las vars y temporales locales dentro de un contexto.
 
+    def getLocalDirVirtual(self, tipo, contexto):
+            if(contexto == "vars"): #Variables
+                if(tipo == "entero"):
+                    if self.enterosAux in range(L_E_INI, L_E_FIN):
+                        self.enterosAux+=1
+                        return (self.enterosAux-1)
+                    else:
+                        print("overflow memoria: globales enteras.")
+                        sys.exit()
+                elif(tipo == "flotante"):
+                    if self.flotantesAux in range(L_F_INI, L_F_FIN):
+                        self.flotantesAux+=1
+                        return (self.flotantesAux-1)
+                    else:
+                        print("overflow memoria: globales flotantes.")
+                        sys.exit()
+                elif(tipo == "char"):
+                    if self.charAux in range(L_C_INI, L_C_FIN):
+                        self.charAux+=1
+                        return (self.charAux-1)
+                    else:
+                        print("overflow memoria: globales chars.")
+                        sys.exit()
+            elif(contexto == "tmps"): #temporales
+                if(tipo=="entero"):
+                    if self.tmpEnteroAux in range(L_TMP_E_INI, L_TMP_E_FIN):
+                        self.tmpEnteroAux+=1
+                        return (self.tmpEnteroAux-1)
+                    else:
+                        print("overflow memoria: temporales globales enteras.")
+                        sys.exit()
+                elif(tipo=="flotante"):
+                    if self.tmpFlotanteAux in range(L_TMP_F_INI, L_TMP_F_FIN):
+                        self.tmpFlotanteAux+=1
+                        return (self.tmpFlotanteAux-1)
+                    else:
+                        print("overflow memoria: temporales globales flotantes.")
+                        sys.exit()
+                elif(tipo=="char"):
+                    if self.tmpCharAux in range(L_TMP_C_INI, L_TMP_C_FIN):
+                        self.tmpCharAux+=1
+                        return (self.tmpCharAux-1)
+                    else:
+                        print("overflow memoria: temporales globales chars.")
+                        sys.exit()
+                elif(tipo=="bool"):
+                    if self.tmpBoolAux in range(L_TMP_B_INI, L_TMP_B_FIN):
+                        self.tmpBoolAux+=1
+                        return (self.tmpBoolAux-1)
+                    else:
+                        print("overflow memoria: temporales globales chars.")
+                        sys.exit()
+
+#######################################################
     #Resete contadores de recursos
     def reseteRecursos(self):
         self.memory={}
@@ -173,47 +237,21 @@ class Memoria:
         self.tmpFlotanteAux=0
         self.tmpCharAux=0
         self.tmpBoolAux=0
+#######################################################
 
-    # #Contador de recursos
-    # def addMemoriaRes(self, contexto, tipo):
-    #     if(contexto == "vars"):
-    #         if(tipo == "entero"):
-    #             self.enterosAux+=1
-    #         elif(tipo =="float"):
-    #             self.flotantesAux+=1
-    #         elif(tipo=="char"):
-    #             self.charAux+=1
-    #     elif(contexto=="tmps"):
-    #         if(tipo == "entero"):
-    #             self.tmpEnteroAux+=1
-    #         elif(tipo =="float"):
-    #             self.tmpFlotanteAux+=1
-    #         elif(tipo=="char"):
-    #             self.tmpCharAux+=1
-    #         elif(tipo=="bool"):
-    #             self.tmpBoolAux+=1
-
-    # #Regresa reserva de recursos
-    # def getMemoriaRes(self):
-    #     e = self.enterosAux
-    #     f = self.flotantesAux
-    #     c = self.charAux
-    #     te = self.tmpEnteroAux
-    #     tf = self.tmpFlotanteAux
-    #     tc = self.tmpCharAux
-    #     tb = self.tmpBoolAux
-    #     return ({"vars": [e,f,c], "tmps":[te,tf,tc,tb]})
-
-    #Exist value?
-    def existVal(self, add):
-        return add not in self.memory
-
-    #return value
-    def getVal(self, add):
-        if self.existVal(add):
-            print("No existe direccion")
-        return self.memory[add]
+    #Regresar valores guardados
+    def getMemory(self):
+        return self.memory
 
     #print memory
     def printMemory(self):
         print(self.memory)
+
+# def main():
+#     m = Memoria()
+#     m.setDicsAux("local")
+#     print(m.getLocalDirVirtual("entero", "vars"))
+#     print(m.getLocalDirVirtual("entero", "vars"))
+#     print(m.getLocalDirVirtual("entero", "vars"))
+
+# main()

@@ -53,7 +53,26 @@ L_TMP_C_FIN=27499
 L_TMP_B_INI=27500
 L_TMP_B_FIN=28499
 #codigos de operacion
-
+cod_operacion = {
+    '+': 1,
+    '-': 2,
+    '*': 3,
+    '/': 4,
+    '=': 5,
+    '<': 6,
+    '>': 7,
+    '<=': 8,
+    '>=': 9,
+    '==': 10,
+    '&': 11,
+    '|': 12,
+    'print': 13,
+    'goto': 14,
+    'gotof': 15,
+    'gosub': 16,
+    'endproc': 17,
+    'return': 18
+}
 ######################################################################################
 #Tokens
 tokens = [
@@ -145,11 +164,10 @@ def t_COMMENT(t):
 #t_ignore = r' '
 t_ignore=' \t\r\n\f\v' 
 
-# Building the lexer
-lex.lex()
 
 #Building managers
 quads = QuadruplesManager()
+lex.lex() #Building the lexer
 superTabla = TablaManager()
 superTabla.crearTabla("global", dirInicio="")
 ctes_memoria = Memoria() #crear memoria para constantes
@@ -162,6 +180,8 @@ def p_programa(p):
     ''' programa : STARTPROGRAMA ID SEMICOLON main
                 | STARTPROGRAMA ID SEMICOLON programaAux main
     '''
+    superTabla.set_nombrePrograma(p[2])
+
 
 def p_main(p):
     ''' main : PRINCIPAL LP RP LCB estatutosAux endprog
@@ -201,7 +221,7 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
-    superTabla.insertRowToTablaVar(currTabla, p[1], tipo=currType, dirVirutal="") #agregar var y tipo en su respectiva tabla
+    superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
@@ -297,7 +317,7 @@ def p_parametros(p):
                     | tipo_simple ID COMMA parametros
     '''
     currTabla = superTabla.get_currentTablaId()
-    superTabla.insertRowToTablaVar(currTabla, p[2], tipo=p[1], dirVirtual="") #Agregar var tabla variables
+    superTabla.insertRowToTablaVar(currTabla, p[2], p[1], "vars") #Agregar var tabla variables
     superTabla.insertRowToListaParms(currTabla, p[1]) #Agregar tipo a lista de parametros
 
 def p_var(p):
@@ -563,21 +583,39 @@ def p_error(p):
     #print("Error de sintaxis : '%s' " % p.value)
     exit()
 
+######################################################################################
+#Crear ejecutable .obj
+def crearOutFile():
+    original_stdout = sys.stdout #Referencia original standar output
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    root = ROOT_DIR+"/Testing/objFiles/"
+    nombreProg = superTabla.get_nombrePrograma() 
+    with open(root+nombreProg+".out", 'w') as f:
+        sys.stdout = f #cambiar standar output to the file
+        # print ctes in file
+        print("### CTES ###")
+        for key, value in ctes_memoria.getMemory().items():
+            print(key,value)
+        
+        sys.stdout = original_stdout #resete standar output
+######################################################################################
 #Creating praser
 yacc.yacc()
+if __name__ == '__main__':
+    if (len(sys.argv)>1):
+        fileName = sys.argv[1]
+        try:
+            ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+            namef = ROOT_DIR+"/Testing/axFiles/"+fileName 
+            file = open(namef,'r')
+            s = file.read()
+            file.close()
+        except EOFError:
+            quit()
+    yacc.parse(s) #Parser with grammar
+    crearOutFile()
 
-#to check if file exists
-try:
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-    namef = ROOT_DIR+"/Testing/ifQuad.txt" 
-    file = open(namef,'r')
-    s = file.read()
-    file.close()
-except EOFError:
-    quit()
-#Prase file using own grammar
-yacc.parse(s)
-
+######################################################################################
 #print testing
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
