@@ -335,8 +335,10 @@ def p_asign_vars(p):
 def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
-    varTipo = superTabla.getTipoIdTablaVars(superTabla.currentTablaId, p[1])
-    quads.id_push(p[1], varTipo) #Agregar id con varTipo
+    tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+    dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1])    
+    quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+    # quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
 #Estatutos
@@ -576,27 +578,33 @@ def p_ctei(p):
     ''' ctei : CTEI '''
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
+    dirAux = ctes_memoria.getDirMemory(p[1])
     quads.id_push(p[1], "entero") #Agregar a quads operations
+    # quads.id_push(dirAux, "entero") #Agregar dir a quads operations
+
     
 def p_ctef(p):
     ''' ctef : CTEF '''
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
+    dirAux = ctes_memoria.getDirMemory(p[1])
     quads.id_push(p[1], "float") #Agregar a quads operations
+    # quads.id_push(dirAux, "float") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
     ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
+    dirAux = ctes_memoria.getDirMemory(p[1])
     quads.id_push(p[1], "char") #Agregar a quads operations
+    # quads.id_push(dirAux, "char") #Agrega dir a quads operations
 
 ######################################################################################
 #Manejo errores
 def p_error(p):
     token = f"{p.type}({p.value}) en linea {p.lineno}"
     print(f"Error de sintaxis: error {token}")
-    #print("Error de sintaxis : '%s' " % p.value)
-    exit()
+    sys.exit()
 
 ######################################################################################
 #Crear ejecutable .obj
@@ -612,11 +620,14 @@ def crearOutFile():
         print("### CTES ###")
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
+        #print quads in file
         print("### QUADS ###")
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator() ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-        
+            #print con codigo de operacion
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+        #print 
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
 #Creating praser

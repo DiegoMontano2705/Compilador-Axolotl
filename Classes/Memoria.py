@@ -169,6 +169,7 @@ class Memoria:
                     sys.exit()
             else:
                 print("type mismatch: constantes solo enteras, float, char.")
+    
 #######################################################
 #Locales
 #Regresa direccion virutal para las vars y temporales locales dentro de un contexto.
@@ -238,6 +239,14 @@ class Memoria:
         self.tmpCharAux=0
         self.tmpBoolAux=0
 #######################################################
+#Auxiliares Memoria
+
+    #Regresa direccion de un variable/cte especifico
+    def getDirMemory(self, id):
+        key_list = list(self.memory.keys())
+        val_list = list(self.memory.values())
+        position = val_list.index(int(id))
+        return key_list[position]
 
     #Regresar valores guardados
     def getMemory(self):

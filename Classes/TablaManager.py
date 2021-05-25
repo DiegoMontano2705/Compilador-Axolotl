@@ -123,6 +123,13 @@ class TablaManager:
         if(currTabla.findRow(idVar)):
             return currTabla.findRow(idVar)["tipo"]
 
+    #Regresa dir memoria virtual especifica en tablaVariables especificada
+    def getDirIdTablaVars(self, idTabla, idVar):
+        currTabla = self.getTablaVar(idTabla)
+        if(currTabla.findRow(idVar)):
+            return currTabla.findRow(idVar)["dirVirtual"]
+
+
     #Regresa memoria en especifico
     def getMemoriaLocal(self, idTabla):
         return (self.dirFun.findRow(idTabla)["memoriaLocal"])
