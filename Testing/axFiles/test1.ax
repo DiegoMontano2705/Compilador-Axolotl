@@ -2,7 +2,7 @@ programa test1;
 variables entero : a,b,d;
 
 void funcion pruebaUno() {
-    variables entero : e;
+    variables entero : e,f;
     e = 4;
 }
 
