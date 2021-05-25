@@ -189,9 +189,8 @@ def p_main(p):
 
 def p_endprog(p):
     ''' endprog : RCB '''
-    #Print quads to file
-    quads.fillQuadruples()
-    quads.print_quadruples()
+    quads.fillQuadruples() 
+    # quads.print_quadruples()
 
 def p_programaAux(p):
     ''' programaAux : clases programaAux
@@ -503,79 +502,93 @@ def p_f(p): #lpid y rpid para identificar ().
             | llamada_fun_exp
     '''
     p[0] = p[1]
-    # if(p[1]): #si no esta vacio
-    #     print(p[1])
 
 
 #Auxiliares identificadores expresion
 def p_equalId(p):
     ''' equalId : EQUAL '''
     # print("=")
+    quads.operator_push("=")
 
 def p_plusId(p):
     ''' plusId : PLUS '''
     # print("+")
+    quads.operator_push("+")
+
 
 def p_minusId(p):
     ''' minusId : MINUS '''
     # print("-")
+    quads.operator_push("-")
 
 def p_timesId(p):
     ''' timesId : TIMES '''
     # print("*")
+    quads.operator_push("*")
 
 def p_divideId(p):
     ''' divideId : DIVIDE '''
     # print("/")
+    quads.operator_push("/")
 
 def p_greaterThanId(p):
     ''' greaterThanId : GREATER_THAN '''
     # print(">")
+    quads.operator_push(">")
 
 def p_greaterEqualThanId(p):
     ''' greaterEqualThanId : GREATER_EQUAL_THAN '''
     # print(">=")
+    quads.operator_push(">=")
 
 def p_smallerThanId(p):
     ''' smallerThanId : SMALLER_THAN '''
     # print("<")
+    quads.operator_push("<")
 
 def p_smallerEqualThanid(p):
     ''' smallerEqualThanId : SMALLER_EQUAL_THAN '''
     # print("<=")
+    quads.operator_push("<=")
 
 def p_isequalId(p):
     ''' isequalId : IS_EQUAL '''
     # print("==")
+    quads.operator_push("==")
 
 def p_differentId(p):
     ''' differentId : DIFFERENT '''
     # print("!=")
+    quads.operator_push("!=")
 
 def p_lpId(p):
     ''' lpId : LP '''
     # print("(")
+    quads.operator_push("(")
 
 def p_rpId(p):
     ''' rpId : RP '''
     # print(")")
+    quads.operator_push(")")
 ######################################################################################
 #Constantes
 def p_ctei(p):
     ''' ctei : CTEI '''
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
-
+    quads.id_push(p[1], "entero") #Agregar a quads operations
     
 def p_ctef(p):
     ''' ctef : CTEF '''
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
+    quads.id_push(p[1], "float") #Agregar a quads operations
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
     ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
+    quads.id_push(p[1], "char") #Agregar a quads operations
 
 ######################################################################################
 #Manejo errores
@@ -588,6 +601,7 @@ def p_error(p):
 ######################################################################################
 #Crear ejecutable .obj
 def crearOutFile():
+    print("Generando archivo .out ...")
     original_stdout = sys.stdout #Referencia original standar output
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     root = ROOT_DIR+"/Testing/objFiles/"
@@ -599,6 +613,10 @@ def crearOutFile():
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
         print("### QUADS ###")
+        listaQuads = quads.getListaQuads()
+        for i in range(len(listaQuads)):
+            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator() ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+        
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
 #Creating praser
@@ -615,7 +633,7 @@ if __name__ == '__main__':
         except EOFError:
             quit()
     yacc.parse(s) #Parser with grammar
-    crearOutFile()
+    crearOutFile() #generar ejecutable
 
 ######################################################################################
 #print testing

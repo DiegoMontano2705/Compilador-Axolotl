@@ -4,7 +4,7 @@
 #     Diego Fernando Montaño Pérez
 #     Jose Alberto Gonzalez 
 # 
-
+import sys
 class Semantica:
 
     #Entero,+,-: 0
@@ -74,14 +74,20 @@ class Semantica:
         elif(stm=="==" or stm=="!="):
             return 6     
         else:
-            print("Error: Atributos no disponibles en cubo semantico.")        
+            return -1      
 
     #Regresa el tipo del resultado entre leftOp op rightOp
     def resTipo(self,op, leftOp, rightOp):
-        leftOp = self.equivalent(leftOp)
-        rightOp = self.equivalent(rightOp)
-        op = self.equivalent(op)
-        return self.equivalentReturn(self.cuboSemantico[leftOp][rightOp][op])
+        leftOpCode = self.equivalent(leftOp)
+        rightOpCode = self.equivalent(rightOp)
+        opCode = self.equivalent(op)
+
+        res = self.cuboSemantico[leftOpCode][rightOpCode][opCode]
+        if(res >= 0):
+            return self.equivalentReturn(res)
+        else:
+            print("Error: operacion entre", leftOp, op, rightOp, "no es posible")
+            sys.exit()
 
 # def main():
 #     sem = Semantica()

@@ -31,6 +31,9 @@ class QuadruplesManager:
         self.pilaSaltos = LifoQueue() #pila que almacena los saltos pendientes
         self.contParams = 0         #contador para saber que parametro esta recibiendo cuando se llama una funcion/modulo
 
+######################################################################################
+#set and gets
+
     def getID(self):
         return self.idNum
 
@@ -40,6 +43,9 @@ class QuadruplesManager:
     def getContParam(self):
         return self.contParams
     
+    def getListaQuads(self):
+        return self.quadruples
+
     #Se usa para reinicar el contador a cero despues de que llamas todos los parametros de una funcion/modulo
     def setContParam(self,contParams):
         self.contParams = contParams
@@ -47,6 +53,9 @@ class QuadruplesManager:
     #Reset a contador de tmps
     def clearTmps(self):
         self.tmp.clear()
+
+######################################################################################
+#operator push 
 
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self,op):
@@ -61,7 +70,8 @@ class QuadruplesManager:
         else:
             self.pilaOperators.put(op)
             
-
+######################################################################################
+# id push
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
     def id_push(self, idName, idType):
         #push id & type
@@ -93,6 +103,8 @@ class QuadruplesManager:
                         self.pilaOperators.put(pilaOperatorsTop)
                     
 
+######################################################################################
+#Quads helpers
 
     #Genera cuadruplos cuando se encuentra ), hasta volver a encontra (.
     def solveQuadruplesUntil(self, op):
@@ -129,8 +141,6 @@ class QuadruplesManager:
                 self.setID(self.getID() + 1)
                 #self.pilaSaltos.put(self.getID()) #Guardas id del else en pila de saltos
                 self.quadruples.append(q)
-
-            ######
 
             ## print y write
             elif(operator == 'print'):
@@ -174,7 +184,8 @@ class QuadruplesManager:
                     self.pilaOperands.put(result)
                     self.pilaTypes.put(result_type)
 
-
+######################################################################################
+# Testing
     def print_stack(self):
         print("pilaOperands: ")
         while not self.pilaOperands.empty():
@@ -185,6 +196,7 @@ class QuadruplesManager:
             print(self.pilaOperators.get(), end=" ")
         print('\n')   
 
+    #print for testing
     def print_quadruples(self):
         myfile = open('quads.txt', 'w')
         for i in range(len(self.quadruples)):
@@ -192,8 +204,6 @@ class QuadruplesManager:
             #myfile.write("%s \n" % self.quadruples[i].printQuad())
             myfile.write("%s %s %s %s %s \n" % (self.quadruples[i].getID(), self.quadruples[i].getOperator() ,self.quadruples[i].getLeftOp(),self.quadruples[i].getRightOp(), self.quadruples[i].getResult()))
         myfile.close()
-
- 
 
 # def main():
 #    qm = QuadruplesManager()
