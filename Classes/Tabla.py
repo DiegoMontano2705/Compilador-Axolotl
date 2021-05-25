@@ -47,8 +47,7 @@ class Tabla:
         if id in self.dict:
             return self.dict[id]
         else:
-            print("Error:",id, "no declarada en tablaVar de", self.id_tabla)
-            sys.exit()
+            return None
 
     #Regresa true/false para ver si existe la row en la tabla.
     def existRow(self, id):
