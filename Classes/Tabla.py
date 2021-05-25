@@ -4,7 +4,7 @@
 #     Diego Fernando Montaño Pérez
 #     Jose Alberto Gonzalez 
 # 
-
+import sys
 class Tabla:
 
     def __init__(self, id_tabla):
@@ -46,6 +46,9 @@ class Tabla:
     def findRow(self, id):
         if id in self.dict:
             return self.dict[id]
+        else:
+            print("Error:",id, "no declarada en tablaVar")
+            sys.exit()
 
     #Regresa true/false para ver si existe la row en la tabla.
     def existRow(self, id):

@@ -336,6 +336,8 @@ def p_asign_vars(p):
 def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
+    varTipo = superTabla.getTipoIdTablaVars(superTabla.currentTablaId, p[1])
+    quads.id_push(p[1], varTipo) #Agregar id con varTipo
 
 ######################################################################################
 #Estatutos
@@ -411,7 +413,7 @@ def p_startWhile(p):
     quads.pilaSaltos.put(quads.getID())
 
 def p_startWhile2(p):
-    ''' starWhile2 : RP '''
+    ''' startWhile2 : RP '''
     quads.operator_push('GoToF')
     quads.pilaSaltos.put(quads.getID()-1)
 
@@ -596,7 +598,7 @@ def crearOutFile():
         print("### CTES ###")
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
-        
+        print("### QUADS ###")
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
 #Creating praser
