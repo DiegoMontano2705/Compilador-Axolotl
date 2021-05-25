@@ -7,14 +7,14 @@
 from queue import LifoQueue
 import sys
 import queue
-from Classes.Quadruples import *
-from Classes.Semantica import *
-from Classes.Temporal import *
-#from Quadruples import *
-#from Semantica import *
-#from Temporal import *
+#from Classes.Quadruples import *
+#from Classes.Semantica import *
+#from Classes.Temporal import *
+from Quadruples import *
+from Semantica import *
+from Temporal import *
 
-opUntil = ['>', '<', '>=', '<=']
+opUntil = ['>', '<', '>=', '<=', '=']
 opCond_Loops = ['GoToF', 'GoTo', 'GoToV']
 opModules = ['GoSub', 'Era', 'Param','EndFunc']
 
@@ -166,7 +166,6 @@ class QuadruplesManager:
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
             #####
-
             else:
                 right_op = self.pilaOperands.get_nowait()
                 right_type = self.pilaTypes.get_nowait()
@@ -175,14 +174,18 @@ class QuadruplesManager:
                 # print("my operator", operator)
                 result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
                 if(result_type != None):    
-                    result = self.tmp.next() #preparar temporal
                     id_Final = (self.getID() + 1)
-                    q = Quadruples(id_Final,operator, left_op, right_op, result)
-                    self.setID(self.getID() + 1)
-                    #self.quadruples.put(q)
-                    self.quadruples.append(q) 
-                    self.pilaOperands.put(result)
-                    self.pilaTypes.put(result_type)
+                    if(operator == '='):
+                        q = Quadruples(id_Final,operator, right_op, None,left_op )
+                        self.setID(self.getID() + 1)
+                        self.quadruples.append(q) 
+                    else:
+                        result = self.tmp.next() #preparar temporal
+                        q = Quadruples(id_Final,operator, left_op, right_op, result)
+                        self.setID(self.getID() + 1)
+                        self.quadruples.append(q) 
+                        self.pilaOperands.put(result)
+                        self.pilaTypes.put(result_type)
 
 ######################################################################################
 # Testing
@@ -205,8 +208,8 @@ class QuadruplesManager:
             myfile.write("%s %s %s %s %s \n" % (self.quadruples[i].getID(), self.quadruples[i].getOperator() ,self.quadruples[i].getLeftOp(),self.quadruples[i].getRightOp(), self.quadruples[i].getResult()))
         myfile.close()
 
-# def main():
-#    qm = QuadruplesManager()
+def main():
+    qm = QuadruplesManager()
     #A - ( B + C) * D * E ->
     #+ B C t0
     #* t0 D t1
@@ -273,21 +276,24 @@ class QuadruplesManager:
 #    qm.print_quadruples()
 
      #Test print
-#    qm.id_push("A", "float")
-#    qm.operator_push("=")
-#    qm.id_push("B", "float")
-#    qm.operator_push("*")
-#    qm.id_push("C", "float")
-#    qm.operator_push("+")
-#    qm.id_push("D", "float")
-#    qm.operator_push("-")
-#    qm.id_push("E", "float")
-#    qm.operator_push('print')
-
-#    qm.fillQuadruples()
-#    qm.print_quadruples()
+    qm.id_push("A", "float")
+    qm.operator_push("=")
+    qm.id_push("10.2", "float")
+    #qm.operator_push("*")
+    #qm.id_push("15", "float")
+    #qm.operator_push("+")
+    #qm.id_push("D", "float")
+    #qm.operator_push("-")
+    #qm.id_push("E", "float")
+    qm.id_push("G", "float")
+    qm.operator_push("=")
+    qm.id_push("12", "float")
     
-# main()
+
+    qm.fillQuadruples()
+    qm.print_quadruples()
+    
+main()
 
 
 
