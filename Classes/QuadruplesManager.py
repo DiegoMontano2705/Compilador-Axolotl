@@ -10,9 +10,9 @@ import queue
 from Classes.Quadruples import *
 from Classes.Semantica import *
 from Classes.Temporal import *
-#from Quadruples import *
-#from Semantica import *
-#from Temporal import *
+# from Quadruples import *
+# from Semantica import *
+# from Temporal import *
 
 opUntil = ['>', '<', '>=', '<=']
 opCond_Loops = ['GoToF', 'GoTo', 'GoToV']
@@ -82,7 +82,6 @@ class QuadruplesManager:
             #check pasados operators
             pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
             self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
-            
             if(not pilaOperatorsTop == "("): #Fondo falso / salta
                 if(pilaOperatorsTop == "*" or pilaOperatorsTop == "/"):
                     operator = self.pilaOperators.get_nowait()
@@ -101,7 +100,9 @@ class QuadruplesManager:
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
                         self.pilaOperators.put(pilaOperatorsTop)
-                    
+                # elif(self.pilaOperators.qsize()<=1 and pilaOperatorsTop == "="): 
+                #     operator = self.pilaOperators.get_nowait()
+                #     self.generateQuadruple(operator)
 
 ######################################################################################
 #Quads helpers
@@ -205,89 +206,102 @@ class QuadruplesManager:
             myfile.write("%s %s %s %s %s \n" % (self.quadruples[i].getID(), self.quadruples[i].getOperator() ,self.quadruples[i].getLeftOp(),self.quadruples[i].getRightOp(), self.quadruples[i].getResult()))
         myfile.close()
 
-# def main():
-#    qm = QuadruplesManager()
-    #A - ( B + C) * D * E ->
-    #+ B C t0
-    #* t0 D t1
-    #* t1 E t2
-    #- A t2 t3
+# if __name__ == '__main__':
+#     qm = QuadruplesManager()
+#     #A - ( B + C) * D * E ->
+#     #+ B C t0
+#     #* t0 D t1
+#     #* t1 E t2
+#     #- A t2 t3
 
-    # if(A + B > C){  # GOTOF t3 8
-    #   C * D
-    # }
-    # else {
-    # C + D
-    # }
+#     # if(A + B > C){  # GOTOF t3 8
+#     #   C * D
+#     # }
+#     # else {
+#     # C + D
+#     # }
     
-    # #Test Conditional
-    # qm.id_push("A", "float")
-    # qm.operator_push("*")                    #Op GOTOF
-    # qm.id_push("B", "float")                 #id 
-    # ##First If                              QUAD * A B T0
-    # qm.operator_push("GoToF")
-    # qm.id_push("C", "float")
-    # qm.operator_push("+")
-    # qm.id_push("D", "float")
-    # # Else
-    # qm.operator_push("GoTo")
-    # qm.id_push("E", "float")
-    # qm.operator_push("-")
-    # qm.id_push("F", "float")
-    # qm.fillQuadruples()
-    # qm.print_stack()
-    # qm.print_quadruples()
+#     # #Test Conditional
+#     # qm.id_push("A", "float")
+#     # qm.operator_push("*")                    #Op GOTOF
+#     # qm.id_push("B", "float")                 #id 
+#     # ##First If                              QUAD * A B T0
+#     # qm.operator_push("GoToF")
+#     # qm.id_push("C", "float")
+#     # qm.operator_push("+")
+#     # qm.id_push("D", "float")
+#     # # Else
+#     # qm.operator_push("GoTo")
+#     # qm.id_push("E", "float")
+#     # qm.operator_push("-")
+#     # qm.id_push("F", "float")
+#     # qm.fillQuadruples()
+#     # qm.print_stack()
+#     # qm.print_quadruples()
 
-    #Test Conditional
-#    qm.operator_push('(')
-#    qm.id_push("A", "float")
-#    qm.operator_push(">")
-#    qm.id_push("B", "float")
-#    qm.operator_push("-")
-#    qm.id_push("D", "float")
-#    qm.operator_push(')')
-    ##First If
-#    qm.operator_push('GoToF')
-#    qm.id_push("F", "float")
-#    qm.operator_push("+")
-#    qm.id_push("G", "float")
-    ## Else
-#    qm.operator_push('GoTo')
-#    qm.id_push("H", "float")
-#    qm.operator_push("*")
-#    qm.id_push("I", "float")
+#     #Test Conditional
+# #    qm.operator_push('(')
+# #    qm.id_push("A", "float")
+# #    qm.operator_push(">")
+# #    qm.id_push("B", "float")
+# #    qm.operator_push("-")
+# #    qm.id_push("D", "float")
+# #    qm.operator_push(')')
+#     ##First If
+# #    qm.operator_push('GoToF')
+# #    qm.id_push("F", "float")
+# #    qm.operator_push("+")
+# #    qm.id_push("G", "float")
+#     ## Else
+# #    qm.operator_push('GoTo')
+# #    qm.id_push("H", "float")
+# #    qm.operator_push("*")
+# #    qm.id_push("I", "float")
 
 
 
-#     #Test operations
-#    qm.id_push("A", "float")
-#    qm.operator_push("=")
-#    qm.id_push("B", "float")
-#    qm.operator_push("*")
-#    qm.id_push("C", "float")
-#    qm.operator_push("+")
-#    qm.id_push("D", "float")
-#    qm.operator_push("-")
-#    qm.id_push("E", "float")
-#    qm.fillQuadruples()
-#    qm.print_quadruples()
+# #     #Test operations
+# #    qm.id_push("A", "float")
+# #    qm.operator_push("=")
+# #    qm.id_push("B", "float")
+# #    qm.operator_push("*")
+# #    qm.id_push("C", "float")
+# #    qm.operator_push("+")
+# #    qm.id_push("D", "float")
+# #    qm.operator_push("-")
+# #    qm.id_push("E", "float")
+# #    qm.fillQuadruples()
+# #    qm.print_quadruples()
 
-     #Test print
-#    qm.id_push("A", "float")
-#    qm.operator_push("=")
-#    qm.id_push("B", "float")
-#    qm.operator_push("*")
-#    qm.id_push("C", "float")
-#    qm.operator_push("+")
-#    qm.id_push("D", "float")
-#    qm.operator_push("-")
-#    qm.id_push("E", "float")
-#    qm.operator_push('print')
+#      #Test print
+#     # qm.id_push("A", "float")
+#     # qm.operator_push("=")
+#     # qm.id_push("B", "float")
+#     # qm.operator_push("*")
+#     # qm.id_push("C", "float")
+#     # qm.operator_push("+")
+#     # qm.id_push("D", "float")
+#     # qm.operator_push("-")
+#     # qm.id_push("E", "float")
+#     # qm.operator_push('print')
 
-#    qm.fillQuadruples()
-#    qm.print_quadruples()
+#     #Test constantes
+#     qm.id_push("a", "entero")
+#     qm.operator_push("=")
+#     qm.id_push("4", "entero")
+#     qm.id_push("b", "entero")
+#     qm.operator_push("=")
+#     qm.id_push("5", "entero")
+#     qm.operator_push("+")
+#     qm.id_push("5", "entero")
+#     qm.operator_push("+")
+#     qm.id_push("4", "entero")
+#     qm.operator_push("-")
+#     qm.id_push("2", "entero")
+#     qm.fillQuadruples()
+#     qm.print_quadruples()
     
-# main()
+
 
 
 

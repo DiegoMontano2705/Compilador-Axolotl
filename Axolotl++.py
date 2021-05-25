@@ -195,10 +195,10 @@ def p_endprog(p):
 def p_programaAux(p):
     ''' programaAux : clases programaAux
                         | dec_vars programaAux
-                        | funciones programaAux
+                        | funcionesAux programaAux
                         | clases
                         | dec_vars
-                        | funciones
+                        | funcionesAux
     '''
 ######################################################################################
 #Declarar Variables
@@ -248,6 +248,7 @@ def p_clases(p):
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
+    #Borrar tabla de vars
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
 #Auxiliar para identificar clase
@@ -268,13 +269,13 @@ def p_funcionesAux(p):
     '''
 
 def p_funciones(p):
-    ''' funciones : funcionIdAux LP RP dec_vars LCB estatutosAux RCB
-                    | funcionIdAux LP parametros RP dec_vars LCB estatutosAux RCB
+    ''' funciones : funcionIdAux LP RP LCB dec_vars estatutosAux RCB
+                    | funcionIdAux LP parametros RP LCB dec_vars estatutosAux RCB
                     | funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
-    #Agregar recursos utilizados.
-    #Borrar su tabla de variables
+    # currTabla = superTabla.get_currentTablaId()
+    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
 
 def p_funcionId(p):
@@ -336,8 +337,15 @@ def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
     tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
-    dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1])    
+    print(tipoVar)
+    if(superTabla.get_currentTablaId()!="global"):
+        dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
+        #Checar en tabla global
+    else:
+        #get tipo var
+        dirVar = global_memoria.getDirMemory(str(p[1]))
     quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+    # print(p[1])
     # quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
@@ -578,8 +586,9 @@ def p_ctei(p):
     ''' ctei : CTEI '''
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
-    dirAux = ctes_memoria.getDirMemory(p[1])
+    dirAux = ctes_memoria.getDirMemory(int(p[1]))
     quads.id_push(p[1], "entero") #Agregar a quads operations
+    # print(p[1])
     # quads.id_push(dirAux, "entero") #Agregar dir a quads operations
 
     
@@ -587,15 +596,16 @@ def p_ctef(p):
     ''' ctef : CTEF '''
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
-    dirAux = ctes_memoria.getDirMemory(p[1])
+    dirAux = ctes_memoria.getDirMemory(float(p[1]))
     quads.id_push(p[1], "float") #Agregar a quads operations
+    # print(p[1])
     # quads.id_push(dirAux, "float") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
     ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
-    dirAux = ctes_memoria.getDirMemory(p[1])
+    dirAux = ctes_memoria.getDirMemory(str(p[1]))
     quads.id_push(p[1], "char") #Agregar a quads operations
     # quads.id_push(dirAux, "char") #Agrega dir a quads operations
 
@@ -650,8 +660,8 @@ if __name__ == '__main__':
 #print testing
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
-# print(superTabla.getRecursos("creando"))
-# superTabla.printDirFun() #superTabla con funciones/clases/methodos
+# print(superTabla.getRecursos("global"))
+superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")

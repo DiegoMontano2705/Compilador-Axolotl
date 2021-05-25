@@ -128,6 +128,8 @@ class TablaManager:
         currTabla = self.getTablaVar(idTabla)
         if(currTabla.findRow(idVar)):
             return currTabla.findRow(idVar)["dirVirtual"]
+        else:
+            print("no yei", idVar)
 
 
     #Regresa memoria en especifico

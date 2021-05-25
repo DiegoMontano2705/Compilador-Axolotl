@@ -8,6 +8,7 @@ clase creando {
         flotante : d, e;
     metodos
         entero funcion regresaValores(entero k, flotante h){
+            variables entero : a;
             a = 8 * 2 + 2;
             b = 10.5;
         } 
@@ -25,7 +26,7 @@ flotante funcion pruebaDos(char i){
     escribe("probando codigo", 1+2);
 }
 
-variables entero : j;
+variables entero : j, a;
 
 principal() {
     j = 4;
