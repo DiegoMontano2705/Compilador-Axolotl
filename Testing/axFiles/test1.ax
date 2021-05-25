@@ -1,6 +1,11 @@
 programa test1;
 variables entero : a,b,d;
 
+void funcion pruebaUno() {
+    variables entero : e;
+    e = 4;
+}
+
 %%test comment
 principal() {
     a = 4; %% una igualacion

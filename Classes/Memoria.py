@@ -245,7 +245,12 @@ class Memoria:
     def getDirMemory(self, id):
         key_list = list(self.memory.keys())
         val_list = list(self.memory.values())
-        position = val_list.index(int(id))
+        if(isinstance(id, int)):
+            position = val_list.index(int(id))
+        elif(isinstance(id, float)):
+            position = val_list.index(float(id))
+        elif(isinstance(id, str)):
+            position = val_list.index(str(id))
         return key_list[position]
 
     #Regresar valores guardados
