@@ -269,9 +269,7 @@ def p_funcionesAux(p):
     '''
 
 def p_funciones(p):
-    ''' funciones : funcionIdAux LP RP LCB dec_vars estatutosAux RCB
-                    | funcionIdAux LP parametros RP LCB dec_vars estatutosAux RCB
-                    | funcionIdAux LP RP LCB estatutosAux RCB
+    ''' funciones : funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
     # currTabla = superTabla.get_currentTablaId()
@@ -332,18 +330,22 @@ def p_asign_vars(p):
                     | var equalId CTEC SEMICOLON
     '''
 
+
 #Auxiliar para identificar id de asignacion.
 def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
-    tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
-    print(tipoVar)
+
+    #Validar que exista y extraer tipo.
     if(superTabla.get_currentTablaId()!="global"):
         dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
-        #Checar en tabla global
+        tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+        if(dirVar == -1): #Si no esta local, buscar global
+            dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
     else:
-        #get tipo var
-        dirVar = global_memoria.getDirMemory(str(p[1]))
+        #Checar global
+        dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+
     quads.id_push(p[1], tipoVar) #Agregar id con varTipo
     # print(p[1])
     # quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
@@ -659,7 +661,7 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-# global_memoria.printMemory()
+global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")

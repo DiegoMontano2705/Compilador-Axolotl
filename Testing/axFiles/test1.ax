@@ -2,8 +2,8 @@ programa test1;
 variables entero : a,b,d;
 
 void funcion pruebaUno() {
-    variables entero : e;
-    e = 4;
+    b = 6;
+    return (5);
 }
 
 %%test comment

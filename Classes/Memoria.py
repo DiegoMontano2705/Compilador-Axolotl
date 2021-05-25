@@ -243,15 +243,27 @@ class Memoria:
 
     #Regresa direccion de un variable/cte especifico
     def getDirMemory(self, id):
-        key_list = list(self.memory.keys())
-        val_list = list(self.memory.values())
-        if(isinstance(id, int)):
-            position = val_list.index(int(id))
-        elif(isinstance(id, float)):
-            position = val_list.index(float(id))
-        elif(isinstance(id, str)):
-            position = val_list.index(str(id))
-        return key_list[position]
+        try:
+            key_list = list(self.memory.keys())
+            val_list = list(self.memory.values())
+            if(isinstance(id, int)):
+                position = val_list.index(int(id))
+            elif(isinstance(id, float)):
+                position = val_list.index(float(id))
+            elif(isinstance(id, str)):
+                position = val_list.index(str(id))
+        except ValueError:
+            print("ERROR:",id, "no encontrado ni local y global")
+            sys.exit()
+        return key_list[position], self.getTipoByDir(key_list[position])
+
+    def getTipoByDir(self, dir):
+        if(dir in range(G_E_INI, G_E_FIN)):
+            return "entero"
+        elif(dir in range(G_F_INI, G_F_FIN)):
+            return "float"
+        elif(dir in range(G_C_INI, G_C_FIN)):
+            return "char"
 
     #Regresar valores guardados
     def getMemory(self):
