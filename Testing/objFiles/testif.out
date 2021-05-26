@@ -1,8 +1,8 @@
 ### CTES ###
 ### QUADS ###
-0 GoTo None None 1
+0 GoTo None None 0
 1 > a b tmp0
-2 GoToF tmp0 None 3
+2 GoToF tmp0 None 4
 3 * a d tmp1
-4 = d None tmp1
-5 = c None c
+4 = tmp1 None c
+5 = c None d

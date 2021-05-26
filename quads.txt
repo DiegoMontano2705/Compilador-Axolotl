@@ -1,2 +1,5 @@
-0 = G None 10.2 
-1 = 12 None A 
+0 = 4 None a 
+1 + 5 5 tmp0 
+2 + tmp0 4 tmp1 
+3 - tmp1 2 tmp2 
+4 = tmp2 None b 
