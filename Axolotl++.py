@@ -142,6 +142,7 @@ def p_programa(p):
                 | startProg ID SEMICOLON programaAux main
     '''
     superTabla.set_nombrePrograma(p[2])
+    superTabla.deleteTablaVars("global")
 
 def p_startProg(p):
     ''' startProg : STARTPROGRAMA '''
@@ -197,7 +198,6 @@ def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
     '''
-    # print("multi")
 
 def p_typeAuxId(p):
     ''' typeAuxId : tipo'''
@@ -239,8 +239,9 @@ def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
-    # currTabla = superTabla.get_currentTablaId()
-    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    currTabla = superTabla.get_currentTablaId()
+    superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
+    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
 
 def p_funcionId(p):
@@ -282,8 +283,10 @@ def p_parametros(p):
                     | tipo_simple ID COMMA parametros
     '''
     currTabla = superTabla.get_currentTablaId()
+    superTabla.addContRecursos(superTabla.get_currentTablaId(), p[1]) #Contabilizar recursos por funcion/clase
     superTabla.insertRowToTablaVar(currTabla, p[2], p[1], "vars") #Agregar var tabla variables
     superTabla.insertRowToListaParms(currTabla, p[1]) #Agregar tipo a lista de parametros
+
 
 def p_var(p):
     ''' var : idAssignId
@@ -632,7 +635,7 @@ if __name__ == '__main__':
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
-# superTabla.printDirFun() #superTabla con funciones/clases/methodos
+superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")

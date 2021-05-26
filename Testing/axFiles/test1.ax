@@ -1,7 +1,7 @@
 programa test1;
 variables entero : a,b,d;
 
-void funcion pruebaUno() {
+void funcion pruebaUno(entero e, flotante f) {
     b = 6;
     return (5);
 }

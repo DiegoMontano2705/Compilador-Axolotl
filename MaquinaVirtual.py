@@ -43,6 +43,7 @@ def ejecuta():
 #######################################################   
 #ejecutar programa
 def prepararData():
+    
     pass
 #######################################################   
 # print para testing
@@ -62,4 +63,4 @@ if __name__ == '__main__':
         except EOFError:
             print(EOFError)
     else:
-        print(".dout no existente.")
+        print(sys.argv[1], ".obj no existente.")

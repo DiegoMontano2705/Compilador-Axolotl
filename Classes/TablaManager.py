@@ -57,7 +57,8 @@ class TablaManager:
     #Al terminar, se elimina dirFun.
     def deleteTablaVars(self, idTabla):
         if(self.dirFun.existRow(idTabla)):
-            self.getTablaVar(idTabla).deleteTabla()
+            self.getTablaVar(idTabla).deleteTabla() #Eliminar tabla
+            self.dirFun.findRow(idTabla).pop("tablaVar") #Eliminar de dictionary.
 
     #Add reserva de recursos en contexto
     # [enteros, flotantes, chars] [enteros,flotantes,chars,bool]
@@ -140,6 +141,10 @@ class TablaManager:
     def getListaParms(self, idTabla):
         self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
         return self.dirFun.findRow(idTabla)["listaParms"]
+    
+    #Set lista de tipos parametros de una tabla especificada
+    def setListaParms(self, idTabla):
+        self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
 
     #Testing
     def printDirFun(self):
