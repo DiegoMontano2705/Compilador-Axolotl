@@ -6,14 +6,15 @@
 20504 8
 20505 100
 ### QUADS ###
-0 = a None 5
-1 = b None 4
-2 + 5 5 tmp0
-3 + tmp0 4 tmp1
-4 - 2 d tmp2
-5 = tmp2 None tmp1
-6 * 8 2 tmp3
-7 = d None tmp3
-8 * 6 100 tmp4
-9 + 5 tmp4 tmp5
-10 = tmp5 None 6
+0 GoTo None None 1
+1 = 6 None b
+2 = 4 None a
+3 + 5 5 tmp0
+4 + tmp0 4 tmp1
+5 - tmp1 2 tmp2
+6 = tmp2 None b
+7 * 8 2 tmp3
+8 = tmp3 None d
+9 * 6 100 tmp4
+10 + 5 tmp4 tmp5
+11 = tmp5 None d
