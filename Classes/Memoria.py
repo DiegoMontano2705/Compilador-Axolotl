@@ -264,11 +264,26 @@ class Memoria:
             return "float"
         elif(dir in range(G_C_INI, G_C_FIN)):
             return "char"
+#######################################################
+#Memoria de ejecucion
 
     #Regresar valores guardados
     def getMemory(self):
         return self.memory
 
+    #Regresa valor dada una direccion
+    def getValMemory(self, dir):
+        if dir not in self.memory:
+            print("Error:",dir,"no existente en la memoria ejecucion.")
+            sys.exit()
+        return self.memory[dir]
+
+    #Set valor en una direccion
+    def setValMemory(self, dir, value):
+        self.memory[dir] = value
+
+##############################################################################################################
+#Testing    
     #print memory
     def printMemory(self):
         print(self.memory)
