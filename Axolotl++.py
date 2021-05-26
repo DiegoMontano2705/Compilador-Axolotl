@@ -332,9 +332,12 @@ def p_var(p):
     '''
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId exp SEMICOLON
-                    | var equalId CTEC SEMICOLON
+    ''' asign_vars : var equalId exp asignend 
+                    | var equalId CTEC asignend 
     '''
+def p_asignend(p):
+    ''' asignend : SEMICOLON '''
+    quads.fillQuadruples()
 
 
 #Auxiliar para identificar id de asignacion.

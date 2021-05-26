@@ -7,13 +7,13 @@
 20505 100
 ### QUADS ###
 0 GoTo None None 0
-1 = b None 4
+1 = 4 None a
 2 + 5 5 tmp0
 3 + tmp0 4 tmp1
-4 - 2 f tmp2
-5 = tmp2 None tmp1
+4 - tmp1 2 tmp2
+5 = tmp2 None b
 6 * 8 2 tmp3
-7 = f None tmp3
+7 = tmp3 None f
 8 * 6 100 tmp4
 9 + 5 tmp4 tmp5
-10 = tmp5 None a
+10 = tmp5 None f
