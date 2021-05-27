@@ -6,7 +6,6 @@ void funcion pruebaUno(entero e, flotante f) {
     return (5);
 }
 
-
 %%test comment
 principal() {
     a = 4; %% una igualacion

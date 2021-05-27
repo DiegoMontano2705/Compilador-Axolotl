@@ -72,15 +72,11 @@ class TablaManager:
             self.dirFun.findRow(idTabla)["recursos"]["vars"][1] = self.dirFun.findRow(idTabla)["recursos"]["vars"][1]+1
         elif(tipo=="char"):
             self.dirFun.findRow(idTabla)["recursos"]["vars"][2] = self.dirFun.findRow(idTabla)["recursos"]["vars"][2]+1
-        elif(tipo=="tmp_entero"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][0] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][0]+1
-        elif(tipo=="tmp_flotante"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][1] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][1]+1
-        elif(tipo=="tmp_char"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][2] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][2]+1
-        elif(tipo=="tmp_bool"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][3] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][3]+1
-    
+        
+    #Asigna lista de recursos temporales por contexto
+    def setListaTemporales(self, idTabla, listaTmps):
+        self.dirFun.findRow(idTabla)["recursos"]["tmps"] = listaTmps 
+
     #Regresa recursos utilizados por contexto.
     def getRecursos(self, idTabla):
         return self.dirFun.findRow(idTabla)["recursos"]

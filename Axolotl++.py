@@ -141,6 +141,7 @@ def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
+    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales())
     superTabla.set_nombrePrograma(p[2])
     superTabla.deleteTablaVars("global")
 
@@ -216,6 +217,8 @@ def p_clases(p):
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
     #Borrar tabla de vars
+    currTabla = superTabla.get_currentTablaId()
+    superTabla.setListaTemporales(currTabla,quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
     quads.setCurrTabla("global")
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
@@ -242,6 +245,7 @@ def p_funciones(p):
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
     currTabla = superTabla.get_currentTablaId()
+    superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
     superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")

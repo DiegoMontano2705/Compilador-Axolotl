@@ -48,6 +48,14 @@ class QuadruplesManager:
     def getListaQuads(self):
         return self.quadruples
 
+    #Regresa recursos temporales utilizados localmente
+    def getRecursosTmpsLocales(self):
+        return self.tmp.getListaTemporalesLocales()
+
+    #Regresa recursos temporales utilizados globalmente
+    def getRecursosTmpsGlobales(self):
+        return self.tmp.getListaTemporalesGlobales()
+
     #Se usa para reinicar el contador a cero despues de que llamas todos los parametros de una funcion/modulo
     def setContParam(self,contParams):
         self.contParams = contParams
