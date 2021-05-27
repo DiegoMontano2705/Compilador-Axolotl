@@ -7,8 +7,8 @@
 20505 100
 ### dirFun ###
 global None 3 0 0 6 0 0 0
-pruebaUno void None None ['entero', 'flotante'] [[1, 1, 0], [1, 0, 0, 0]]
-pruebaDos entero None None ['entero', 'flotante', 'char'] [[1, 1, 1], [1, 0, 0, 0]]
+pruebaUno void None None ['entero', 'flotante'] 1 1 0 1 0 0 0
+pruebaDos entero None None ['entero', 'flotante', 'char'] 1 1 1 1 0 0 0
 ### QUADS ###
 14 None None 4
 1 10001 20500 28000
@@ -25,3 +25,4 @@ pruebaDos entero None None ['entero', 'flotante', 'char'] [[1, 1, 1], [1, 0, 0, 
 3 20500 20505 14504
 1 20501 14504 14505
 12 14505 None 10000
+17 None None None

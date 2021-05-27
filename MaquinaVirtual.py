@@ -16,7 +16,6 @@ stackParms = LifoQueue() #Maneja orden de parametros
 stackExe = LifoQueue() #Maneja el orden de ejecucion
 memoriaPrincipal = Memoria() #Maneja la memoria de ejecucion
 quadruples = [] #Maneja cuadruplos
-ip = 0 #Instruction Pointer
 
 #######################################################   
 #Operaciones del programa
@@ -49,28 +48,34 @@ def calcula(izq, op, der, dirRes):
 #######################################################   
 #ejecutar programa
 def ejecuta():
+    ip = 0 #Instruction Pointer
+    codOp = int(quadruples[ip][0])
 
-    codOp = 3
-    # codOp = quadruples[ip] 
-    # # while codOp != 17:
-    if(codOp>=0 and codOp<=11): #operacion aritmetica
-        izq = memoriaPrincipal.getValMemory(20500)
-        der = memoriaPrincipal.getValMemory(20500)
-        calcula(izq, codOp, der, 28000)
-    elif(codOp == 12): # =
-        pass
-    elif(codOp == 13): # print
-        pass
-    elif(codOp == 14): # GoTo
-        pass
-    elif(codOp == 15): # GoToF
-        pass
-    elif(codOp == 16): # GoSub
-        pass
-    elif(codOp == 17): # endproc
-        pass
-    elif(codOp == 18): # return
-        pass
+    #Mientras no encuentre fin del programa.
+    while codOp != 17:
+        codOp = int(quadruples[ip][0]) #Codigo de operacion
+        if(codOp>=0 and codOp<=11): #operacion aritmetica
+            izq = memoriaPrincipal.getValMemory(int(quadruples[ip][1]))
+            der = memoriaPrincipal.getValMemory(int(quadruples[ip][2]))
+            res = int(quadruples[ip][3])
+            calcula(izq, codOp, der, res)
+        elif(codOp == 12): # =
+            val = memoriaPrincipal.getValMemory(int(quadruples[ip][1]))
+            res = int(quadruples[ip][3])
+            memoriaPrincipal.setValMemory(res, val)
+        elif(codOp == 13): # print
+            pass
+        elif(codOp == 14): # GoTo
+            pass
+        elif(codOp == 15): # GoToF
+            pass
+        elif(codOp == 16): # GoSub
+            pass
+        elif(codOp == 17): # endproc
+            pass
+        elif(codOp == 18): # return
+            pass
+        ip+=1
     
 
 #######################################################   
@@ -87,6 +92,12 @@ def prepararData(data):
     #DirFunciones
     for index in range(startDirFun+1, startQuads):
         values = data[index].split()
+        #Reservar memoria global
+        if(values[0] == "global"): #tabla global
+            listAux = [values[2:5], values[5:]] #lista a reservar
+            dicAux = memoriaPrincipal.reservarMemoria("global", listAux)
+            memoriaPrincipal.mergeMemories(dicAux) #Agregar reservas a memoria principal
+        
     #QUADS
     for index in range(startQuads+1, len(data)):
         values = data[index].split()

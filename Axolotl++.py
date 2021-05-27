@@ -31,7 +31,7 @@ cod_operacion = {
     'GoTo': 14,
     'GoToF': 15,
     'GoSub': 16,
-    'endproc': 17,
+    'endprog': 17,
     'return': 18
 }
 ######################################################################################
@@ -135,15 +135,17 @@ ctes_memoria = Memoria() #crear memoria para constantes
 ctes_memoria.setDicsAux("constantes") #Asignar direcciones default
 global_memoria = Memoria() #crear memoria para globales
 global_memoria.setDicsAux("global") #Asignar direcciones default
+
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
-    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales())
-    superTabla.set_nombrePrograma(p[2])
-    superTabla.deleteTablaVars("global")
+    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
+    superTabla.set_nombrePrograma(p[2]) #Nombre del programa
+    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
     ''' startProg : STARTPROGRAMA '''
@@ -633,7 +635,7 @@ def dirFunFormat():
     print("global", globalAux["dirInicio"], globalAux["recursos"]["vars"][0], globalAux["recursos"]["vars"][1], globalAux["recursos"]["vars"][2], globalAux["recursos"]["tmps"][0], globalAux["recursos"]["tmps"][1], globalAux["recursos"]["tmps"][2], globalAux["recursos"]["tmps"][3])
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], [val["recursos"]["vars"], val["recursos"]["tmps"]])
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], val["recursos"]["vars"][0], val["recursos"]["vars"][1], val["recursos"]["vars"][2], val["recursos"]["tmps"][0], val["recursos"]["tmps"][1], val["recursos"]["tmps"][2], val["recursos"]["tmps"][3])
     
 
 ######################################################################################
