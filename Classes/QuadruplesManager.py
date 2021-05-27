@@ -11,9 +11,9 @@ import queue
 from Classes.Quadruples import *
 from Classes.Semantica import *
 from Classes.Temporal import *
-# from Quadruples import *
-# from Semantica import *
-# from Temporal import *
+#from Quadruples import *
+#from Semantica import *
+#from Temporal import *
 
 
 opUntil = ['>', '<', '>=', '<=', '=']
@@ -102,9 +102,7 @@ class QuadruplesManager:
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
                         self.pilaOperators.put(pilaOperatorsTop)
-                # elif(self.pilaOperators.qsize()<=1 and pilaOperatorsTop == "="): 
-                #     operator = self.pilaOperators.get_nowait()
-                #     self.generateQuadruple(operator)
+
 
 ######################################################################################
 #Quads helpers
@@ -212,8 +210,8 @@ class QuadruplesManager:
         myfile.close()
 
 
-# if __name__ == '__main__':
-#     qm = QuadruplesManager()
+#if __name__ == '__main__':
+#    qm = QuadruplesManager()
 #     #A - ( B + C) * D * E ->
 #     #+ B C t0
 #     #* t0 D t1
@@ -293,20 +291,21 @@ class QuadruplesManager:
 #     # qm.operator_push('print')
 
 #     #Test constantes
-#     qm.id_push("a", "entero")
-#     qm.operator_push("=")
-#     qm.id_push("4", "entero")
-#     qm.id_push("b", "entero")
-#     qm.operator_push("=")
-#     qm.id_push("5", "entero")
-#     qm.operator_push("+")
-#     qm.id_push("5", "entero")
-#     qm.operator_push("+")
-#     qm.id_push("4", "entero")
-#     qm.operator_push("-")
-#     qm.id_push("2", "entero")
-#     qm.fillQuadruples()
-#     qm.print_quadruples()
+#    qm.id_push("a", "entero")
+#    qm.operator_push("=")
+#    qm.id_push("4", "entero")
+#    qm.fillQuadruples()
+#    qm.id_push("b", "entero")
+#    qm.operator_push("=")
+#    qm.id_push("5", "entero")
+#    qm.operator_push("+")
+#    qm.id_push("5", "entero")
+#    qm.operator_push("+")
+#    qm.id_push("4", "entero")
+#    qm.operator_push("-")
+#    qm.id_push("2", "entero")
+#    qm.fillQuadruples()
+#    qm.print_quadruples()
 
 
 

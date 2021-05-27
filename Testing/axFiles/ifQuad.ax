@@ -3,7 +3,8 @@ variables entero : a,b,c,d;
 
 %%if comment
 principal() {
-    si (a > b){
+    si (a > b) entonces {
         c = a * d;
     }
+    d = c;
 }

@@ -138,15 +138,21 @@ global_memoria.setDicsAux("global") #Asignar direcciones default
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
-    ''' programa : STARTPROGRAMA ID SEMICOLON main
-                | STARTPROGRAMA ID SEMICOLON programaAux main
+    ''' programa : startProg ID SEMICOLON main
+                | startProg ID SEMICOLON programaAux main
     '''
     superTabla.set_nombrePrograma(p[2])
 
+def p_startProg(p):
+    ''' startProg : STARTPROGRAMA '''
+    quads.operator_push('GoTo')
 
 def p_main(p):
-    ''' main : PRINCIPAL LP RP LCB estatutosAux endprog
+    ''' main : startmain LP RP LCB estatutosAux endprog
     '''
+def p_startmain(p):
+    ''' startmain : PRINCIPAL '''
+    quads.quadruples[0].setResult(quads.getID())
 
 def p_endprog(p):
     ''' endprog : RCB '''
@@ -287,9 +293,12 @@ def p_var(p):
     '''
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId exp SEMICOLON
-                    | var equalId CTEC SEMICOLON
+    ''' asign_vars : var equalId exp asignend 
+                    | var equalId CTEC asignend 
     '''
+def p_asignend(p):
+    ''' asignend : SEMICOLON '''
+    quads.fillQuadruples()
 
 
 #Auxiliar para identificar id de asignacion.
@@ -360,19 +369,19 @@ def p_decision(p):
 def p_startIf(p):
     ''' startIf : RP '''
     quads.operator_push('GoToF')
-    quads.pilaSaltos.put(quads.getID()-1)
+    quads.pilaSaltos.put(quads.getID())
 
 def p_endIf_Else(p):
     ''' endIf_Else : RCB '''
-    end = quads.pilaSaltos.pop()
+    end = quads.pilaSaltos.get_nowait()
     nxtQuad = quads.getID()
     quads.quadruples[end].setResult(nxtQuad)
 
 def p_startElse(p):
     ''' startElse : ELSE '''
     quads.operator_push('GoTo')
-    false = quads.pilaSaltos.pop()
-    quads.pilaSaltos.put(quads.getID()-1)
+    false = quads.pilaSaltos.get_nowait()
+    quads.pilaSaltos.put(quads.getID())
     quads.quadruples[false].setResult(quads.getID())
 
 
@@ -391,8 +400,8 @@ def p_startWhile2(p):
 
 def p_endWhile(p):
     ''' endWhile : RCB '''
-    end = quads.pilaSaltos.pop()
-    ret = quads.pilaSaltos.pop()
+    end = quads.pilaSaltos.get_nowait()
+    ret = quads.pilaSaltos.get_nowait()
     quads.operator_push('GoTo')
     quads.quadruples[quads.getID() - 1].setResult(ret)
     quads.quadruples[end].setResult(quads.getID())
