@@ -29,7 +29,7 @@ cod_operacion = {
     '|': 12,
     'print': 13,
     'GoTo': 14,
-    'gotof': 15,
+    'GoToF': 15,
     'gosub': 16,
     'endproc': 17,
     'return': 18
@@ -130,7 +130,7 @@ t_ignore=' \t\r\n\f\v'
 quads = QuadruplesManager()
 lex.lex() #Building the lexer
 superTabla = TablaManager()
-superTabla.crearTabla("global", dirInicio="")
+superTabla.crearTabla("global", dirInicio=None)
 ctes_memoria = Memoria() #crear memoria para constantes
 ctes_memoria.setDicsAux("constantes") #Asignar direcciones default
 global_memoria = Memoria() #crear memoria para globales
@@ -226,7 +226,7 @@ def p_clases(p):
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla(p[1], scope="class", dirInicio="", metodosClase="")
+    superTabla.crearTabla(p[1], scope="class", dirInicio=None, metodosClase=None)
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
@@ -254,7 +254,7 @@ def p_funciones(p):
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
-    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", pointerParams="", quadIni="")
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni=None)
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
     quads.setCurrTabla(p[3])
 
@@ -612,15 +612,30 @@ def crearOutFile():
         print("### CTES ###")
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
+        print("### dirFun ###")
+        dirFunFormat() #Desplegar tabla de funciones
         #print quads in file
         print("### QUADS ###")
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
             #print con codigo de operacion
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
         #print 
         sys.stdout = original_stdout #resete standar output
+
+#Darle formato a tabla de funciones
+def dirFunFormat():
+    dirAux = superTabla.dirFun.getDict()
+    globalAux = dirAux["global"]
+    dirAux.pop('global', None)
+    #imprimir tabla global
+    print("global", globalAux["dirInicio"], globalAux["recursos"]["vars"][0], globalAux["recursos"]["vars"][1], globalAux["recursos"]["vars"][2], globalAux["recursos"]["tmps"][0], globalAux["recursos"]["tmps"][1], globalAux["recursos"]["tmps"][2], globalAux["recursos"]["tmps"][3])
+    #imprimir demas funciones/clases
+    for key, val in dirAux.items():
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], val["recursos"]["vars"][0], val["recursos"]["vars"][1], val["recursos"]["vars"][2], val["recursos"]["tmps"][0], val["recursos"]["tmps"][1], val["recursos"]["tmps"][2], val["recursos"]["tmps"][3])
+    
+
 ######################################################################################
 #Creating praser
 yacc.yacc()
@@ -643,7 +658,7 @@ if __name__ == '__main__':
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
-superTabla.printDirFun() #superTabla con funciones/clases/methodos
+# superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")

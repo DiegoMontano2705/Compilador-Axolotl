@@ -1,0 +1,27 @@
+### CTES ###
+20500 6
+20501 5
+20502 4
+20503 2
+20504 8
+20505 100
+### dirFun ###
+global None 3 0 0 6 0 0 0
+pruebaUno void None None ['entero', 'flotante'] 1 1 0 1 0 0 0
+pruebaDos entero None None ['entero', 'flotante', 'char'] 1 1 1 1 0 0 0
+### QUADS ###
+0 GoTo None None 4
+1 + b 6 28000
+2 = 28000 None b
+3 + b 6 28000
+4 = 28000 None b
+5 = 4 None a
+6 + 5 5 14500
+7 + 14500 4 14501
+8 - 14501 2 14502
+9 = 14502 None b
+10 * 8 2 14503
+11 = 14503 None d
+12 * 6 100 14504
+13 + 5 14504 14505
+14 = 14505 None d

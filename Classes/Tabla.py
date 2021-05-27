@@ -18,7 +18,7 @@ class Tabla:
         return self.id_tabla
 
     def deleteTabla(self):
-        self.id_tabla=""
+        self.id_tabla=None
         self.dict.clear()
 
     #Agrega una nueva row con id y los kwargs pasados.
