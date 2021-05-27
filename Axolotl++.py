@@ -19,18 +19,18 @@ cod_operacion = {
     '-': 2,
     '*': 3,
     '/': 4,
-    '=': 5,
-    '<': 6,
-    '>': 7,
-    '<=': 8,
-    '>=': 9,
-    '==': 10,
-    '&': 11,
-    '|': 12,
+    '<': 5,
+    '>': 6,
+    '<=': 7,
+    '>=': 8,
+    '==': 9,
+    '&': 10,
+    '|': 11,
+    '=': 12,
     'print': 13,
     'GoTo': 14,
     'GoToF': 15,
-    'gosub': 16,
+    'GoSub': 16,
     'endproc': 17,
     'return': 18
 }
@@ -327,9 +327,9 @@ def p_idAssignId(p):
         #Checar global
         dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
 
-    quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+    # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
     # print(p[1])
-    # quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
+    quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
 #Estatutos
@@ -569,9 +569,9 @@ def p_ctei(p):
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(int(p[1]))
-    quads.id_push(p[1], "entero") #Agregar a quads operations
+    # quads.id_push(p[1], "entero") #Agregar a quads operations
     # print(p[1])
-    # quads.id_push(dirAux, "entero") #Agregar dir a quads operations
+    quads.id_push(dirAux[0], "entero") #Agregar dir a quads operations
 
     
 def p_ctef(p):
@@ -579,17 +579,17 @@ def p_ctef(p):
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(float(p[1]))
-    quads.id_push(p[1], "float") #Agregar a quads operations
+    # quads.id_push(p[1], "float") #Agregar a quads operations
     # print(p[1])
-    # quads.id_push(dirAux, "float") #Agregar dir a quads opeartions
+    quads.id_push(dirAux[0], "float") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
     ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(str(p[1]))
-    quads.id_push(p[1], "char") #Agregar a quads operations
-    # quads.id_push(dirAux, "char") #Agrega dir a quads operations
+    # quads.id_push(p[1], "char") #Agregar a quads operations
+    quads.id_push(dirAux[0], "char") #Agrega dir a quads operations
 
 ######################################################################################
 #Manejo errores
@@ -619,8 +619,8 @@ def crearOutFile():
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
             #print con codigo de operacion
-            # print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
         #print 
         sys.stdout = original_stdout #resete standar output
 
@@ -633,7 +633,7 @@ def dirFunFormat():
     print("global", globalAux["dirInicio"], globalAux["recursos"]["vars"][0], globalAux["recursos"]["vars"][1], globalAux["recursos"]["vars"][2], globalAux["recursos"]["tmps"][0], globalAux["recursos"]["tmps"][1], globalAux["recursos"]["tmps"][2], globalAux["recursos"]["tmps"][3])
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], val["recursos"]["vars"][0], val["recursos"]["vars"][1], val["recursos"]["vars"][2], val["recursos"]["tmps"][0], val["recursos"]["tmps"][1], val["recursos"]["tmps"][2], val["recursos"]["tmps"][3])
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], [val["recursos"]["vars"], val["recursos"]["tmps"]])
     
 
 ######################################################################################

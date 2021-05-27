@@ -284,12 +284,16 @@ class Memoria:
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):
-        if(int(dir) in range(G_E_INI, G_E_FIN) or int(dir) in range(L_E_INI, L_E_FIN)):
+        if(int(dir) in range(G_E_INI, G_E_FIN) or int(dir) in range(L_E_INI, L_E_FIN) or int(dir) in range(G_TMP_E_INI, G_TMP_E_FIN) or int(dir) in range(L_TMP_E_INI, L_TMP_E_FIN) or int(dir) in range(CTE_E_INI, CTE_E_FIN)):
             self.memory[dir] = int(value)
-        elif(int(dir) in range(G_F_INI, G_F_FIN) or int(dir) in range(L_F_INI, L_F_FIN)):
+        elif(int(dir) in range(G_F_INI, G_F_FIN) or int(dir) in range(L_F_INI, L_F_FIN)or int(dir) in range(G_TMP_F_INI, G_TMP_F_FIN) or int(dir) in range(L_TMP_F_INI, L_TMP_F_FIN) or int(dir) in range(CTE_F_INI, CTE_F_FIN)):
             self.memory[dir] = float(value)
-        elif(int(dir) in range(G_C_INI, G_C_FIN) or int(dir) in range(G_C_INI, G_C_FIN)):
+        elif(int(dir) in range(G_C_INI, G_C_FIN) or int(dir) in range(L_C_INI, L_C_FIN)or int(dir) in range(G_TMP_F_INI, G_TMP_F_FIN) or int(dir) in range(L_TMP_F_INI, L_TMP_F_FIN) or int(dir) in range(CTE_C_INI, CTE_C_FIN)):
             self.memory[dir] = str(value)
+        elif(int(dir) in range(G_TMP_B_INI, G_TMP_B_FIN) or int(dir) in range(L_TMP_B_INI, L_TMP_B_FIN)):
+            self.memory[dir] = bool(value)
+        else:
+            print("Error:",dir, "fuera de rango de memoria.")
 
 ##############################################################################################################
 #Testing    
