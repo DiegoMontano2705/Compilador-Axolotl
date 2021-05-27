@@ -18,7 +18,7 @@ from Classes.Temporal import *
 
 opUntil = ['>', '<', '>=', '<=', '=']
 opCond_Loops = ['GoToF', 'GoTo', 'GoToV']
-opModules = ['GoSub', 'Era', 'Param','EndFunc']
+opModules = ['GoSub', 'Era', 'Param','EndFunc','Return']
 
 class QuadruplesManager:
 
@@ -155,8 +155,8 @@ class QuadruplesManager:
                 #self.pilaSaltos.put(self.getID()) #Guardas id del else en pila de saltos
                 self.quadruples.append(q)
 
-            ## print y write
-            elif(operator == 'print'):
+            ## print, write y return
+            elif(operator == 'print' or operator == 'Return'):
                 left_op = left_op = self.pilaOperands.get_nowait()
                 if(left_op != None ):
                     id_Final = (self.getID() + 1)
