@@ -241,8 +241,8 @@ def p_funcionesAux(p):
     '''
 
 def p_funciones(p):
-    ''' funciones : funcionIdAux LP RP LCB estatutosAux RCB
-                    | funcionIdAux LP parametros RP LCB estatutosAux RCB
+    ''' funciones : funcionIdAux LP RP LCB estatutosAux endFunction
+                    | funcionIdAux LP parametros RP LCB estatutosAux endFunction
     '''
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
@@ -250,6 +250,10 @@ def p_funciones(p):
     superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
+
+def p_endFunction(p):
+    ''' endFunction : RCB '''
+    quads.operator_push('EndFunc')
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
@@ -335,9 +339,28 @@ def p_idAssignId(p):
 #Estatutos
 
 def p_llamada_fun(p):
-    ''' llamada_fun : ID LP RP SEMICOLON
-                    | ID LP exp RP SEMICOLON
+    ''' llamada_fun : ID  llamadaParam RP llamadaFin
+                    | ID  llamadaParam exp RP llamadaFin
     '''
+
+def p_llamadaParam(p):
+    ''' llamadaParam : LP '''
+    quads.operator_push('Era')
+    #Buscar tamaño de la funcion llamada y hacer esto:
+    #quads.quadruples[quads.getID()].setResult(size)
+
+def p_llamadaFin(p):
+    ''' llamadaFin : SEMICOLON '''
+    quads.operator_push('GoSub')
+    #Obtener 
+
+
+def p_auxExp(p):
+    ''' auxExp : exp
+                | exp COMMA auxExp
+    '''
+
+
 
 # Para uso en operaciones
 def p_llamada_fun_exp(p):
@@ -368,6 +391,7 @@ def p_escrituraAux(p):
                     | exp COMMA escrituraAux
                     | STRING COMMA escrituraAux
     '''
+
 
 ######################################################################################
 #Condicionales
@@ -419,7 +443,7 @@ def p_endWhile(p):
 
 
 def p_rep_no_condicional(p):
-    ''' rep_no_condicional : DESDE ID EQUAL exp HASTA exp HACER LCB estatutosAux RCB
+    ''' rep_no_condicional : DESDE asign_vars HASTA exp HACER LCB estatutosAux RCB
     '''
 
 def p_estatutosAux(p):
