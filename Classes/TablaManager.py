@@ -18,7 +18,7 @@ class TablaManager:
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = "" #Que tipo de variable se encuentra.
         self.nombrePrograma = "" #Nombre del programa
-
+######################################################################################
     #sets and gets
     def get_currentTablaId(self):
         return self.currentTablaId
@@ -43,6 +43,8 @@ class TablaManager:
 
     def set_currentScope(self, id):
         self.currentScope = id
+######################################################################################
+#CRUD TABLAS
 
     #Crea una row en Tabla dir fun.
     def crearTabla(self, id, **kwargs):
@@ -57,8 +59,10 @@ class TablaManager:
     #Al terminar, se elimina dirFun.
     def deleteTablaVars(self, idTabla):
         if(self.dirFun.existRow(idTabla)):
-            self.getTablaVar(idTabla).deleteTabla()
+            self.getTablaVar(idTabla).deleteTabla() #Eliminar tabla
+            self.dirFun.findRow(idTabla).pop("tablaVar") #Eliminar de dictionary.
 
+######################################################################################
     #Add reserva de recursos en contexto
     # [enteros, flotantes, chars] [enteros,flotantes,chars,bool]
     def addContRecursos(self, idTabla, tipo):
@@ -68,19 +72,16 @@ class TablaManager:
             self.dirFun.findRow(idTabla)["recursos"]["vars"][1] = self.dirFun.findRow(idTabla)["recursos"]["vars"][1]+1
         elif(tipo=="char"):
             self.dirFun.findRow(idTabla)["recursos"]["vars"][2] = self.dirFun.findRow(idTabla)["recursos"]["vars"][2]+1
-        elif(tipo=="tmp_entero"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][0] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][0]+1
-        elif(tipo=="tmp_flotante"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][1] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][1]+1
-        elif(tipo=="tmp_char"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][2] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][2]+1
-        elif(tipo=="tmp_bool"):
-            self.dirFun.findRow(idTabla)["recursos"]["tmps"][3] = self.dirFun.findRow(idTabla)["recursos"]["tmps"][3]+1
-    
+        
+    #Asigna lista de recursos temporales por contexto
+    def setListaTemporales(self, idTabla, listaTmps):
+        self.dirFun.findRow(idTabla)["recursos"]["tmps"] = listaTmps 
+
     #Regresa recursos utilizados por contexto.
     def getRecursos(self, idTabla):
         return self.dirFun.findRow(idTabla)["recursos"]
-    
+######################################################################################
+#Manejo TablaVars
     #Crea una row en Tabla existente y almacena en tabla interna.
     def insertRowToTablaVar(self, idTabla, idRow, tip, contexto, **kwargs):
         if(not self.getTablaVar(idTabla).existRow(idRow)):
@@ -131,7 +132,6 @@ class TablaManager:
         else:
             return -1
 
-
     #Regresa memoria en especifico
     def getMemoriaLocal(self, idTabla):
         return (self.dirFun.findRow(idTabla)["memoriaLocal"])
@@ -140,7 +140,12 @@ class TablaManager:
     def getListaParms(self, idTabla):
         self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
         return self.dirFun.findRow(idTabla)["listaParms"]
+    
+    #Set lista de tipos parametros de una tabla especificada
+    def setListaParms(self, idTabla):
+        self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
 
+######################################################################################
     #Testing
     def printDirFun(self):
         self.dirFun.printDic()

@@ -28,7 +28,7 @@ cod_operacion = {
     '&': 11,
     '|': 12,
     'print': 13,
-    'goto': 14,
+    'GoTo': 14,
     'gotof': 15,
     'gosub': 16,
     'endproc': 17,
@@ -141,7 +141,9 @@ def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
+    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales())
     superTabla.set_nombrePrograma(p[2])
+    superTabla.deleteTablaVars("global")
 
 def p_startProg(p):
     ''' startProg : STARTPROGRAMA '''
@@ -197,7 +199,6 @@ def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
     '''
-    # print("multi")
 
 def p_typeAuxId(p):
     ''' typeAuxId : tipo'''
@@ -216,6 +217,9 @@ def p_clases(p):
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
     #Borrar tabla de vars
+    currTabla = superTabla.get_currentTablaId()
+    superTabla.setListaTemporales(currTabla,quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
+    quads.setCurrTabla("global")
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
 #Auxiliar para identificar clase
@@ -225,6 +229,7 @@ def p_claseId(p):
     superTabla.crearTabla(p[1], scope="class", dirInicio="", metodosClase="")
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
+    quads.setCurrTabla(p[1])
     
 
 ######################################################################################
@@ -239,15 +244,19 @@ def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux RCB
                     | funcionIdAux LP parametros RP LCB estatutosAux RCB
     '''
-    # currTabla = superTabla.get_currentTablaId()
-    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    currTabla = superTabla.get_currentTablaId()
+    superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
+    superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
+    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
+    quads.setCurrTabla("global")
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
     superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", pointerParams="", quadIni="")
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
+    quads.setCurrTabla(p[3])
 
 ######################################################################################
 #Tipos variables
@@ -282,8 +291,10 @@ def p_parametros(p):
                     | tipo_simple ID COMMA parametros
     '''
     currTabla = superTabla.get_currentTablaId()
+    superTabla.addContRecursos(superTabla.get_currentTablaId(), p[1]) #Contabilizar recursos por funcion/clase
     superTabla.insertRowToTablaVar(currTabla, p[2], p[1], "vars") #Agregar var tabla variables
     superTabla.insertRowToListaParms(currTabla, p[1]) #Agregar tipo a lista de parametros
+
 
 def p_var(p):
     ''' var : idAssignId
@@ -606,8 +617,8 @@ def crearOutFile():
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
             #print con codigo de operacion
-            # print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
         #print 
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
@@ -630,7 +641,7 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-global_memoria.printMemory()
+# global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")

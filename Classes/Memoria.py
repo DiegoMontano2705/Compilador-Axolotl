@@ -117,6 +117,7 @@ class Memoria:
                 if self.tmpEnteroAux in range(G_TMP_E_INI, G_TMP_E_FIN):
                     self.memory[self.tmpEnteroAux] = value
                     self.tmpEnteroAux+=1
+                    return (self.tmpEnteroAux-1)
                 else:
                     print("overflow memoria: temporales globales enteras.")
                     sys.exit()
@@ -124,6 +125,7 @@ class Memoria:
                 if self.tmpFlotanteAux in range(G_TMP_F_INI, G_TMP_F_FIN):
                     self.memory[self.tmpFlotanteAux] = value
                     self.tmpFlotanteAux+=1
+                    return (self.tmpFlotanteAux-1)
                 else:
                     print("overflow memoria: temporales globales flotantes.")
                     sys.exit()
@@ -131,6 +133,7 @@ class Memoria:
                 if self.tmpCharAux in range(G_TMP_C_INI, G_TMP_C_FIN):
                     self.memory[self.tmpCharAux] = value
                     self.tmpCharAux+=1
+                    return (self.tmpCharAux-1)
                 else:
                     print("overflow memoria: temporales globales chars.")
                     sys.exit()
@@ -138,6 +141,7 @@ class Memoria:
                 if self.tmpBoolAux in range(G_TMP_B_INI, G_TMP_B_FIN):
                     self.memory[self.tmpBoolAux] = value
                     self.tmpBoolAux+=1
+                    return (self.tmpBoolAux-1)
                 else:
                     print("overflow memoria: temporales globales chars.")
                     sys.exit()
@@ -181,21 +185,21 @@ class Memoria:
                         self.enterosAux+=1
                         return (self.enterosAux-1)
                     else:
-                        print("overflow memoria: globales enteras.")
+                        print("overflow memoria: locales enteras.")
                         sys.exit()
                 elif(tipo == "flotante"):
                     if self.flotantesAux in range(L_F_INI, L_F_FIN):
                         self.flotantesAux+=1
                         return (self.flotantesAux-1)
                     else:
-                        print("overflow memoria: globales flotantes.")
+                        print("overflow memoria: locales flotantes.")
                         sys.exit()
                 elif(tipo == "char"):
                     if self.charAux in range(L_C_INI, L_C_FIN):
                         self.charAux+=1
                         return (self.charAux-1)
                     else:
-                        print("overflow memoria: globales chars.")
+                        print("overflow memoria: locales chars.")
                         sys.exit()
             elif(contexto == "tmps"): #temporales
                 if(tipo=="entero"):
@@ -203,28 +207,28 @@ class Memoria:
                         self.tmpEnteroAux+=1
                         return (self.tmpEnteroAux-1)
                     else:
-                        print("overflow memoria: temporales globales enteras.")
+                        print("overflow memoria: temporales locales enteras.")
                         sys.exit()
                 elif(tipo=="flotante"):
                     if self.tmpFlotanteAux in range(L_TMP_F_INI, L_TMP_F_FIN):
                         self.tmpFlotanteAux+=1
                         return (self.tmpFlotanteAux-1)
                     else:
-                        print("overflow memoria: temporales globales flotantes.")
+                        print("overflow memoria: temporales locales flotantes.")
                         sys.exit()
                 elif(tipo=="char"):
                     if self.tmpCharAux in range(L_TMP_C_INI, L_TMP_C_FIN):
                         self.tmpCharAux+=1
                         return (self.tmpCharAux-1)
                     else:
-                        print("overflow memoria: temporales globales chars.")
+                        print("overflow memoria: temporales locales chars.")
                         sys.exit()
                 elif(tipo=="bool"):
                     if self.tmpBoolAux in range(L_TMP_B_INI, L_TMP_B_FIN):
                         self.tmpBoolAux+=1
                         return (self.tmpBoolAux-1)
                     else:
-                        print("overflow memoria: temporales globales chars.")
+                        print("overflow memoria: temporales locales chars.")
                         sys.exit()
 
 #######################################################
