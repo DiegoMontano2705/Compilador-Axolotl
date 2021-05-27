@@ -6,6 +6,7 @@
 # 
 #######################################################   
 import sys
+import os
 from Classes.Memoria import *
 from queue import LifoQueue
 
@@ -32,6 +33,7 @@ cod_operacion = {
 }
 #######################################################   
 #
+stackParms = LifoQueue() #Maneja orden de parametros
 stackExe = LifoQueue() #Maneja el orden de ejecucion
 memoriaPrincipal = Memoria() #Maneja la memoria de ejecucion
 IP = 1 #Instruction Pointer
@@ -40,26 +42,56 @@ IP = 1 #Instruction Pointer
 #ejecutar programa
 def ejecuta():
     pass
+
+
 #######################################################   
-#ejecutar programa
-def prepararData():
+#prepararDatos
+def prepararData(data):
+    data = limpiarData(data)
+    #Constantes
+    startCtes = data.index("### CTES ###")
+    startDirFun = data.index("### dirFun ###")
+    startQuads = data.index("### QUADS ###")
+    for index in range(startCtes+1, startDirFun):
+        values = data[index].split()
+        memoriaPrincipal.setValMemory(values[0], values[1])
+    #DirFunciones
+    for index in range(startDirFun+1, startQuads):
+        values = data[index].split()
+        print(values)
+        pass
+    #QUADS
+    print("#quads")
+    for index in range(startQuads+1, len(data)):
+        values = data[index].split()
+        print(values)
     
     pass
+
+#Eliminar '/n'
+def limpiarData(data):
+    newData = []
+    for i in range(len(data)):
+        newData.append(data[i].rstrip('\n'))
+    return newData
 #######################################################   
 # print para testing
-def log():
+def testing():
+    memoriaPrincipal.printMemory()
     pass
 #######################################################   
 if __name__ == '__main__':
     if (len(sys.argv)>1):
         file = sys.argv[1]
         try:
-            f = open("/Testing/"+file, 'r')
+            ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+            f = open(ROOT_DIR+"/Testing/objFiles/"+file, 'r')
             data = f.readlines()
             f.close()
+            print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            log()
+            testing()
         except EOFError:
             print(EOFError)
     else:

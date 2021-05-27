@@ -284,7 +284,12 @@ class Memoria:
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):
-        self.memory[dir] = value
+        if(int(dir) in range(G_E_INI, G_E_FIN) or int(dir) in range(L_E_INI, L_E_FIN)):
+            self.memory[dir] = int(value)
+        elif(int(dir) in range(G_F_INI, G_F_FIN) or int(dir) in range(L_F_INI, L_F_FIN)):
+            self.memory[dir] = float(value)
+        elif(int(dir) in range(G_C_INI, G_C_FIN) or int(dir) in range(G_C_INI, G_C_FIN)):
+            self.memory[dir] = str(value)
 
 ##############################################################################################################
 #Testing    
