@@ -2,9 +2,10 @@ programa test1;
 variables entero : a,b,d;
 
 void funcion pruebaUno(entero e, flotante f) {
-    b = 6;
+    b = b + 6;
     return (5);
 }
+
 
 %%test comment
 principal() {

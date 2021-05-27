@@ -6,15 +6,16 @@
 20504 8
 20505 100
 ### QUADS ###
-0 GoTo None None 1
-1 = 6 None b
-2 = 4 None a
-3 + 5 5 tmp0
-4 + tmp0 4 tmp1
-5 - tmp1 2 tmp2
-6 = tmp2 None b
-7 * 8 2 tmp3
-8 = tmp3 None d
-9 * 6 100 tmp4
-10 + 5 tmp4 tmp5
-11 = tmp5 None d
+0 GoTo None None 2
+1 + b 6 28000
+2 = 28000 None b
+3 = 4 None a
+4 + 5 5 14500
+5 + 14500 4 14501
+6 - 14501 2 14502
+7 = 14502 None b
+8 * 8 2 14503
+9 = 14503 None d
+10 * 6 100 14504
+11 + 5 14504 14505
+12 = 14505 None d

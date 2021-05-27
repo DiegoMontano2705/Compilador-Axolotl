@@ -18,7 +18,7 @@ class TablaManager:
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = "" #Que tipo de variable se encuentra.
         self.nombrePrograma = "" #Nombre del programa
-
+######################################################################################
     #sets and gets
     def get_currentTablaId(self):
         return self.currentTablaId
@@ -43,6 +43,8 @@ class TablaManager:
 
     def set_currentScope(self, id):
         self.currentScope = id
+######################################################################################
+#CRUD TABLAS
 
     #Crea una row en Tabla dir fun.
     def crearTabla(self, id, **kwargs):
@@ -60,6 +62,7 @@ class TablaManager:
             self.getTablaVar(idTabla).deleteTabla() #Eliminar tabla
             self.dirFun.findRow(idTabla).pop("tablaVar") #Eliminar de dictionary.
 
+######################################################################################
     #Add reserva de recursos en contexto
     # [enteros, flotantes, chars] [enteros,flotantes,chars,bool]
     def addContRecursos(self, idTabla, tipo):
@@ -81,7 +84,8 @@ class TablaManager:
     #Regresa recursos utilizados por contexto.
     def getRecursos(self, idTabla):
         return self.dirFun.findRow(idTabla)["recursos"]
-    
+######################################################################################
+#Manejo TablaVars
     #Crea una row en Tabla existente y almacena en tabla interna.
     def insertRowToTablaVar(self, idTabla, idRow, tip, contexto, **kwargs):
         if(not self.getTablaVar(idTabla).existRow(idRow)):
@@ -132,7 +136,6 @@ class TablaManager:
         else:
             return -1
 
-
     #Regresa memoria en especifico
     def getMemoriaLocal(self, idTabla):
         return (self.dirFun.findRow(idTabla)["memoriaLocal"])
@@ -146,6 +149,7 @@ class TablaManager:
     def setListaParms(self, idTabla):
         self.dirFun.findRow(idTabla)["listaParms"].reverse() #Reverse para el orden correcto
 
+######################################################################################
     #Testing
     def printDirFun(self):
         self.dirFun.printDic()

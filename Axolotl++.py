@@ -216,6 +216,7 @@ def p_clases(p):
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
     #Borrar tabla de vars
+    quads.setCurrTabla("global")
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
 #Auxiliar para identificar clase
@@ -225,6 +226,7 @@ def p_claseId(p):
     superTabla.crearTabla(p[1], scope="class", dirInicio="", metodosClase="")
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
+    quads.setCurrTabla(p[1])
     
 
 ######################################################################################
@@ -243,12 +245,14 @@ def p_funciones(p):
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
     superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
+    quads.setCurrTabla("global")
 
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
     superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", pointerParams="", quadIni="")
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
+    quads.setCurrTabla(p[3])
 
 ######################################################################################
 #Tipos variables

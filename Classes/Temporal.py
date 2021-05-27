@@ -4,18 +4,35 @@
 #     Diego Fernando Montaño Pérez
 #     Jose Alberto Gonzalez 
 # 
+from Classes.Memoria import *
 
 class Temporal:
 
     def __init__(self):
         self.tmp = set()
         self.len = 0
+        self.lastContext = ""
+        self.memoriaLocal = Memoria()
+        self.memoriaLocal.setDicsAux("local")
+        self.memoriaGlobal = Memoria()
+        self.memoriaGlobal.setDicsAux("global")
 
     #regresa el tmp siguiente y aumenta el contador.
-    def next(self):
-        val = "tmp"+str(self.len)
-        self.tmp.add(val)
-        self.len += 1
+    #contexto global o local
+    def next(self, tipo, contexto):
+        #Utilizando strings
+        # val = "tmp_"+str(tipo)+"_"+str(self.len)
+        # self.tmp.add(val)
+        # self.len += 1
+        #Utilizando dirs memoria
+        if(contexto == "global"):
+            val = self.memoriaGlobal.setGlobalVal("", tipo, "tmps") #dir temporal global
+        elif(contexto == self.lastContext):
+            val= self.memoriaLocal.getLocalDirVirtual(tipo, "tmps") #dir temporal local
+        else: 
+            self.lastContext = contexto
+            self.memoriaLocal.setDicsAux("local") #reset dirs locales cambio de contexto
+            val = self.memoriaLocal.getLocalDirVirtual(tipo, "tmps")
         return val
 
     #clearTmp(idTmp) elimina el idTmp del diccionario.

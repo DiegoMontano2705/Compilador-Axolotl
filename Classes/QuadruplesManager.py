@@ -32,7 +32,7 @@ class QuadruplesManager:
         self.tmp = Temporal() #objeto de la clase Temporal, administra los temporales y la memoria.
         self.pilaSaltos = LifoQueue() #pila que almacena los saltos pendientes
         self.contParams = 0         #contador para saber que parametro esta recibiendo cuando se llama una funcion/modulo
-
+        self.currTabla = "global" #Saber en que contexto se encuentra para el manejo de temporales.
 ######################################################################################
 #set and gets
 
@@ -51,6 +51,10 @@ class QuadruplesManager:
     #Se usa para reinicar el contador a cero despues de que llamas todos los parametros de una funcion/modulo
     def setContParam(self,contParams):
         self.contParams = contParams
+
+    #set curr Tabla para direccion temporales
+    def setCurrTabla(self, cTabla):
+        self.currTabla = cTabla
 
     #Reset a contador de tmps
     def clearTmps(self):
@@ -181,7 +185,7 @@ class QuadruplesManager:
                         self.setID(self.getID() + 1)
                         self.quadruples.append(q) 
                     else:
-                        result = self.tmp.next() #preparar temporal
+                        result = self.tmp.next(result_type, self.currTabla) #preparar temporal
                         q = Quadruples(id_Final,operator, left_op, right_op, result)
                         self.setID(self.getID() + 1)
                         self.quadruples.append(q) 
