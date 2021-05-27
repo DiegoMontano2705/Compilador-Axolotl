@@ -28,7 +28,7 @@ cod_operacion = {
     '&': 11,
     '|': 12,
     'print': 13,
-    'goto': 14,
+    'GoTo': 14,
     'gotof': 15,
     'gosub': 16,
     'endproc': 17,
@@ -617,8 +617,8 @@ def crearOutFile():
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
             #print con codigo de operacion
-            # print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
         #print 
         sys.stdout = original_stdout #resete standar output
 ######################################################################################
