@@ -40,3 +40,9 @@ class Quadruples:
     
     def setOperator(self,operator):
         self.operator = operator
+    
+    def setLeftOp(self,leftOp):
+        self.leftOp = leftOp
+
+    def setRightOp(self,rightOp):
+        self.rightOp = rightOp

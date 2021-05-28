@@ -55,7 +55,7 @@ def ejecuta():
     codOp = int(quadruples[ip][0])
 
     #Mientras no encuentre fin del programa.
-    while codOp != 21:
+    while codOp != 22:
         codOp = int(quadruples[ip][0]) #Codigo de operacion
         if(codOp>=0 and codOp<=11): #operacion aritmetica
             izq = memorias[0].getValMemory(int(quadruples[ip][1]))
@@ -95,7 +95,9 @@ def ejecuta():
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
-        elif(codOp == 21): # endprog
+        elif(codOp == 21): # Param
+            pass
+        elif(codOp == 22): # endprog
             print("fin del programa :) - Axolotl")
         ip+=1
     

@@ -27,15 +27,17 @@ cod_operacion = {
     '&': 10,
     '|': 11,
     '=': 12,
-    'print': 13,
-    'read': 14,
+    'Print': 13,
+    'Read': 14,
     'GoTo': 15,
     'GoToF': 16,
     'GoSub': 17,
-    'return': 18,
+    'Return': 18,
     'Era' : 19,
     'EndFunc' : 20,
-    'endprog': 21
+    'Param' : 21,
+    'endprog': 22
+    
 }
 ######################################################################################
 #Tokens
@@ -263,7 +265,7 @@ def p_endFunction(p):
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
-    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni=None)
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni= quads.getID()+1)
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
     quads.setCurrTabla(p[3])
 
@@ -344,26 +346,41 @@ def p_idAssignId(p):
 #Estatutos
 
 def p_llamada_fun(p):
-    ''' llamada_fun : ID  llamadaParam RP llamadaFin
-                    | ID  llamadaParam exp RP llamadaFin
+    ''' llamada_fun : llamadaParam RP endParam llamadaFin
+                    | llamadaParam auxExp RP endParam llamadaFin
     '''
+       
 
 def p_llamadaParam(p):
-    ''' llamadaParam : LP '''
+    ''' llamadaParam : ID LP '''
+    nameFunc = p[1]
+    superTabla.set_currentTablaId(nameFunc)
     quads.operator_push('Era')
     #Buscar tamaño de la funcion llamada y hacer esto:
-    #quads.quadruples[quads.getID()].setResult(size)
+    quads.quadruples[quads.getID()].setResult(nameFunc)
 
 def p_llamadaFin(p):
     ''' llamadaFin : SEMICOLON '''
     quads.operator_push('GoSub')
-    #Obtener ID del procedimiento y su direccion en donde se encuentragit aand
-
+    #Obtener ID del procedimiento y su direccion en donde se encuentra
+    quads.quadruples[quads.getID()].setResult(superTabla.get_currentTablaId())
+    superTabla.set_currentTablaId('global')
 
 def p_auxExp(p):
-    ''' auxExp : exp
-                | exp COMMA auxExp
+    ''' auxExp : exp mandaParam
+                | exp mandaParam COMMA auxExp
     '''
+
+def p_mandaParam(p):
+    ''' mandaParam : '''
+    quads.operator_push('Param')
+
+#Reinicar contador de parametros
+def p_endParam(p):
+    ''' endParam : '''
+    quads.setContParam(0)
+
+
 
 
 
