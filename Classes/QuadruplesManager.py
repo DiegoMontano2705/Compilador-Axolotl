@@ -120,9 +120,11 @@ class QuadruplesManager:
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
                         self.pilaOperators.put(pilaOperatorsTop)
+    
     #Solo se usara en print(escribe)
-    def string_push(self,str):
-        self.pilaOperands.put(str)
+    def string_push(self, strAux):
+        strAux = strAux.replace(" ", "_") #solve problem with spaces
+        self.pilaOperands.put(strAux[1:-1]) #without " " 
 
 
 ######################################################################################

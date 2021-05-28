@@ -64,7 +64,12 @@ def ejecuta():
             res = int(quadruples[ip][3])
             memoriaPrincipal.setValMemory(res, val)
         elif(codOp == 13): # print
-            pass
+            try:
+                val = memoriaPrincipal.getValMemory(int(quadruples[ip][3]))
+            except:
+                strAux = str(quadruples[ip][3:][0])
+                val = strAux.replace("_", " ") #solve problem with spaces
+            print(val)
         elif(codOp == 14): # GoTo
             pass
         elif(codOp == 15): # GoToF
@@ -96,8 +101,7 @@ def prepararData(data):
         if(values[0] == "global"): #tabla global
             listAux = [values[2:5], values[5:]] #lista a reservar
             dicAux = memoriaPrincipal.reservarMemoria("global", listAux)
-            memoriaPrincipal.mergeMemories(dicAux) #Agregar reservas a memoria principal
-        
+            memoriaPrincipal.mergeMemories(dicAux) #Agregar reservas a memoria principal    
     #QUADS
     for index in range(startQuads+1, len(data)):
         values = data[index].split()
