@@ -19,19 +19,19 @@ cod_operacion = {
     '-': 2,
     '*': 3,
     '/': 4,
-    '=': 5,
-    '<': 6,
-    '>': 7,
-    '<=': 8,
-    '>=': 9,
-    '==': 10,
-    '&': 11,
-    '|': 12,
+    '<': 5,
+    '>': 6,
+    '<=': 7,
+    '>=': 8,
+    '==': 9,
+    '&': 10,
+    '|': 11,
+    '=': 12,
     'print': 13,
     'GoTo': 14,
-    'gotof': 15,
-    'gosub': 16,
-    'endproc': 17,
+    'GoToF': 15,
+    'GoSub': 16,
+    'endprog': 17,
     'return': 18
 }
 ######################################################################################
@@ -130,20 +130,22 @@ t_ignore=' \t\r\n\f\v'
 quads = QuadruplesManager()
 lex.lex() #Building the lexer
 superTabla = TablaManager()
-superTabla.crearTabla("global", dirInicio="")
+superTabla.crearTabla("global", dirInicio=None)
 ctes_memoria = Memoria() #crear memoria para constantes
 ctes_memoria.setDicsAux("constantes") #Asignar direcciones default
 global_memoria = Memoria() #crear memoria para globales
 global_memoria.setDicsAux("global") #Asignar direcciones default
+
 ######################################################################################
 #Grammatic rules
 def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
-    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales())
-    superTabla.set_nombrePrograma(p[2])
-    superTabla.deleteTablaVars("global")
+    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
+    superTabla.set_nombrePrograma(p[2]) #Nombre del programa
+    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
     ''' startProg : STARTPROGRAMA '''
@@ -226,7 +228,7 @@ def p_clases(p):
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla(p[1], scope="class", dirInicio="", metodosClase="")
+    superTabla.crearTabla(p[1], scope="class", dirInicio=None, metodosClase=None)
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
@@ -258,7 +260,7 @@ def p_endFunction(p):
 def p_funcionId(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
-    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio="", pointerParams="", quadIni="")
+    superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni=None)
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
     quads.setCurrTabla(p[3])
 
@@ -331,9 +333,9 @@ def p_idAssignId(p):
         #Checar global
         dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
 
-    quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+    # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
     # print(p[1])
-    # quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
+    quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
 #Estatutos
@@ -593,9 +595,9 @@ def p_ctei(p):
     p[0] = p[1]
     ctes_memoria.setConstante(int(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(int(p[1]))
-    quads.id_push(p[1], "entero") #Agregar a quads operations
+    # quads.id_push(p[1], "entero") #Agregar a quads operations
     # print(p[1])
-    # quads.id_push(dirAux, "entero") #Agregar dir a quads operations
+    quads.id_push(dirAux[0], "entero") #Agregar dir a quads operations
 
     
 def p_ctef(p):
@@ -603,17 +605,17 @@ def p_ctef(p):
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(float(p[1]))
-    quads.id_push(p[1], "float") #Agregar a quads operations
+    # quads.id_push(p[1], "float") #Agregar a quads operations
     # print(p[1])
-    # quads.id_push(dirAux, "float") #Agregar dir a quads opeartions
+    quads.id_push(dirAux[0], "float") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''
     p[0] = p[1]
     ctes_memoria.setConstante(str(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(str(p[1]))
-    quads.id_push(p[1], "char") #Agregar a quads operations
-    # quads.id_push(dirAux, "char") #Agrega dir a quads operations
+    # quads.id_push(p[1], "char") #Agregar a quads operations
+    quads.id_push(dirAux[0], "char") #Agrega dir a quads operations
 
 ######################################################################################
 #Manejo errores
@@ -636,15 +638,30 @@ def crearOutFile():
         print("### CTES ###")
         for key, value in ctes_memoria.getMemory().items():
             print(key,value)
+        print("### dirFun ###")
+        dirFunFormat() #Desplegar tabla de funciones
         #print quads in file
         print("### QUADS ###")
         listaQuads = quads.getListaQuads()
         for i in range(len(listaQuads)):
             #print con codigo de operacion
-            print("%s %s %s %s %s" % (listaQuads[i].getID(), cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
             # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
         #print 
         sys.stdout = original_stdout #resete standar output
+
+#Darle formato a tabla de funciones
+def dirFunFormat():
+    dirAux = superTabla.dirFun.getDict()
+    globalAux = dirAux["global"]
+    dirAux.pop('global', None)
+    #imprimir tabla global
+    print("global", globalAux["dirInicio"], globalAux["recursos"]["vars"][0], globalAux["recursos"]["vars"][1], globalAux["recursos"]["vars"][2], globalAux["recursos"]["tmps"][0], globalAux["recursos"]["tmps"][1], globalAux["recursos"]["tmps"][2], globalAux["recursos"]["tmps"][3])
+    #imprimir demas funciones/clases
+    for key, val in dirAux.items():
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], val["recursos"]["vars"][0], val["recursos"]["vars"][1], val["recursos"]["vars"][2], val["recursos"]["tmps"][0], val["recursos"]["tmps"][1], val["recursos"]["tmps"][2], val["recursos"]["tmps"][3])
+    
+
 ######################################################################################
 #Creating praser
 yacc.yacc()
@@ -667,7 +684,7 @@ if __name__ == '__main__':
 # ctes_memoria.printMemory()
 # global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
-superTabla.printDirFun() #superTabla con funciones/clases/methodos
+# superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")

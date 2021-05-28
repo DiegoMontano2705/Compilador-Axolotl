@@ -68,6 +68,12 @@ class QuadruplesManager:
     def clearTmps(self):
         self.tmp.clear()
 
+    #set endprog
+    def setEndProg(self):
+        self.quadruples
+        q = Quadruples(None,"endprog",None,None,None)
+        self.quadruples.append(q) 
+
 ######################################################################################
 #operator push 
 

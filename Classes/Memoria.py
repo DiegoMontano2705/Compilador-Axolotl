@@ -262,14 +262,45 @@ class Memoria:
         return key_list[position], self.getTipoByDir(key_list[position])
 
     def getTipoByDir(self, dir):
-        if(dir in range(G_E_INI, G_E_FIN)):
+        if(int(dir) in range(G_E_INI, G_E_FIN) or int(dir) in range(L_E_INI, L_E_FIN) or int(dir) in range(G_TMP_E_INI, G_TMP_E_FIN) or int(dir) in range(L_TMP_E_INI, L_TMP_E_FIN) or int(dir) in range(CTE_E_INI, CTE_E_FIN)):
             return "entero"
-        elif(dir in range(G_F_INI, G_F_FIN)):
+        elif(int(dir) in range(G_F_INI, G_F_FIN) or int(dir) in range(L_F_INI, L_F_FIN)or int(dir) in range(G_TMP_F_INI, G_TMP_F_FIN) or int(dir) in range(L_TMP_F_INI, L_TMP_F_FIN) or int(dir) in range(CTE_F_INI, CTE_F_FIN)):
             return "float"
-        elif(dir in range(G_C_INI, G_C_FIN)):
+        elif(int(dir) in range(G_C_INI, G_C_FIN) or int(dir) in range(L_C_INI, L_C_FIN)or int(dir) in range(G_TMP_C_INI, G_TMP_C_FIN) or int(dir) in range(L_TMP_C_INI, L_TMP_C_FIN) or int(dir) in range(CTE_C_INI, CTE_C_FIN)):
             return "char"
+        elif(int(dir) in range(G_TMP_B_INI, G_TMP_B_FIN) or int(dir) in range(L_TMP_B_INI, L_TMP_B_FIN)):
+            return "bool"
 #######################################################
 #Memoria de ejecucion
+
+    #Reservar memoria con direcciones con formato [[entero,float,char],[tmpEntero, tmpFloat, tmpChar, tmpBool]]
+    #tipoMemoria = global o local
+    #contexto = vars o tmps
+    def reservarMemoria(self, tipoMemoria, listaTipos):
+        memoriaAux = Memoria()
+        memoriaAux.setDicsAux(tipoMemoria)
+        if(tipoMemoria == "global"):
+            for i in range(0, int(listaTipos[0][0])): #reservar globales enteras
+                memoriaAux.setGlobalVal(None, "entero", "vars")
+            for i in range(0, int(listaTipos[0][1])): #reservar globales float
+                memoriaAux.setGlobalVal(None, "float", "vars")
+            for i in range(0, int(listaTipos[0][2])): #reservar globales char
+                memoriaAux.setGlobalVal(None, "char", "vars")
+            for i in range(0, int(listaTipos[1][0])): #reservar globales temporal enteras
+                memoriaAux.setGlobalVal(None, "entero", "tmps")
+            for i in range(0, int(listaTipos[1][1])): #reservar globales temporal float
+                memoriaAux.setGlobalVal(None, "float", "tmps")
+            for i in range(0, int(listaTipos[1][2])): #reservar globales temporal char
+                memoriaAux.setGlobalVal(None, "char", "tmps")
+            for i in range(0, int(listaTipos[1][3])): #reservar globales temporal bool
+                memoriaAux.setGlobalVal(None, "bool", "tmps")
+            return (memoriaAux.getMemory()) #Regresa memoria con direcciones reservadas
+
+        pass
+    
+    #Juntar dos memorias (merge dictionaries)
+    def mergeMemories(self, dict1):
+        self.memory.update(dict1)
 
     #Regresar valores guardados
     def getMemory(self):
@@ -284,7 +315,16 @@ class Memoria:
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):
-        self.memory[dir] = value
+        if(self.getTipoByDir(dir) == "entero"):
+            self.memory[dir] = int(value)
+        elif(self.getTipoByDir(dir) == "float"):
+            self.memory[dir] = float(value)
+        elif(self.getTipoByDir(dir) == "char"):
+            self.memory[dir] = str(value)
+        elif(self.getTipoByDir(dir) == "bool"):
+            self.memory[dir] = bool(value)
+        else:
+            print("Error:",dir, "fuera de rango de memoria.")
 
 ##############################################################################################################
 #Testing    

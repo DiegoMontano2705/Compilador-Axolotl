@@ -16,8 +16,8 @@ class TablaManager:
         self.dirFun = Tabla("dirFun") #Tabla encargada de administar demas tablas.
         self.currentScope = "global" #En que scope se encuentra: class or global
         self.currentTablaId = "global" #Tabla en la que se encuentra.
-        self.currentType = "" #Que tipo de variable se encuentra.
-        self.nombrePrograma = "" #Nombre del programa
+        self.currentType = None #Que tipo de variable se encuentra.
+        self.nombrePrograma = None #Nombre del programa
 ######################################################################################
     #sets and gets
     def get_currentTablaId(self):
