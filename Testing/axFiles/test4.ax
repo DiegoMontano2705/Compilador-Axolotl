@@ -1,0 +1,10 @@
+programa test4;
+variables entero : a,b,c,d;
+
+void funcion uno(){
+    variables entero : e;
+}
+
+principal() {
+    escribe("hola pepe");
+}

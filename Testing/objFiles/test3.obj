@@ -1,0 +1,19 @@
+### CTES ###
+20500 1
+20501 2
+20502 3
+20503 4
+### dirFun ###
+global None 4_0_0 3_0_0_0
+### QUADS ###
+15 None None 0
+12 20500 None 10003
+12 20501 None 10002
+12 20502 None 10001
+12 20503 None 10000
+13 None None hola_pepe
+1 10001 10001 14500
+3 10003 10002 14501
+1 14500 14501 14502
+13 None None 14502
+21 None None None

@@ -670,7 +670,10 @@ def dirFunFormat():
     print("global", globalAux["dirInicio"], "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], "_".join(val["listaParms"]), "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+        listParms = "_".join(val["listaParms"])
+        if(not listParms): #if is empty
+            listParms = None
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
     
 
 ######################################################################################
