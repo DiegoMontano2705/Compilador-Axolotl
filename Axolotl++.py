@@ -354,7 +354,7 @@ def p_llamadaParam(p):
 def p_llamadaFin(p):
     ''' llamadaFin : SEMICOLON '''
     quads.operator_push('GoSub')
-    #Obtener 
+    #Obtener ID del procedimiento y su direccion en donde se encuentragit aand
 
 
 def p_auxExp(p):
@@ -388,11 +388,15 @@ def p_escritura(p):
     '''
 
 def p_escrituraAux(p):
-    ''' escrituraAux : exp
-                    | STRING
-                    | exp COMMA escrituraAux
-                    | STRING COMMA escrituraAux
+    ''' escrituraAux : exp escrituraEnd
+                    | STRING escrituraEnd
+                    | exp escrituraEnd COMMA escrituraAux
+                    | STRING escrituraEnd COMMA escrituraAux
     '''
+
+def p_escrituraEnd(p):
+    ''' escrituraEnd : '''
+    quads.operator_push('print')
 
 
 ######################################################################################
