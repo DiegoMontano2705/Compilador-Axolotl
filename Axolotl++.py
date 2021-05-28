@@ -28,11 +28,14 @@ cod_operacion = {
     '|': 11,
     '=': 12,
     'print': 13,
-    'GoTo': 14,
-    'GoToF': 15,
-    'GoSub': 16,
-    'endprog': 17,
-    'return': 18
+    'read': 14,
+    'GoTo': 15,
+    'GoToF': 16,
+    'GoSub': 17,
+    'return': 18,
+    'Era' : 19,
+    'EndFunc' : 20,
+    'endprog': 21
 }
 ######################################################################################
 #Tokens
@@ -664,10 +667,10 @@ def dirFunFormat():
     globalAux = dirAux["global"]
     dirAux.pop('global', None)
     #imprimir tabla global
-    print("global", globalAux["dirInicio"], globalAux["recursos"]["vars"][0], globalAux["recursos"]["vars"][1], globalAux["recursos"]["vars"][2], globalAux["recursos"]["tmps"][0], globalAux["recursos"]["tmps"][1], globalAux["recursos"]["tmps"][2], globalAux["recursos"]["tmps"][3])
+    print("global", globalAux["dirInicio"], "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], val["listaParms"], val["recursos"]["vars"][0], val["recursos"]["vars"][1], val["recursos"]["vars"][2], val["recursos"]["tmps"][0], val["recursos"]["tmps"][1], val["recursos"]["tmps"][2], val["recursos"]["tmps"][3])
+        print(key, val["retorno"], val["dirInicio"], val["quadIni"], "_".join(val["listaParms"]), "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
     
 
 ######################################################################################

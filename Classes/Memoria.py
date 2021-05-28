@@ -61,6 +61,7 @@ class Memoria:
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
         self.tmpBoolAux = 0 #tempora_bool
+
 #######################################################      
     #set dirs en auxiliares
     def setDicsAux(self, tipoMemoria):
@@ -84,7 +85,8 @@ class Memoria:
             self.tmpFlotanteAux = L_TMP_F_INI
             self.tmpCharAux = L_TMP_C_INI
             self.tmpBoolAux = L_TMP_B_INI
-        
+    
+
 #######################################################
     #guardar valor en dic direcciones
     #tipo = entero, flotante, char, bool
@@ -178,6 +180,7 @@ class Memoria:
 #Locales
 #Regresa direccion virutal para las vars y temporales locales dentro de un contexto.
 
+    #get only local dir
     def getLocalDirVirtual(self, tipo, contexto):
             if(contexto == "vars"): #Variables
                 if(tipo == "entero"):
@@ -187,7 +190,7 @@ class Memoria:
                     else:
                         print("overflow memoria: locales enteras.")
                         sys.exit()
-                elif(tipo == "flotante"):
+                elif(tipo == "float"):
                     if self.flotantesAux in range(L_F_INI, L_F_FIN):
                         self.flotantesAux+=1
                         return (self.flotantesAux-1)
@@ -209,7 +212,7 @@ class Memoria:
                     else:
                         print("overflow memoria: temporales locales enteras.")
                         sys.exit()
-                elif(tipo=="flotante"):
+                elif(tipo=="float"):
                     if self.tmpFlotanteAux in range(L_TMP_F_INI, L_TMP_F_FIN):
                         self.tmpFlotanteAux+=1
                         return (self.tmpFlotanteAux-1)
@@ -295,8 +298,32 @@ class Memoria:
             for i in range(0, int(listaTipos[1][3])): #reservar globales temporal bool
                 memoriaAux.setGlobalVal(None, "bool", "tmps")
             return (memoriaAux.getMemory()) #Regresa memoria con direcciones reservadas
-
-        pass
+        elif(tipoMemoria == "local"): #Memoria local.
+            for i in range(0, int(listaTipos[0][0])): #reservar locales enteras
+                dirAux = memoriaAux.getLocalDirVirtual("entero", "vars") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None) #asginar 
+            for i in range(0, int(listaTipos[0][1])): #reservar locales float
+                dirAux = memoriaAux.getLocalDirVirtual("float", "vars") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            for i in range(0, int(listaTipos[0][2])): #reservar locales char
+                dirAux = memoriaAux.getLocalDirVirtual("char", "vars") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            for i in range(0, int(listaTipos[1][0])): #reservar locales temporal enteras
+                dirAux = memoriaAux.getLocalDirVirtual("entero", "tmps") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            for i in range(0, int(listaTipos[1][1])): #reservar locales temporal float
+                dirAux = memoriaAux.getLocalDirVirtual("float", "tmps") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            for i in range(0, int(listaTipos[1][2])): #reservar locales temporal char
+                dirAux = memoriaAux.getLocalDirVirtual("char", "tmps") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            for i in range(0, int(listaTipos[1][3])): #reservar locales temporal bool
+                dirAux = memoriaAux.getLocalDirVirtual("bool", "tmps") #get local dir
+                memoriaAux.setValMemory(int(dirAux), None)
+            return (memoriaAux.getMemory()) #Regresa memoria con direcciones reservadas
+        else:
+            print("Error:", tipoMemoria, "no valido.")
+            sys.exit()
     
     #Juntar dos memorias (merge dictionaries)
     def mergeMemories(self, dict1):
@@ -315,7 +342,9 @@ class Memoria:
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):
-        if(self.getTipoByDir(dir) == "entero"):
+        if(value == None):
+            self.memory[dir] = None
+        elif(self.getTipoByDir(dir) == "entero"):
             self.memory[dir] = int(value)
         elif(self.getTipoByDir(dir) == "float"):
             self.memory[dir] = float(value)
