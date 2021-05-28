@@ -23,7 +23,7 @@ opModules = ['GoSub', 'Era', 'Param','EndFunc','Return']
 class QuadruplesManager:
 
     def __init__(self):
-        self.idNum = -1   # numero de quadruplo, sirve sobre todo para Conditions y Loops
+        self.idNum = -1   # numero de quadruplo
         self.pilaOperands = LifoQueue() #stack que almacena los operandos.
         self.pilaTypes = LifoQueue() #stack que almacena los tipos de los operandos.
         self.pilaOperators = LifoQueue() #stack que almacena operadores.
@@ -167,13 +167,15 @@ class QuadruplesManager:
                 self.quadruples.append(q)
 
             ## print, write y return
-            elif(operator == 'print' or operator == 'Return'):
+            elif(operator == 'Print' or operator == 'Return'):
                 left_op = left_op = self.pilaOperands.get_nowait()
                 if(left_op != None ):
                     id_Final = (self.getID() + 1)
                     q = Quadruples(id_Final,operator,None, None,left_op)
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
+            elif(operator == 'read'):
+                pass
             
             ## Modulos
             elif(operator == 'EndFunc' or operator == 'Era' or operator == 'GoSub'):

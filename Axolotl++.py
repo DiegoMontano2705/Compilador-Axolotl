@@ -27,15 +27,17 @@ cod_operacion = {
     '&': 10,
     '|': 11,
     '=': 12,
-    'print': 13,
-    'read': 14,
+    'Print': 13,
+    'Read': 14,
     'GoTo': 15,
     'GoToF': 16,
     'GoSub': 17,
-    'return': 18,
+    'Return': 18,
     'Era' : 19,
     'EndFunc' : 20,
-    'endprog': 21
+    'Param' : 21,
+    'endprog': 22
+    
 }
 ######################################################################################
 #Tokens
@@ -345,7 +347,7 @@ def p_idAssignId(p):
 
 def p_llamada_fun(p):
     ''' llamada_fun : ID  llamadaParam RP llamadaFin
-                    | ID  llamadaParam exp RP llamadaFin
+                    | ID  llamadaParam auxExp RP llamadaFin
     '''
 
 def p_llamadaParam(p):
@@ -361,9 +363,13 @@ def p_llamadaFin(p):
 
 
 def p_auxExp(p):
-    ''' auxExp : exp
-                | exp COMMA auxExp
+    ''' auxExp : exp mandaParam
+                | exp mandaParam COMMA auxExp
     '''
+
+def p_mandaParam(p):
+    ''' mandaParam : '''
+    quads.operator_push('Param')
 
 
 
