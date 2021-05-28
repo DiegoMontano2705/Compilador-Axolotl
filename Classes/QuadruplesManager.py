@@ -67,7 +67,7 @@ class QuadruplesManager:
     #Reset a contador de tmps
     def clearTmps(self):
         self.tmp.clear()
-
+        
     #set endprog
     def setEndProg(self):
         self.quadruples
@@ -120,6 +120,9 @@ class QuadruplesManager:
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
                         self.pilaOperators.put(pilaOperatorsTop)
+    #Solo se usara en print(escribe)
+    def string_push(self,str):
+        self.pilaOperands.put(str)
 
 
 ######################################################################################
@@ -176,6 +179,7 @@ class QuadruplesManager:
                 q = Quadruples(id_Final,operator,None, None,None)
                 self.setID(self.getID() + 1)
                 self.quadruples.append(q)
+
             elif(operator == 'Param'):
                 left_op = left_op = self.pilaOperands.get_nowait()
                 if(left_op != None):

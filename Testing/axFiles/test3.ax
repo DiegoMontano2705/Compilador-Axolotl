@@ -7,5 +7,5 @@ principal() {
     b = 2;
     c = 3;
     d = 4;
-    escribe(1*2,3+4);
+    escribe("hola pepe",3+4);
 }
