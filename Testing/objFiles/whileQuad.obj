@@ -1,0 +1,15 @@
+### CTES ###
+20500 0
+20501 5
+20502 1
+### dirFun ###
+global None 3_0_0 1_0_0_1
+### QUADS ###
+15 None None 0
+12 20500 None 10002
+5 10002 20501 19000
+16 19000 None 6
+1 10002 20502 14500
+12 14500 None 10002
+15 None None 2
+22 None None None
