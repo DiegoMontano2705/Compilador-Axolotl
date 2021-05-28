@@ -389,10 +389,14 @@ def p_escritura(p):
 
 def p_escrituraAux(p):
     ''' escrituraAux : exp escrituraEnd
-                    | STRING escrituraEnd
+                    | cartel escrituraEnd
                     | exp escrituraEnd COMMA escrituraAux
-                    | STRING escrituraEnd COMMA escrituraAux
+                    | cartel escrituraEnd COMMA escrituraAux
     '''
+
+def p_cartel(p):
+    ''' cartel : STRING '''
+    quads.string_push(p[1])
 
 def p_escrituraEnd(p):
     ''' escrituraEnd : '''
