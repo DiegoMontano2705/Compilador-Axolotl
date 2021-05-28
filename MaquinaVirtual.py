@@ -64,9 +64,9 @@ def ejecuta():
             res = int(quadruples[ip][3])
             memoriaPrincipal.setValMemory(res, val)
         elif(codOp == 13): # print
-            try:
+            try: #if not work with value, so its a string
                 val = memoriaPrincipal.getValMemory(int(quadruples[ip][3]))
-            except:
+            except: #work with strings
                 strAux = str(quadruples[ip][3:][0])
                 val = strAux.replace("_", " ") #solve problem with spaces
             print(val)
@@ -76,8 +76,8 @@ def ejecuta():
             pass
         elif(codOp == 16): # GoSub
             pass
-        elif(codOp == 17): # endproc
-            pass
+        elif(codOp == 17): # endprog
+            print("fin del programa :) - Axolotl")
         elif(codOp == 18): # return
             pass
         ip+=1
@@ -138,7 +138,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            testing()
+            # testing()
         except EOFError:
             print(EOFError)
     else:
