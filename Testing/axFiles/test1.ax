@@ -4,7 +4,6 @@ variables entero : a,b,d;
 void funcion pruebaUno(entero e, flotante f) {
     e = 6;
     escribe(e);
-    regresa (5);
 }
 
 entero funcion pruebaDos(entero e, flotante f, char x) {

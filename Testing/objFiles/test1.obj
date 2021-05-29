@@ -14,7 +14,7 @@ pruebaDos entero None 4 entero_flotante_char 1_1_1 1_0_0_0
 ### QUADS ###
 15 None None 6
 12 20500 None 23500
-13 None None 20501
+13 None None 23500
 20 None None None
 1 10001 20500 28000
 12 28000 None 10001

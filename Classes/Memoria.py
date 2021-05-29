@@ -348,13 +348,13 @@ class Memoria:
 
     #Regresa valor dada una direccion buscando en local y global
     def getValMemory(self, dir, memoriaGlobal):
-        if dir not in self.memory:
-            if dir in memoriaGlobal.memory:
-                return memoriaGlobal.memory[dir]
-            else:
-                print("Error:",dir,"no existente en la memoria ejecucion local ni global.")
-                sys.exit()
-        return self.memory[dir]
+        if dir in self.memory:
+            return self.memory[dir]
+        elif( dir in memoriaGlobal.memory):
+            return memoriaGlobal.memory[dir]
+        else:
+            print("Error:",dir,"no existente en la memoria ejecucion local ni global.")
+            sys.exit()
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):

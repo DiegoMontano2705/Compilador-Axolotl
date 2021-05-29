@@ -70,7 +70,7 @@ def ejecuta():
             ip+=1
         elif(codOp == 13): # print
             try: #if not work with value, so its a string
-                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])
+                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])  
             except: #work with strings
                 strAux = str(quadruples[ip][3:][0])
                 val = strAux.replace("_", " ") #solve problem with spaces
