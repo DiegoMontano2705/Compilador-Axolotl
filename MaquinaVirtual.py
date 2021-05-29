@@ -13,7 +13,7 @@ from queue import LifoQueue
 #######################################################   
 #
 stackParms = LifoQueue() #Maneja orden de parametros
-stackExe = LifoQueue() #Maneja el orden de ejecucion
+stackExe = [] #Maneja el orden de ejecucion
 memoriaPrincipal = Memoria() #Maneja la memoria de ejecucion
 memorias = [] #Maneja instancias de memorias.
 memorias.append(memoriaPrincipal) #Agregar memoria principal
@@ -66,7 +66,7 @@ def ejecuta():
         elif(codOp == 12): # =
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
             res = int(quadruples[ip][3])
-            memorias[0].setValMemory(res, val)
+            memorias[-1].setValMemory(res, val)
             ip+=1
         elif(codOp == 13): # print
             try: #if not work with value, so its a string
@@ -86,7 +86,8 @@ def ejecuta():
         elif(codOp == 16): # GoToF
             ip+=1
         elif(codOp == 17): # GoSub
-            ip+=1
+            stackExe.append(ip+1) #Saber a donde tiene que regresar al finalizar func.
+            ip = int(quadruples[ip][1])
         elif(codOp == 18): # return
             ip+=1
         elif(codOp == 19): # ERA
@@ -99,12 +100,12 @@ def ejecuta():
             ip+=1
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
-            ip+=1
+            ip = stackExe.pop()
         elif(codOp == 21): # Param
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
-            
-            print(quadruples[ip])
-            print(val)
+            memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
+            dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
+            memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
             ip+=1
         elif(codOp == 22): # endprog
             print("fin del programa :) - Axolotl")
@@ -165,10 +166,6 @@ def testing():
     print("### Memoria Principal ###")
     memorias[0].printMemory()
     print("###################################################################################")
-    print("### Demas memorias ###")
-    for i in memorias[1:]:
-        i.printMemory()
-    print("###################################################################################")
     print("### QUADS ###")
     for quad in quadruples:
         print(quad)
@@ -186,7 +183,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            # testing()
+            testing()
         except EOFError:
             print(EOFError)
     else:

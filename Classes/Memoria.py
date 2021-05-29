@@ -60,7 +60,8 @@ class Memoria:
         self.tmpEnteroAux = 0 #temporal_entero
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
-        self.tmpBoolAux = 0 #tempora_bool
+        self.tmpBoolAux = 0 #tempora_bool\
+
 
 #######################################################      
     #set dirs en auxiliares
@@ -235,9 +236,8 @@ class Memoria:
                         sys.exit()
 
 #######################################################
-    #Resete contadores de recursos
+    #Reset contadores/pointers a memoria.
     def reseteRecursos(self):
-        self.memory={}
         self.enterosAux=0
         self.flotantesAux=0
         self.charAux=0
@@ -333,9 +333,18 @@ class Memoria:
     def getMemory(self):
         return self.memory
 
-    #Asigna parametro
-    def asignaParm(self):
-        pass
+    #Regresa direccion que le corresponde depende el tipo.
+    def getDirParm(self, dir):
+        tipo = self.getTipoByDir(int(dir))
+        if(tipo == "entero"): #regresa la variable entera que le corresponde
+            self.enterosAux+= 1
+            return self.enterosAux - 1 
+        elif(tipo == "float"):
+            self.flotantesAux+=1
+            return self.flotantesAux - 1
+        elif(tipo == "char"):
+            self.charAux+=1
+            return self.charAux - 1
 
     #Regresa valor dada una direccion buscando en local y global
     def getValMemory(self, dir, memoriaGlobal):
