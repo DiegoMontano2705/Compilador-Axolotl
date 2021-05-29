@@ -37,7 +37,6 @@ cod_operacion = {
     'EndFunc' : 20,
     'Param' : 21,
     'endprog': 22
-    
 }
 ######################################################################################
 #Tokens
@@ -384,8 +383,13 @@ def p_llamada_fun_exp(p):
     '''
 
 def p_retorno_fun(p):
-    ''' retorno_fun :  RETURN LP exp RP SEMICOLON
+    ''' retorno_fun :  RETURN LP exp finRetorno SEMICOLON
     '''
+
+#Auxiliar para retorno
+def p_finRetorno(p):
+    ''' finRetorno : RP '''
+    quads.operator_push("Return")
 
 def p_lectura(p):
     ''' lectura : READ LP var RP SEMICOLON

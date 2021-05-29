@@ -8,7 +8,7 @@ void funcion pruebaUno(entero e, entero f) {
 
 entero funcion pruebaDos(entero e, flotante f, char x) {
     b = b + 6;
-    regresa (5);
+    regresa (1+1);
 }
 
 %%test comment
