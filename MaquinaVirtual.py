@@ -98,6 +98,7 @@ def ejecuta():
             memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
             memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
+            stackParms = dirFun[nomFun]['listaParms']
             ip+=1
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
@@ -106,7 +107,9 @@ def ejecuta():
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
             dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
             #Checar tipo 
-
+            if(memorias[-1].getTipoByDir(int(dirHost)) != stackParms[int(quadruples[ip][3])-1]):
+                print("Error:", nomFun, "tipo de parametros no coincide con declaracion.")
+                sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
             memorias[-1].printMemory()
             ip+=1
