@@ -10,10 +10,9 @@
 ### dirFun ###
 global None 3_0_0 7_0_0_0
 pruebaUno void None 1 entero_flotante 1_1_0 0_0_0_0
-pruebaDos entero None 4 entero_flotante_char 1_1_1 1_0_0_0
+pruebaDos entero None 3 entero_flotante_char 1_1_1 1_0_0_0
 ### QUADS ###
-15 None None 6
-12 20500 None 23500
+15 None None 5
 13 None None 23500
 20 None None None
 1 10001 20500 28000

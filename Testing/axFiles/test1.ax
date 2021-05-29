@@ -2,7 +2,6 @@ programa test1;
 variables entero : a,b,d;
 
 void funcion pruebaUno(entero e, flotante f) {
-    e = 6;
     escribe(e);
 }
 
