@@ -84,7 +84,11 @@ def ejecuta():
         elif(codOp == 15): # GoTo
             ip = int(quadruples[ip][3]) + 1 #ve directo quad ip.
         elif(codOp == 16): # GoToF
-            ip+=1
+            val = bool(memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]))
+            if not val: #si es falso, ve a quadruplo
+                ip = int(quadruples[ip][3])+1
+            else:
+                ip+=1
         elif(codOp == 17): # GoSub
             stackExe.append(ip+1) #Saber a donde tiene que regresar al finalizar func.
             ip = int(quadruples[ip][1])
@@ -189,7 +193,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            # testing()
+            testing()
         except EOFError:
             print(EOFError)
     else:

@@ -1,12 +1,16 @@
-programa testIf;
+programa ifQuad;
 variables entero : a,b,c,d;
 
 %%if comment
 principal() {
+    a=10;
+    b=11;
+    d=2;
     si (a > b) entonces {
         c = a * d;
     } sino {
         c = d + a;
     }
     d = c;
+    escribe(d);
 }

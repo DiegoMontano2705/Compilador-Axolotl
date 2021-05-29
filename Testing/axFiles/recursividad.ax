@@ -1,7 +1,7 @@
 programa recursividad;
 
 void funcion pruebaUno(entero x) {
-    escribe(x);
+    regresa(10);
 }
 
 %%test comment
