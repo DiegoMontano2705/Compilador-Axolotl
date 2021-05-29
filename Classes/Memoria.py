@@ -106,7 +106,7 @@ class Memoria:
                     self.memory[self.flotantesAux] = value
                     self.flotantesAux+=1
                 else:
-                    print("overflow memoria: globales flotantes.")
+                    print("overflow memoria: globales flotante.")
                     sys.exit()
             elif(tipo == "char"):
                 if self.charAux in range(G_C_INI, G_C_FIN):
@@ -175,7 +175,7 @@ class Memoria:
                     print("overflow memoria: constantes chars.")
                     sys.exit()
             else:
-                print("type mismatch: constantes solo enteras, float, char.")
+                print("type mismatch: constantes solo enteras, flotante, char.")
     
 #######################################################
 #Locales
@@ -191,7 +191,7 @@ class Memoria:
                     else:
                         print("overflow memoria: locales enteras.")
                         sys.exit()
-                elif(tipo == "float"):
+                elif(tipo == "flotante"):
                     if self.flotantesAux in range(L_F_INI, L_F_FIN):
                         self.flotantesAux+=1
                         return (self.flotantesAux-1)
@@ -213,7 +213,7 @@ class Memoria:
                     else:
                         print("overflow memoria: temporales locales enteras.")
                         sys.exit()
-                elif(tipo=="float"):
+                elif(tipo=="flotante"):
                     if self.tmpFlotanteAux in range(L_TMP_F_INI, L_TMP_F_FIN):
                         self.tmpFlotanteAux+=1
                         return (self.tmpFlotanteAux-1)
@@ -268,7 +268,7 @@ class Memoria:
         if(int(dir) in range(G_E_INI, G_E_FIN) or int(dir) in range(L_E_INI, L_E_FIN) or int(dir) in range(G_TMP_E_INI, G_TMP_E_FIN) or int(dir) in range(L_TMP_E_INI, L_TMP_E_FIN) or int(dir) in range(CTE_E_INI, CTE_E_FIN)):
             return "entero"
         elif(int(dir) in range(G_F_INI, G_F_FIN) or int(dir) in range(L_F_INI, L_F_FIN)or int(dir) in range(G_TMP_F_INI, G_TMP_F_FIN) or int(dir) in range(L_TMP_F_INI, L_TMP_F_FIN) or int(dir) in range(CTE_F_INI, CTE_F_FIN)):
-            return "float"
+            return "flotante"
         elif(int(dir) in range(G_C_INI, G_C_FIN) or int(dir) in range(L_C_INI, L_C_FIN)or int(dir) in range(G_TMP_C_INI, G_TMP_C_FIN) or int(dir) in range(L_TMP_C_INI, L_TMP_C_FIN) or int(dir) in range(CTE_C_INI, CTE_C_FIN)):
             return "char"
         elif(int(dir) in range(G_TMP_B_INI, G_TMP_B_FIN) or int(dir) in range(L_TMP_B_INI, L_TMP_B_FIN)):
@@ -276,7 +276,7 @@ class Memoria:
 #######################################################
 #Memoria de ejecucion
 
-    #Reservar memoria con direcciones con formato [[entero,float,char],[tmpEntero, tmpFloat, tmpChar, tmpBool]]
+    #Reservar memoria con direcciones con formato [[entero,flotante,char],[tmpEntero, tmpflotante, tmpChar, tmpBool]]
     #tipoMemoria = global o local
     #contexto = vars o tmps
     def reservarMemoria(self, tipoMemoria, listaTipos):
@@ -285,14 +285,14 @@ class Memoria:
         if(tipoMemoria == "global"):
             for i in range(0, int(listaTipos[0][0])): #reservar globales enteras
                 memoriaAux.setGlobalVal(None, "entero", "vars")
-            for i in range(0, int(listaTipos[0][1])): #reservar globales float
-                memoriaAux.setGlobalVal(None, "float", "vars")
+            for i in range(0, int(listaTipos[0][1])): #reservar globales flotante
+                memoriaAux.setGlobalVal(None, "flotante", "vars")
             for i in range(0, int(listaTipos[0][2])): #reservar globales char
                 memoriaAux.setGlobalVal(None, "char", "vars")
             for i in range(0, int(listaTipos[1][0])): #reservar globales temporal enteras
                 memoriaAux.setGlobalVal(None, "entero", "tmps")
-            for i in range(0, int(listaTipos[1][1])): #reservar globales temporal float
-                memoriaAux.setGlobalVal(None, "float", "tmps")
+            for i in range(0, int(listaTipos[1][1])): #reservar globales temporal flotante
+                memoriaAux.setGlobalVal(None, "flotante", "tmps")
             for i in range(0, int(listaTipos[1][2])): #reservar globales temporal char
                 memoriaAux.setGlobalVal(None, "char", "tmps")
             for i in range(0, int(listaTipos[1][3])): #reservar globales temporal bool
@@ -302,8 +302,8 @@ class Memoria:
             for i in range(0, int(listaTipos[0][0])): #reservar locales enteras
                 dirAux = memoriaAux.getLocalDirVirtual("entero", "vars") #get local dir
                 memoriaAux.setValMemory(int(dirAux), None) #asginar 
-            for i in range(0, int(listaTipos[0][1])): #reservar locales float
-                dirAux = memoriaAux.getLocalDirVirtual("float", "vars") #get local dir
+            for i in range(0, int(listaTipos[0][1])): #reservar locales flotante
+                dirAux = memoriaAux.getLocalDirVirtual("flotante", "vars") #get local dir
                 memoriaAux.setValMemory(int(dirAux), None)
             for i in range(0, int(listaTipos[0][2])): #reservar locales char
                 dirAux = memoriaAux.getLocalDirVirtual("char", "vars") #get local dir
@@ -311,8 +311,8 @@ class Memoria:
             for i in range(0, int(listaTipos[1][0])): #reservar locales temporal enteras
                 dirAux = memoriaAux.getLocalDirVirtual("entero", "tmps") #get local dir
                 memoriaAux.setValMemory(int(dirAux), None)
-            for i in range(0, int(listaTipos[1][1])): #reservar locales temporal float
-                dirAux = memoriaAux.getLocalDirVirtual("float", "tmps") #get local dir
+            for i in range(0, int(listaTipos[1][1])): #reservar locales temporal flotante
+                dirAux = memoriaAux.getLocalDirVirtual("flotante", "tmps") #get local dir
                 memoriaAux.setValMemory(int(dirAux), None)
             for i in range(0, int(listaTipos[1][2])): #reservar locales temporal char
                 dirAux = memoriaAux.getLocalDirVirtual("char", "tmps") #get local dir
@@ -339,7 +339,7 @@ class Memoria:
         if(tipo == "entero"): #regresa la variable entera que le corresponde
             self.enterosAux+= 1
             return self.enterosAux - 1 
-        elif(tipo == "float"):
+        elif(tipo == "flotante"):
             self.flotantesAux+=1
             return self.flotantesAux - 1
         elif(tipo == "char"):
@@ -362,7 +362,7 @@ class Memoria:
             self.memory[dir] = None
         elif(self.getTipoByDir(dir) == "entero"):
             self.memory[dir] = int(value)
-        elif(self.getTipoByDir(dir) == "float"):
+        elif(self.getTipoByDir(dir) == "flotante"):
             self.memory[dir] = float(value)
         elif(self.getTipoByDir(dir) == "char"):
             self.memory[dir] = str(value)

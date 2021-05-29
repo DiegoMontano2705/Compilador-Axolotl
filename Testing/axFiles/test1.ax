@@ -1,6 +1,11 @@
 programa test1;
 variables entero : a,b,d;
 
+
+void funcion pruebaCuatro(entero e, entero f) {
+    escribe(e);
+    escribe(f);
+}
 void funcion pruebaUno(entero e, flotante f) {
     variables entero : m;
     m = 10;
@@ -11,12 +16,13 @@ void funcion pruebaUno(entero e, flotante f) {
 void funcion pruebaTest(){
     variables entero : w;
     b = 10 + 3;
+
 }
 
 entero funcion pruebaDos(entero e, flotante f, char x) {
     variables entero : y;
     b = b + 6;
-    regresa (5);
+    regresa (1+1);
 }
 
 %%test comment
@@ -25,5 +31,5 @@ principal() {
     b = 5 + 5 + 4 - 2;
     d = 8 * 2;
     d  = (5 + 6 * 100);
-    pruebaUno(1+1, 20.4);
+    pruebaCuatro(1+1, 20+5);
 }

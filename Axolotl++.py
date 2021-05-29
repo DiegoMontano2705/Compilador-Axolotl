@@ -37,7 +37,6 @@ cod_operacion = {
     'EndFunc' : 20,
     'Param' : 21,
     'endprog': 22
-    
 }
 ######################################################################################
 #Tokens
@@ -395,8 +394,13 @@ def p_llamada_fun_exp(p):
     '''
 
 def p_retorno_fun(p):
-    ''' retorno_fun :  RETURN LP exp RP SEMICOLON
+    ''' retorno_fun :  RETURN LP exp finRetorno SEMICOLON
     '''
+
+#Auxiliar para retorno
+def p_finRetorno(p):
+    ''' finRetorno : RP '''
+    quads.operator_push("Return")
 
 def p_lectura(p):
     ''' lectura : READ LP var RP SEMICOLON
@@ -500,8 +504,8 @@ def p_rep_no_end(p):
 
 
 def p_estatutosAux(p):
-    ''' estatutosAux : estatutos
-                        | estatutos estatutosAux
+    ''' estatutosAux : estatutos estatutosAux
+                        | estatutos 
     '''
 
 def p_estatutos(p):
@@ -656,9 +660,9 @@ def p_ctef(p):
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(float(p[1]))
-    # quads.id_push(p[1], "float") #Agregar a quads operations
+    # quads.id_push(p[1], "flotante") #Agregar a quads operations
     # print(p[1])
-    quads.id_push(dirAux[0], "float") #Agregar dir a quads opeartions
+    quads.id_push(dirAux[0], "flotante") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''
