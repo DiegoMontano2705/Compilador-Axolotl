@@ -464,10 +464,29 @@ def p_endWhile(p):
     quads.quadruples[quads.getID()].setResult(ret)
     quads.quadruples[end].setResult(quads.getID())
 
-
+#For Loop
 def p_rep_no_condicional(p):
-    ''' rep_no_condicional : DESDE asign_vars HASTA exp HACER LCB estatutosAux RCB
+    ''' rep_no_condicional : DESDE asign_vars HASTA rep_no_start exp rep_no_2 HACER asign_vars LCB  estatutosAux rep_no_end 
     '''
+def p_rep_no_start(p):
+    ''' rep_no_start : '''
+    quads.pilaSaltos.put(quads.getID()+1)
+
+def p_rep_no_2(p):
+    ''' rep_no_2 : SEMICOLON  '''
+    quads.operator_push('GoToF')
+    quads.pilaSaltos.put(quads.getID())
+
+def p_rep_no_end(p):
+    ''' rep_no_end : RCB '''
+    false = quads.pilaSaltos.get_nowait()
+    ret = quads.pilaSaltos.get_nowait()
+    quads.operator_push('GoTo')
+    quads.quadruples[quads.getID()].setResult(ret)
+    quads.quadruples[false].setResult(quads.getID())
+
+### end For loop
+
 
 def p_estatutosAux(p):
     ''' estatutosAux : estatutos
