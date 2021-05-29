@@ -3,12 +3,12 @@ variables entero : a,b,d;
 
 void funcion pruebaUno(entero e, flotante f) {
     b = b + 6;
-    return (5);
+    regresa (5);
 }
 
 entero funcion pruebaDos(entero e, flotante f, char x) {
     b = b + 6;
-    return (5);
+    regresa (5);
 }
 
 %%test comment
@@ -17,4 +17,5 @@ principal() {
     b = 5 + 5 + 4 - 2;
     d = 8 * 2;
     d  = (5 + 6 * 100);
+    pruebaUno(10, 10.5);
 }
