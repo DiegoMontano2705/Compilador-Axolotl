@@ -80,6 +80,11 @@ class TablaManager:
     #Regresa recursos utilizados por contexto.
     def getRecursos(self, idTabla):
         return self.dirFun.findRow(idTabla)["recursos"]
+
+    #Regresa quad inicio de funcion especificada
+    def getQuadIni(self, idTabla):
+        return self.dirFun.findRow(idTabla)['quadIni']
+        
 ######################################################################################
 #Manejo TablaVars
     #Crea una row en Tabla existente y almacena en tabla interna.

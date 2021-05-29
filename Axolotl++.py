@@ -147,7 +147,7 @@ def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
-    superTabla.setListaTemporales("global",quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
+    superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
     superTabla.deleteTablaVars("global") #Borrar tabla variables globales
     quads.setEndProg() #Agregar end of program.
@@ -346,27 +346,23 @@ def p_idAssignId(p):
 #Estatutos
 
 def p_llamada_fun(p):
-    ''' llamada_fun : llamadaParam RP endParam llamadaFin
-                    | llamadaParam auxExp RP endParam llamadaFin
+    ''' llamada_fun : llamadaParam RP endParam SEMICOLON
+                    | llamadaParam auxExp RP endParam SEMICOLON
     '''
-       
+    quads.operator_push('GoSub')
+    #Obtener ID del procedimiento y su direccion en donde se encuentra
+    quads.quadruples[quads.getID()].setResult(p[1])
+    quadIni = superTabla.getQuadIni(p[1])
+    quads.quadruples[quads.getID()].setLeftOp(quadIni)
 
 def p_llamadaParam(p):
     ''' llamadaParam : ID LP '''
-    nameFunc = p[1]
-    superTabla.set_currentTablaId(nameFunc)
+    p[0] = p[1]
+    # superTabla.set_currentTablaId(nameFunc)
     quads.operator_push('Era')
     #Buscar tamaño de la funcion llamada y hacer esto:
-    quads.quadruples[quads.getID()].setResult(nameFunc)
-
-def p_llamadaFin(p):
-    ''' llamadaFin : SEMICOLON '''
-    quads.operator_push('GoSub')
-    #Obtener ID del procedimiento y su direccion en donde se encuentra
-    quads.quadruples[quads.getID()].setLeftOp(superTabla.get_currentTablaId())
-    quads.quadruples[quads.getID()].setResult(superTabla.get)
-    superTabla.set_currentTablaId('global')
-
+    quads.quadruples[quads.getID()].setResult(p[1])
+    
 def p_auxExp(p):
     ''' auxExp : exp mandaParam
                 | exp mandaParam COMMA auxExp
@@ -380,10 +376,6 @@ def p_mandaParam(p):
 def p_endParam(p):
     ''' endParam : '''
     quads.setContParam(0)
-
-
-
-
 
 # Para uso en operaciones
 def p_llamada_fun_exp(p):
