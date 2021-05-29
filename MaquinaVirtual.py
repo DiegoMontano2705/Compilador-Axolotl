@@ -13,7 +13,7 @@ from queue import LifoQueue
 #######################################################   
 #
 stackParms = LifoQueue() #Maneja orden de parametros
-stackExe = LifoQueue() #Maneja el orden de ejecucion
+stackExe = [] #Maneja el orden de ejecucion
 memoriaPrincipal = Memoria() #Maneja la memoria de ejecucion
 memorias = [] #Maneja instancias de memorias.
 memorias.append(memoriaPrincipal) #Agregar memoria principal
@@ -55,37 +55,41 @@ def ejecuta():
     codOp = int(quadruples[ip][0])
 
     #Mientras no encuentre fin del programa.
-    while codOp != 22:
+    while codOp != 22: #Mientras no encuentre EndProg
         codOp = int(quadruples[ip][0]) #Codigo de operacion
         if(codOp>=0 and codOp<=11): #operacion aritmetica
-            izq = memorias[0].getValMemory(int(quadruples[ip][1]))
-            der = memorias[0].getValMemory(int(quadruples[ip][2]))
+            izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
+            der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
             res = int(quadruples[ip][3])
             calcula(izq, codOp, der, res)
+            ip+=1
         elif(codOp == 12): # =
-            val = memorias[0].getValMemory(int(quadruples[ip][1]))
+            val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
             res = int(quadruples[ip][3])
-            memorias[0].setValMemory(res, val)
+            memorias[-1].setValMemory(res, val)
+            ip+=1
         elif(codOp == 13): # print
             try: #if not work with value, so its a string
-                val = memorias[0].getValMemory(int(quadruples[ip][3]))
+                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])  
             except: #work with strings
                 strAux = str(quadruples[ip][3:][0])
                 val = strAux.replace("_", " ") #solve problem with spaces
             print(val)
+            ip+=1
         elif(codOp == 14): # read
             val = input()
             res = int(quadruples[ip][3])
             #checar si va en global o local
-            pass
+            ip+=1
         elif(codOp == 15): # GoTo
-            pass
+            ip = int(quadruples[ip][3]) + 1 #ve directo quad ip.
         elif(codOp == 16): # GoToF
-            pass
+            ip+=1
         elif(codOp == 17): # GoSub
-            pass
+            stackExe.append(ip+1) #Saber a donde tiene que regresar al finalizar func.
+            ip = int(quadruples[ip][1])
         elif(codOp == 18): # return
-            pass
+            ip+=1
         elif(codOp == 19): # ERA
             nomFun = quadruples[ip][3]
             rec = dirFun[nomFun]['recursos']
@@ -93,13 +97,19 @@ def ejecuta():
             dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
             memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
+            ip+=1
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
+            ip = stackExe.pop()
         elif(codOp == 21): # Param
-            pass
+            val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
+            memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
+            dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
+            memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
+            ip+=1
         elif(codOp == 22): # endprog
             print("fin del programa :) - Axolotl")
-        ip+=1
+        
     
 
 #######################################################   
@@ -122,7 +132,7 @@ def prepararData(data):
             dicAux = memorias[0].reservarMemoria("global", listAux)
             memorias[0].mergeMemories(dicAux) #Agregar reservas a memoria principal   
         else:
-            print(values)
+            # print(values)
             listaParms = values[4].split("_")
             recVars = values[5].split("_")
             recTmps = values[6].split("_")
@@ -173,7 +183,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            # testing()
+            testing()
         except EOFError:
             print(EOFError)
     else:

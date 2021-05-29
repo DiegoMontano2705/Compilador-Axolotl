@@ -11,8 +11,8 @@
 #INI=INICIA; FIN=TERMINA; 
 #Dir Globales 10,000 - 20,4999 => 1500 c/u
 G_E_INI=10000
-G_E_FIN=114999
-G_F_INI=15000
+G_E_FIN=11499
+G_F_INI=115000
 G_F_FIN=12999
 G_C_INI=13000
 G_C_FIN=14499
@@ -60,7 +60,8 @@ class Memoria:
         self.tmpEnteroAux = 0 #temporal_entero
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
-        self.tmpBoolAux = 0 #tempora_bool
+        self.tmpBoolAux = 0 #tempora_bool\
+
 
 #######################################################      
     #set dirs en auxiliares
@@ -235,9 +236,8 @@ class Memoria:
                         sys.exit()
 
 #######################################################
-    #Resete contadores de recursos
+    #Reset contadores/pointers a memoria.
     def reseteRecursos(self):
-        self.memory={}
         self.enterosAux=0
         self.flotantesAux=0
         self.charAux=0
@@ -333,12 +333,28 @@ class Memoria:
     def getMemory(self):
         return self.memory
 
-    #Regresa valor dada una direccion
-    def getValMemory(self, dir):
-        if dir not in self.memory:
-            print("Error:",dir,"no existente en la memoria ejecucion.")
+    #Regresa direccion que le corresponde depende el tipo.
+    def getDirParm(self, dir):
+        tipo = self.getTipoByDir(int(dir))
+        if(tipo == "entero"): #regresa la variable entera que le corresponde
+            self.enterosAux+= 1
+            return self.enterosAux - 1 
+        elif(tipo == "float"):
+            self.flotantesAux+=1
+            return self.flotantesAux - 1
+        elif(tipo == "char"):
+            self.charAux+=1
+            return self.charAux - 1
+
+    #Regresa valor dada una direccion buscando en local y global
+    def getValMemory(self, dir, memoriaGlobal):
+        if dir in self.memory:
+            return self.memory[dir]
+        elif( dir in memoriaGlobal.memory):
+            return memoriaGlobal.memory[dir]
+        else:
+            print("Error:",dir,"no existente en la memoria ejecucion local ni global.")
             sys.exit()
-        return self.memory[dir]
 
     #Set valor en una direccion
     def setValMemory(self, dir, value):

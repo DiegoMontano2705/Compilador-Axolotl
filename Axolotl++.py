@@ -413,7 +413,7 @@ def p_cartel(p):
 
 def p_escrituraEnd(p):
     ''' escrituraEnd : '''
-    quads.operator_push('print')
+    quads.operator_push('Print')
 
 
 ######################################################################################

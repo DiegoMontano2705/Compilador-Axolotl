@@ -19,7 +19,7 @@ global None 3_0_0 6_0_0_0
 3 20504 20505 14504
 1 20501 14504 14505
 12 14505 None 10000
-13 None None 10002
-13 None None 10001
 13 None None 10000
-21 None None None
+13 None None 10001
+13 None None 10002
+22 None None None
