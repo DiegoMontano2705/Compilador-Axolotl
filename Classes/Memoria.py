@@ -11,8 +11,8 @@
 #INI=INICIA; FIN=TERMINA; 
 #Dir Globales 10,000 - 20,4999 => 1500 c/u
 G_E_INI=10000
-G_E_FIN=114999
-G_F_INI=15000
+G_E_FIN=11499
+G_F_INI=115000
 G_F_FIN=12999
 G_C_INI=13000
 G_C_FIN=14499
@@ -333,11 +333,18 @@ class Memoria:
     def getMemory(self):
         return self.memory
 
-    #Regresa valor dada una direccion
-    def getValMemory(self, dir):
+    #Asigna parametro
+    def asignaParm(self):
+        pass
+
+    #Regresa valor dada una direccion buscando en local y global
+    def getValMemory(self, dir, memoriaGlobal):
         if dir not in self.memory:
-            print("Error:",dir,"no existente en la memoria ejecucion.")
-            sys.exit()
+            if dir in memoriaGlobal.memory:
+                return memoriaGlobal.memory[dir]
+            else:
+                print("Error:",dir,"no existente en la memoria ejecucion local ni global.")
+                sys.exit()
         return self.memory[dir]
 
     #Set valor en una direccion
