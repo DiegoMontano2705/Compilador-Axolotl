@@ -188,6 +188,14 @@ def p_form_vars(p):
                     | typeAuxId COLON form_vars_aux SEMICOLON 
     '''
 
+### Dec_vars en estatutos
+def p_dec_vars_est(p):
+    ''' dec_vars_est : VARIABLES form_vars_est
+    '''
+
+def p_form_vars_est(p):
+    ''' form_vars_est : typeAuxId COLON form_vars_aux SEMICOLON '''
+
 def p_form_vars_aux(p):
     ''' form_vars_aux : ID
                     | ID COMMA form_vars_aux
@@ -210,6 +218,7 @@ def p_form_vars_aux2(p):
 def p_typeAuxId(p):
     ''' typeAuxId : tipo'''
     superTabla.set_currentType(p[1]) #Auxiliar para identificar tipo de variable.
+    #print(p[1])
 
 ######################################################################################
 # Definicion clases
@@ -257,17 +266,19 @@ def p_funciones(p):
     superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
+    
 
 def p_endFunction(p):
     ''' endFunction : RCB '''
     quads.operator_push('EndFunc')
 
-def p_funcionId(p):
+def p_funcionIdAux(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
     #crear memoria
     superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni= quads.getID()+1)
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
     quads.setCurrTabla(p[3])
+
 
 ######################################################################################
 #Tipos variables
@@ -495,6 +506,7 @@ def p_estatutosAux(p):
 
 def p_estatutos(p):
     ''' estatutos : asign_vars
+                    | dec_vars_est
                     | llamada_fun
                     | lectura
                     | escritura
@@ -502,7 +514,6 @@ def p_estatutos(p):
                     | rep_condicional
                     | retorno_fun
                     | rep_no_condicional
-                    | dec_vars
     '''
 
 ######################################################################################
