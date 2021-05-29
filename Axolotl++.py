@@ -436,7 +436,7 @@ def p_endIf_Else(p):
     quads.quadruples[end].setResult(nxtQuad)
 
 def p_startElse(p):
-    ''' startElse : ELSE '''
+    ''' startElse : RCB ELSE '''
     quads.operator_push('GoTo')
     false = quads.pilaSaltos.get_nowait()
     quads.pilaSaltos.put(quads.getID())
@@ -449,19 +449,19 @@ def p_rep_condicional(p):
 
 def p_startWhile(p):
     ''' startWhile : LP '''
-    quads.pilaSaltos.put(quads.getID())
+    quads.pilaSaltos.put(quads.getID()+1)
 
 def p_startWhile2(p):
     ''' startWhile2 : RP '''
     quads.operator_push('GoToF')
-    quads.pilaSaltos.put(quads.getID()-1)
+    quads.pilaSaltos.put(quads.getID())
 
 def p_endWhile(p):
     ''' endWhile : RCB '''
     end = quads.pilaSaltos.get_nowait()
     ret = quads.pilaSaltos.get_nowait()
     quads.operator_push('GoTo')
-    quads.quadruples[quads.getID() - 1].setResult(ret)
+    quads.quadruples[quads.getID()].setResult(ret)
     quads.quadruples[end].setResult(quads.getID())
 
 
