@@ -2,11 +2,19 @@ programa test1;
 variables entero : a,b,d;
 
 void funcion pruebaUno(entero e, flotante f) {
-    e = 6;
-    escribe(e);
+    variables entero : m;
+    m = 10;
+    a = 100;
+    escribe (a);
+}
+
+void funcion pruebaTest(){
+    variables entero : w;
+    b = 10 + 3;
 }
 
 entero funcion pruebaDos(entero e, flotante f, char x) {
+    variables entero : y;
     b = b + 6;
     regresa (5);
 }
