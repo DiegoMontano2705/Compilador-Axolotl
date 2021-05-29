@@ -6,14 +6,15 @@
 20504 8
 20505 100
 20506 1
-21500 20.4
+20507 20
 ### dirFun ###
-global None 3_0_0 7_0_0_0
-pruebaUno void None 1 entero_flotante 1_1_0 0_0_0_0
-pruebaDos entero None 3 entero_flotante_char 1_1_1 1_0_0_0
+global None 3_0_0 8_0_0_0
+pruebaUno void None 1 entero_entero 2_0_0 0_0_0_0
+pruebaDos entero None 4 entero_flotante_char 1_1_1 1_0_0_0
 ### QUADS ###
-15 None None 5
+15 None None 6
 13 None None 23500
+13 None None 23501
 20 None None None
 1 10001 20500 28000
 12 28000 None 10001
@@ -31,6 +32,7 @@ pruebaDos entero None 3 entero_flotante_char 1_1_1 1_0_0_0
 19 None None pruebaUno
 1 20506 20506 14506
 21 14506 None 1
-21 21500 None 2
+1 20507 20501 14507
+21 14507 None 2
 17 1 None pruebaUno
 22 None None None

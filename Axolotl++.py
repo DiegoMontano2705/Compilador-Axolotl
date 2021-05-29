@@ -489,8 +489,8 @@ def p_rep_no_end(p):
 
 
 def p_estatutosAux(p):
-    ''' estatutosAux : estatutos
-                        | estatutos estatutosAux
+    ''' estatutosAux : estatutos estatutosAux
+                        | estatutos 
     '''
 
 def p_estatutos(p):
@@ -645,9 +645,9 @@ def p_ctef(p):
     p[0] = p[1]
     ctes_memoria.setConstante(float(p[1])) #Agregar a memoria
     dirAux = ctes_memoria.getDirMemory(float(p[1]))
-    # quads.id_push(p[1], "float") #Agregar a quads operations
+    # quads.id_push(p[1], "flotante") #Agregar a quads operations
     # print(p[1])
-    quads.id_push(dirAux[0], "float") #Agregar dir a quads opeartions
+    quads.id_push(dirAux[0], "flotante") #Agregar dir a quads opeartions
 
 def p_ctec(p):
     ''' ctec : CTEC '''

@@ -12,7 +12,7 @@ from queue import LifoQueue
 
 #######################################################   
 #
-stackParms = LifoQueue() #Maneja orden de parametros
+stackParms = [] #Maneja orden de parametros
 stackExe = [] #Maneja el orden de ejecucion
 memoriaPrincipal = Memoria() #Maneja la memoria de ejecucion
 memorias = [] #Maneja instancias de memorias.
@@ -97,15 +97,18 @@ def ejecuta():
             dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
             memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
+            memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
             ip+=1
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
             ip = stackExe.pop()
         elif(codOp == 21): # Param
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
-            memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
             dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
+            #Checar tipo 
+
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
+            memorias[-1].printMemory()
             ip+=1
         elif(codOp == 22): # endprog
             print("fin del programa :) - Axolotl")
@@ -183,7 +186,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            testing()
+            # testing()
         except EOFError:
             print(EOFError)
     else:
