@@ -5,6 +5,8 @@ variables entero : a,b,c,d;
 principal() {
     si (a > b) entonces {
         c = a * d;
+    } sino {
+        c = d + a;
     }
     d = c;
 }
