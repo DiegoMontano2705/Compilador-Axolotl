@@ -1,0 +1,13 @@
+### CTES ###
+20500 10
+### dirFun ###
+global None 0_0_0 0_0_0_0
+pruebaUno void None 1 entero 1_0_0 0_0_0_0
+### QUADS ###
+15 None None 2
+18 None None 20500
+20 None None None
+19 None None pruebaUno
+21 20500 None 1
+17 1 None pruebaUno
+22 None None None

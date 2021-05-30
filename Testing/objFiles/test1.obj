@@ -1,75 +1,51 @@
 ### CTES ###
-20500 6
-20501 1
-20502 4
-20503 5
-20504 2
-20505 8
-20506 100
-20507 20
-### dirFun ###
-global None 3_0_0 8_0_0_0
-pruebaUno void None 1 entero_entero 2_0_0 0_0_0_0
-pruebaDos entero None 4 entero_flotante_char 1_1_1 2_0_0_0
-### QUADS ###
-15 None None 8
-13 None None 23500
-13 None None 23501
 20500 10
 20501 100
 20502 3
 20503 6
-20504 5
+20504 1
 20505 4
-20506 2
-20507 8
-20508 1
-21500 20.4
+20506 5
+20507 2
+20508 8
+20509 20
 ### dirFun ###
-global None 3_0_0 7_0_0_0
-pruebaUno void None 1 entero_flotante 2_1_0 0_0_0_0
-pruebaTest void None 5 None 1_0_0 1_0_0_0
-pruebaDos entero None 8 entero_flotante_char 2_1_1 1_0_0_0
+global None 3_0_0 8_0_0_0
+pruebaCuatro void None 1 entero_entero 2_0_0 0_0_0_0
+pruebaUno void None 4 entero_flotante 2_1_0 0_0_0_0
+pruebaTest void None 8 None 1_0_0 1_0_0_0
+pruebaDos entero None 11 entero_flotante_char 2_1_1 2_0_0_0
 ### QUADS ###
-15 None None 10
+15 None None 15
+13 None None 23500
+13 None None 23501
+20 None None None
 12 20500 None 23501
 12 20501 None 10002
 13 None None 10002
 20 None None None
 1 20500 20502 28000
 12 28000 None 10001
-1 20501 20501 28001
-18 None None 28001
 20 None None None
-12 20502 None 10002
-1 20503 20503 14500
-1 14500 20502 14501
-2 14501 20504 14502
-12 14502 None 10001
-3 20505 20504 14503
-12 14503 None 10000
-3 20500 20506 14504
-1 20503 14504 14505
-12 14505 None 10000
-19 None None pruebaUno
-1 20501 20501 14506
 1 10001 20503 28000
 12 28000 None 10001
+1 20504 20504 28001
+18 None None 28001
 20 None None None
 12 20505 None 10002
-1 20504 20504 14500
+1 20506 20506 14500
 1 14500 20505 14501
-2 14501 20506 14502
+2 14501 20507 14502
 12 14502 None 10001
-3 20507 20506 14503
+3 20508 20507 14503
 12 14503 None 10000
 3 20503 20501 14504
-1 20504 14504 14505
+1 20506 14504 14505
 12 14505 None 10000
-19 None None pruebaUno
-1 20508 20508 14506
+19 None None pruebaCuatro
+1 20504 20504 14506
 21 14506 None 1
-1 20507 20503 14507
+1 20509 20506 14507
 21 14507 None 2
-17 1 None pruebaUno
+17 1 None pruebaCuatro
 22 None None None

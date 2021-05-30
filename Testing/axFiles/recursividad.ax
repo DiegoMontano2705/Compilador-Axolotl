@@ -1,0 +1,10 @@
+programa recursividad;
+
+void funcion pruebaUno(entero x) {
+    regresa(10);
+}
+
+%%test comment
+principal() {
+    pruebaUno(10);
+}
