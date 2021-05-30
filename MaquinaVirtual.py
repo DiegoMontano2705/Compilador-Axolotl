@@ -53,6 +53,7 @@ def ejecuta():
     memorias.append(memoriaPrincipal) #Agrega memoria global a lista de memorias. index 0.
     ip = 0 #Instruction Pointer
     codOp = int(quadruples[ip][0])
+    currTabla = "global"
 
     #Mientras no encuentre fin del programa.
     while codOp != 22: #Mientras no encuentre EndProg
@@ -93,29 +94,37 @@ def ejecuta():
             stackExe.append(ip+1) #Saber a donde tiene que regresar al finalizar func.
             ip = int(quadruples[ip][1])
         elif(codOp == 18): # return
+            val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])
+            tipo = memorias[-1].getTipoByDir(int(quadruples[ip][3]))
+            if(tipo != dirFun[currTabla]['return']): #validar tipo de retorno
+                print("Error: tipo de retorno no coincide con valor regresado.")
+                sys.exit()
+            # print(val, tipo)
             ip+=1
         elif(codOp == 19): # ERA
-            nomFun = quadruples[ip][3]
-            rec = dirFun[nomFun]['recursos']
+            currTabla = quadruples[ip][3]
+            rec = dirFun[currTabla]['recursos']
             memoriaAux = Memoria() #Instancia clase
             dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
             memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
             memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
-            stackParms = dirFun[nomFun]['listaParms']
+            stackParms = dirFun[currTabla]['listaParms']
             ip+=1
         elif(codOp == 20): # EndFunc
             memorias.pop() #termina el contexto y se libera memoria local.
+            currTabla = "global"
             ip = stackExe.pop()
         elif(codOp == 21): # Param
-            val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
+            val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar en la memoria local y global.
+            if(val == None): #En caso de no encontrar, buscar contexto anterior. Recursividad.
+                val = memorias[-2].getValMemory(int(quadruples[ip][1]), memorias[0])
             dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
             #Checar tipo 
             if(memorias[-1].getTipoByDir(int(dirHost)) != stackParms[int(quadruples[ip][3])-1]):
-                print("Error:", nomFun, "tipo de parametros no coincide con declaracion.")
+                print("Error:", currTabla, "tipo de parametros no coincide con declaracion.")
                 sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
-            memorias[-1].printMemory()
             ip+=1
         elif(codOp == 22): # endprog
             print("fin del programa :) - Axolotl")
@@ -193,7 +202,7 @@ if __name__ == '__main__':
             print("Ejecutando", file, "...")
             prepararData(data)
             ejecuta()
-            testing()
+            # testing()
         except EOFError:
             print(EOFError)
     else:
