@@ -83,10 +83,14 @@ def ejecuta():
             #checar si va en global o local
             ip+=1
         elif(codOp == 15): # GoTo
-            ip = int(quadruples[ip][3]) + 1 #ve directo quad ip.
+            ipAux = int(quadruples[ip][3])
+            if(ipAux < ip):
+                ip = ipAux
+            else:
+                ip = ipAux + 1
         elif(codOp == 16): # GoToF
             val = bool(memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]))
-            if not val: #si es falso, ve a quadruplo
+            if (not val): #si es falso, ve a quadruplo
                 ip = int(quadruples[ip][3])+1
             else:
                 ip+=1
