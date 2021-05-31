@@ -78,7 +78,8 @@ class QuadruplesManager:
     #set return Quad
     def setRetornoFuncion(self, nomFun, tipoRetorno):
         result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
-        q = Quadruples(None,'=',nomFun,None,result)
+        val = self.tmp.next(tipoRetorno, self.currTabla) #temporal con el valor.
+        q = Quadruples(None,'=',val,None,result)
         self.quadruples.append(q)
         self.pilaOperands.put(result)
         self.pilaTypes.put(tipoRetorno)

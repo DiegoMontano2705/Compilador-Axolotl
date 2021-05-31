@@ -4,13 +4,13 @@ entero funcion pruebaUno(entero x) {
     variables entero : a, b, c;
     a = 100;
     b = 200;
-    regresa(300);
-    %% escribe(b);
+    regresa(1010);
+    escribe(b);
 }
 
 %%test comment
 principal() {
     variables entero : z;
     z = pruebaUno(500);
-    %%escribe(z);
+    escribe(z);
 }

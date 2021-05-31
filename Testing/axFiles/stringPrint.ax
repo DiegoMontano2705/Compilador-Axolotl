@@ -1,0 +1,10 @@
+programa stringPrint;
+
+%% String print
+principal() {
+    variables entero : n, nxt;
+    n = 10;
+    escribe("holaaaa");
+    nxt = 100;
+    escribe(nxt);
+}
