@@ -73,6 +73,13 @@ class QuadruplesManager:
         self.quadruples
         q = Quadruples(None,"endprog",None,None,None)
         self.quadruples.append(q) 
+    
+    #set return Quad
+    def setRetornoFuncion(self, nomFun, tipoRetorno):
+        self.quadruples
+        result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
+        q = Quadruples(None,'=',nomFun,None,result)
+        self.quadruples.append(q)
 
 ######################################################################################
 #operator push 

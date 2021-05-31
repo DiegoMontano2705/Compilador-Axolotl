@@ -6,6 +6,7 @@ principal() {
     a = 0;
     mientras (a < 5) hacer {
         a = a + 1;
+        escribe(a);
     }
     %% con esta operacion no funciona  print(a,b)
 }

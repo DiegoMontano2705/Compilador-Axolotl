@@ -325,13 +325,14 @@ def p_var(p):
     '''
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId exp asignend 
+    ''' asign_vars : var equalId llamada_fun asignend 
+                    | var equalId exp asignend 
                     | var equalId CTEC asignend 
     '''
+
 def p_asignend(p):
     ''' asignend : SEMICOLON '''
     quads.fillQuadruples()
-
 
 #Auxiliar para identificar id de asignacion.
 def p_idAssignId(p):
@@ -358,12 +359,17 @@ def p_idAssignId(p):
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
                     | llamadaParam auxExp RP endParam SEMICOLON
+                    | llamadaParam auxExp RP endParam
     '''
     quads.operator_push('GoSub')
     #Obtener ID del procedimiento y su direccion en donde se encuentra
     quads.quadruples[quads.getID()].setResult(p[1])
     quadIni = superTabla.getQuadIni(p[1])
     quads.quadruples[quads.getID()].setLeftOp(quadIni)
+    # Almacenar si es que regresa algo la funcion
+    tipoRetorno = superTabla.getTipoRetornoFun(p[1])
+    if(tipoRetorno != "void"):
+        quads.setRetornoFuncion(p[1], tipoRetorno)
 
 def p_llamadaParam(p):
     ''' llamadaParam : ID LP '''
@@ -396,6 +402,11 @@ def p_llamada_fun_exp(p):
 def p_retorno_fun(p):
     ''' retorno_fun :  RETURN LP exp finRetorno SEMICOLON
     '''
+    currTabla = superTabla.get_currentTablaId()
+    if(superTabla.getTipoRetornoFun(currTabla) == "void"):
+        print("Error:", currTabla, " return cuando es funcion void.")
+        sys.exit()
+
 
 #Auxiliar para retorno
 def p_finRetorno(p):
@@ -421,6 +432,7 @@ def p_escrituraAux(p):
                     | exp escrituraEnd COMMA escrituraAux
                     | cartel escrituraEnd COMMA escrituraAux
     '''
+    #agregar el llamado funcion
 
 def p_cartel(p):
     ''' cartel : STRING '''
