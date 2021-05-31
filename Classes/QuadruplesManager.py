@@ -101,7 +101,7 @@ class QuadruplesManager:
         elif(op in opUntil):
             self.fillQuadruples()
             self.pilaOperators.put(op)
-        elif( (op in opCond_Loops) or (op in opModules) or  op == 'print'):
+        elif( (op in opCond_Loops) or (op in opModules) or  op == 'Print' or op == 'Read'):
             self.fillQuadruples()
             self.generateQuadruple(op)
         elif(op in opCallFunc):
@@ -186,15 +186,15 @@ class QuadruplesManager:
                 self.quadruples.append(q)
 
             ## print, write y return
-            elif(operator == 'Print' or operator == 'Return'):
+            elif(operator == 'Print' or operator == 'Return' or operator == 'Read'):
                 left_op = left_op = self.pilaOperands.get_nowait()
                 if(left_op != None ):
                     id_Final = (self.getID() + 1)
                     q = Quadruples(id_Final,operator,None, None,left_op)
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
-            elif(operator == 'read'):
-                pass
+            #elif(operator == 'read'):
+                
             
             ## Modulos
             elif(operator == 'EndFunc' or operator == 'Era' or operator == 'GoSub'):
