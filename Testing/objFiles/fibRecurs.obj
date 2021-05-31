@@ -1,0 +1,25 @@
+### CTES ###
+20500 2
+20501 9
+### dirFun ###
+global None 2_0_0 2_0_0_0
+fib entero None 1 entero 1_0_0 3_0_0_1
+### QUADS ###
+15 None None 8
+5 23500 20500 32500
+16 32500 None 3
+18 None None 23500
+19 None None fib
+21 20500 None 1
+17 1 None fib
+12 28001 None 28000
+2 23500 28000 28002
+20 None None None
+12 20501 None fib
+19 None None None
+21 1 None fib
+17 None None None
+12 14501 None 14500
+12 14500 None 10000
+13 None None 10000
+22 None None None

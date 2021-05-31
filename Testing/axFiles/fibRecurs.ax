@@ -3,10 +3,10 @@ programa fibRecurs;
 %% Fibonnaci with recursion
 
 entero funcion fib(entero x) {
-    si (x < 2){
+    si (x < 2) entonces {
         regresa(x);
     }
-    regresa(fib(x-1) + fib(x-2));
+    fib(x-2);
 }
 
 

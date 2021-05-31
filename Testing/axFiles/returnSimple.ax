@@ -4,7 +4,9 @@ entero funcion pruebaUno(entero x) {
     variables entero : a, b, c;
     a = 100;
     b = 200;
-    regresa(1010);
+    si (a>0) entonces {
+        regresa(1010);
+    }
     escribe(b);
 }
 
