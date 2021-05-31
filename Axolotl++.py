@@ -419,7 +419,7 @@ def p_lecturaaux(p):
 def p_escritura(p):
     ''' escritura : PRINT LP escrituraAux RP SEMICOLON
     '''
-    quads.fillQuadruples() #fill quads (print -> asign)
+    # quads.fillQuadruples() #fill quads (print -> asign)
 
 def p_escrituraAux(p):
     ''' escrituraAux : exp escrituraEnd

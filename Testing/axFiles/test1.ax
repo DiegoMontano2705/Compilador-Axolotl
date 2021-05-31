@@ -6,6 +6,7 @@ void funcion pruebaCuatro(entero e, entero f) {
     escribe(e);
     escribe(f);
 }
+
 void funcion pruebaUno(entero e, flotante f) {
     variables entero : m;
     m = 10;
