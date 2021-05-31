@@ -1,15 +1,16 @@
 ### CTES ###
 20500 100
 20501 200
-20502 10
+20502 300
+20503 10
 ### dirFun ###
-global None 0_0_0 0_0_0_0
+global None 1_0_0 0_0_0_0
 pruebaUno entero None 1 entero 4_0_0 0_0_0_0
 ### QUADS ###
 15 None None 4
 12 20500 None 23503
 12 20501 None 23502
-18 None None 23503
+18 None None 20502
 20 None None None
-13 None None 20502
+12 20503 None 10000
 22 None None None

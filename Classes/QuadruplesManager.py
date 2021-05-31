@@ -79,7 +79,6 @@ class QuadruplesManager:
         self.quadruples
         result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
         q = Quadruples(None,'=',nomFun,None,result)
-        q.printQuad()
         self.quadruples.append(q)
 
 ######################################################################################

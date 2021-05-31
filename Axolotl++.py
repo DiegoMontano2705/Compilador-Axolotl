@@ -325,13 +325,14 @@ def p_var(p):
     '''
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId exp asignend 
+    ''' asign_vars : var equalId llamada_fun asignend 
+                    | var equalId exp asignend 
                     | var equalId CTEC asignend 
     '''
+
 def p_asignend(p):
     ''' asignend : SEMICOLON '''
     quads.fillQuadruples()
-
 
 #Auxiliar para identificar id de asignacion.
 def p_idAssignId(p):
@@ -358,6 +359,7 @@ def p_idAssignId(p):
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
                     | llamadaParam auxExp RP endParam SEMICOLON
+                    | llamadaParam auxExp RP endParam
     '''
     quads.operator_push('GoSub')
     #Obtener ID del procedimiento y su direccion en donde se encuentra
@@ -430,6 +432,7 @@ def p_escrituraAux(p):
                     | exp escrituraEnd COMMA escrituraAux
                     | cartel escrituraEnd COMMA escrituraAux
     '''
+    #agregar el llamado funcion
 
 def p_cartel(p):
     ''' cartel : STRING '''
