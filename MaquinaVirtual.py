@@ -5,6 +5,7 @@
 #     Jose Alberto Gonzalez 
 # 
 #######################################################   
+from Classes.Quadruples import Quadruples
 import sys
 import os
 from Classes.Memoria import *
@@ -103,9 +104,13 @@ def ejecuta():
             if(tipo != dirFun[currTabla]['return']): #validar tipo de retorno
                 print("Error: tipo de retorno no coincide con valor regresado.")
                 sys.exit()
-            #regresa al pointer al que estaba
-            print(val, tipo)
-            ip+=1
+            #Final de contexto
+            memorias[-1].printMemory()
+            memorias.pop() #termina el contexto y se libera memoria local.
+            currTabla = "global"
+            ip = stackExe.pop()
+            memorias[0].setValMemory(int(quadruples[ip][1]), val) #Asignar valor al temporal return
+            
         elif(codOp == 19): # ERA
             currTabla = quadruples[ip][3]
             rec = dirFun[currTabla]['recursos']
@@ -121,6 +126,7 @@ def ejecuta():
             memorias.pop() #termina el contexto y se libera memoria local.
             currTabla = "global"
             ip = stackExe.pop()
+
         elif(codOp == 21): # Param
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar en la memoria local y global.
             if(val == None): #En caso de no encontrar, buscar contexto anterior. Recursividad.
@@ -166,7 +172,8 @@ def prepararData(data):
                 'dirInicio':values[2],
                 'quadInicio':values[3],
                 'listaParms' : listaParms,
-                'recursos' : [recVars, recTmps]
+                'recursos' : [recVars, recTmps],
+                'valorRetorno' : 0
             }
              
     #QUADS
