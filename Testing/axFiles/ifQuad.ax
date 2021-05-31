@@ -6,7 +6,7 @@ principal() {
     a=10;
     b=11;
     d=2;
-    si (a > b) entonces {
+    si (a > 1) entonces {
         c = a * d;
     } sino {
         c = d + a;

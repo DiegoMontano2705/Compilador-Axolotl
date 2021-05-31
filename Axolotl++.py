@@ -74,7 +74,7 @@ t_SEMICOLON = r';'
 t_COLON = r':'
 t_CTEI = r'[0-9]+'
 t_CTEF = r'[0-9]+\.[0-9]+'
-t_CTEC = r'"([^\\"\n]+|\\.)"'
+#t_CTEC = r'"([^\\"\n]+|\\.)"'
 t_STRING = r'"([^\\"\n]+|\\.)*"'
 
 reserved = {
@@ -110,6 +110,11 @@ tokens = tokens + list(reserved.values())
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    return t
+
+def t_CTEC(t):
+    r'\'[\w]\''
+    t.value = str(t.value)
     return t
 
 def t_newline(t):
