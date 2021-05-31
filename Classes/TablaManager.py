@@ -84,7 +84,11 @@ class TablaManager:
     #Regresa quad inicio de funcion especificada
     def getQuadIni(self, idTabla):
         return self.dirFun.findRow(idTabla)['quadIni']
-        
+    
+    #Regresa tipo de retorno de la funcion
+    def getTipoRetornoFun(self, idTabla):
+        return self.dirFun.findRow(idTabla)['retorno']
+
 ######################################################################################
 #Manejo TablaVars
     #Crea una row en Tabla existente y almacena en tabla interna.

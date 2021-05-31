@@ -84,7 +84,7 @@ def ejecuta():
             ip+=1
         elif(codOp == 15): # GoTo
             ipAux = int(quadruples[ip][3])
-            if(ipAux < ip):
+            if(ipAux < ip): #caso del while.
                 ip = ipAux
             else:
                 ip = ipAux + 1
@@ -103,7 +103,8 @@ def ejecuta():
             if(tipo != dirFun[currTabla]['return']): #validar tipo de retorno
                 print("Error: tipo de retorno no coincide con valor regresado.")
                 sys.exit()
-            # print(val, tipo)
+            #regresa al pointer al que estaba
+            print(val, tipo)
             ip+=1
         elif(codOp == 19): # ERA
             currTabla = quadruples[ip][3]
@@ -116,6 +117,7 @@ def ejecuta():
             stackParms = dirFun[currTabla]['listaParms']
             ip+=1
         elif(codOp == 20): # EndFunc
+            memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
             currTabla = "global"
             ip = stackExe.pop()

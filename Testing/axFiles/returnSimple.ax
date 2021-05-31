@@ -1,0 +1,16 @@
+programa returnSimple;
+variables entero : z;
+
+entero funcion pruebaUno(entero x) {
+    variables entero : a, b, c;
+    a = 100;
+    b = 200;
+    regresa(a);
+    %% escribe(b);
+}
+
+%%test comment
+principal() {
+    z = pruebaUno(10);
+    escribe(z);
+}

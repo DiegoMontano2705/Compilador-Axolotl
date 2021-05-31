@@ -364,6 +364,10 @@ def p_llamada_fun(p):
     quads.quadruples[quads.getID()].setResult(p[1])
     quadIni = superTabla.getQuadIni(p[1])
     quads.quadruples[quads.getID()].setLeftOp(quadIni)
+    # Almacenar si es que regresa algo la funcion
+    tipoRetorno = superTabla.getTipoRetornoFun(p[1])
+    if(tipoRetorno != "void"):
+        quads.setRetornoFuncion(p[1], tipoRetorno)
 
 def p_llamadaParam(p):
     ''' llamadaParam : ID LP '''
@@ -396,6 +400,11 @@ def p_llamada_fun_exp(p):
 def p_retorno_fun(p):
     ''' retorno_fun :  RETURN LP exp finRetorno SEMICOLON
     '''
+    currTabla = superTabla.get_currentTablaId()
+    if(superTabla.getTipoRetornoFun(currTabla) == "void"):
+        print("Error:", currTabla, " return cuando es funcion void.")
+        sys.exit()
+
 
 #Auxiliar para retorno
 def p_finRetorno(p):
