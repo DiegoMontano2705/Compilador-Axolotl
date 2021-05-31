@@ -11,6 +11,6 @@ entero funcion pruebaUno(entero x) {
 %%test comment
 principal() {
     variables entero : z;
-    z = pruebaUno(10);
+    z = pruebaUno(500);
     %%escribe(z);
 }

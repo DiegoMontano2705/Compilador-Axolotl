@@ -326,12 +326,12 @@ def p_var(p):
 
 def p_asign_vars(p):
     ''' asign_vars : var equalId llamada_fun asignend 
-                    | var equalId exp asignend 
-                    | var equalId CTEC asignend 
+                    | var equalId exp asignend SEMICOLON 
+                    | var equalId CTEC asignend SEMICOLON 
     '''
 
 def p_asignend(p):
-    ''' asignend : SEMICOLON '''
+    ''' asignend : '''
     quads.fillQuadruples()
 
 #Auxiliar para identificar id de asignacion.
@@ -392,12 +392,6 @@ def p_mandaParam(p):
 def p_endParam(p):
     ''' endParam : '''
     quads.setContParam(0)
-
-# Para uso en operaciones
-def p_llamada_fun_exp(p):
-    ''' llamada_fun_exp : ID LP RP 
-                    | ID LP exp RP 
-    '''
 
 def p_retorno_fun(p):
     ''' retorno_fun :  RETURN LP exp finRetorno SEMICOLON
@@ -585,7 +579,7 @@ def p_f(p): #lpid y rpid para identificar ().
             | ctef
             | ctec
             | var
-            | llamada_fun_exp
+            | llamada_fun
     '''
     p[0] = p[1]
 
