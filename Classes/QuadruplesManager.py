@@ -18,7 +18,8 @@ from Classes.Temporal import *
 
 opUntil = ['>', '<', '>=', '<=', '=']
 opCond_Loops = ['GoToF', 'GoTo', 'GoToV']
-opModules = ['GoSub', 'Era', 'Param','EndFunc','Return']
+opModules = ['EndFunc','Return']
+opCallFunc = ['GoSub', 'Era', 'Param']
 
 class QuadruplesManager:
 
@@ -76,10 +77,18 @@ class QuadruplesManager:
     
     #set return Quad
     def setRetornoFuncion(self, nomFun, tipoRetorno):
-        self.quadruples
         result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
         q = Quadruples(None,'=',nomFun,None,result)
         self.quadruples.append(q)
+        self.pilaOperands.put(result)
+        self.pilaTypes.put(tipoRetorno)
+    
+    #set Era
+    def setEra(self, nomFun):
+        self.quadruples
+        q = Quadruples(None,'Era',nomFun,None, None)
+        self.quadruples.append(q)
+
 
 ######################################################################################
 #operator push 
@@ -93,6 +102,8 @@ class QuadruplesManager:
             self.pilaOperators.put(op)
         elif( (op in opCond_Loops) or (op in opModules) or  op == 'print'):
             self.fillQuadruples()
+            self.generateQuadruple(op)
+        elif(op in opCallFunc):
             self.generateQuadruple(op)
         else:
             self.pilaOperators.put(op)
