@@ -175,8 +175,9 @@ class QuadruplesManager:
                     #self.pilaSaltos.put(self.getID()) #Guardas id del if en pila de saltos
                     self.quadruples.append(q)
                 else:
-                    print("Error Type-mismatch: Value not boolean :",left_op )
-                    sys.exit()
+                    raise Exception("Error Type-mismatch: Valor no es booleano")
+                    #print("Error Type-mismatch: Value not boolean :",left_op )
+                    #sys.exit()
 
             elif(operator == "GoTo" or operator == 'GoToV'):
                 id_Final = (self.getID() + 1)
