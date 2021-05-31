@@ -4,6 +4,6 @@ variables entero : a,b,c;
 %% testing foor loop
 principal() {
     lee(a);
-    a = a +1;
+    a = a + 1;
     escribe(a);
 }

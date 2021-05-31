@@ -80,8 +80,7 @@ def ejecuta():
             ip+=1
         elif(codOp == 14): # read
             val = input()
-            res = int(quadruples[ip][3])
-            #checar si va en global o local
+            memorias[-1].setValMemory(int(quadruples[ip][3]), val)
             ip+=1
         elif(codOp == 15): # GoTo
             ipAux = int(quadruples[ip][3])
@@ -105,7 +104,7 @@ def ejecuta():
                 print("Error: tipo de retorno no coincide con valor regresado.")
                 sys.exit()
             #Final de contexto
-            memorias[-1].printMemory()
+            # memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
             currTabla = "global"
             ip = stackExe.pop()
@@ -122,7 +121,7 @@ def ejecuta():
             stackParms = dirFun[currTabla]['listaParms']
             ip+=1
         elif(codOp == 20): # EndFunc
-            memorias[-1].printMemory()
+            # memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
             currTabla = "global"
             ip = stackExe.pop()
