@@ -7,7 +7,7 @@ principal() {
     nxt = 0;
     t1 = 0;
     t2 = 1;
-    
+    escribe("Fibonnaci Serie");
     desde i = 0; hasta i < n; hacer i = i + 1; {
         si (i == 0) entonces {
             escribe(t1);

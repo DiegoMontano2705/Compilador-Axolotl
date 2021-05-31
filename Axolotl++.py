@@ -408,18 +408,21 @@ def p_finRetorno(p):
     quads.operator_push("Return")
 
 def p_lectura(p):
-    ''' lectura : READ LP var RP SEMICOLON
-            | READ LP var COMMA lecturaaux SEMICOLON
-    '''
+    ''' lectura : READ LP lecturaaux RP SEMICOLON'''
 
 def p_lecturaaux(p):
-    ''' lecturaaux : var
-                    | var COMMA lecturaaux
+    ''' lecturaaux : var lecturaSend
+                    | var lecturaSend COMMA lecturaaux
     '''
+
+def p_lecturaSend(p):
+    ''' lecturaSend : '''
+    quads.operator_push('Read')
+
 def p_escritura(p):
     ''' escritura : PRINT LP escrituraAux RP SEMICOLON
     '''
-    quads.fillQuadruples() #fill quads (print -> asign)
+    #quads.fillQuadruples() #fill quads (print -> asign)
 
 def p_escrituraAux(p):
     ''' escrituraAux : exp escrituraEnd
@@ -490,6 +493,7 @@ def p_endWhile(p):
 def p_rep_no_condicional(p):
     ''' rep_no_condicional : DESDE asign_vars HASTA rep_no_start exp rep_no_2 HACER asign_vars LCB  estatutosAux rep_no_end 
     '''
+
 def p_rep_no_start(p):
     ''' rep_no_start : '''
     quads.pilaSaltos.put(quads.getID()+1)
