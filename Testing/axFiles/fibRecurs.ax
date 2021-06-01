@@ -4,11 +4,16 @@ variables entero : a, b;
 %% Fibonnaci with recursion
 entero funcion fib(entero x){
     
-    si (x == 0 | x == 1) entonces{
-        regresa(x);
+    si (x == 0) entonces{
+        regresa(0);
     }
 
-    %%regresa(fib(x-1) + fib(x-2));
+    si (x == 1) entonces{
+        regresa(1);
+    }
+    a = x - 1;
+    b = x - 2;
+    regresa(fib(a) + fib(b));
 }
 
 principal() {

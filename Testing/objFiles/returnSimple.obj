@@ -8,20 +8,21 @@
 global None 2_0_0 3_0_0_0
 pruebaUno entero None 1 entero 4_0_0 0_0_0_1
 ### QUADS ###
-15 None None 7
+15 None None 8
 12 20500 None 23503
 12 20501 None 23502
+13 None None 23500
 6 23503 20502 32500
-16 32500 None 5
+16 32500 None 6
 18 None None 20503
 13 None None 23502
 20 None None None
 12 20500 None 10000
 19 None None pruebaUno
-21 20504 None 1
+1 10000 20504 14500
+21 14500 None 1
 17 1 None pruebaUno
-12 14501 None 14500
-1 10000 14500 14502
-12 14502 None 10001
+12 14502 None 14501
+12 14501 None 10001
 13 None None 10001
 22 None None None

@@ -3,12 +3,12 @@ programa fibonnaciFor;
 %% Fibonnaci with for loop
 principal() {
     variables entero : i,n,t1,t2,nxt;
-    n = 10;
+    n = 9;
     nxt = 0;
     t1 = 0;
     t2 = 1;
     escribe("Fibonnaci Serie");
-    desde i = 0; hasta i < n; hacer i = i + 1; {
+    desde i = 1; hasta i < n; hacer i = i + 1; {
         si (i == 0) entonces {
             escribe(t1);
         }

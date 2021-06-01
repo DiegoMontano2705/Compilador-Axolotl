@@ -20,6 +20,7 @@ memorias = [] #Maneja instancias de memorias.
 memorias.append(memoriaPrincipal) #Agregar memoria principal
 quadruples = [] #Maneja cuadruplos
 dirFun  = {} #Recrear dir funciones.
+currTabla = [] #Lista de contexto
 #######################################################   
 #Operaciones del programa
 
@@ -54,7 +55,7 @@ def ejecuta():
     memorias.append(memoriaPrincipal) #Agrega memoria global a lista de memorias. index 0.
     ip = 0 #Instruction Pointer
     codOp = int(quadruples[ip][0])
-    currTabla = "global"
+    currTabla.append("global")
 
     #Mientras no encuentre fin del programa.
     while codOp != 22: #Mientras no encuentre EndProg
@@ -101,30 +102,31 @@ def ejecuta():
         elif(codOp == 18): # return
             val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])
             tipo = memorias[-1].getTipoByDir(int(quadruples[ip][3]))
-            if(tipo != dirFun[currTabla]['return']): #validar tipo de retorno
+            if(tipo != dirFun[currTabla[-1]]['return']): #validar tipo de retorno
                 print("Error: tipo de retorno no coincide con valor regresado.")
                 sys.exit()
             #Final de contexto
+            # print(val, tipo)
             # memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
-            # currTabla = "global"
-            ip = stackExe.pop()
+            currTabla.pop() #Regresa al contexto anterior.
+            ip = stackExe.pop() #Sale de la funcion y regresa al quad que sigue.
             memorias[-1].setValMemory(int(quadruples[ip][1]), val) #Asignar valor al temporal return
             
         elif(codOp == 19): # ERA
-            currTabla = quadruples[ip][3]
-            rec = dirFun[currTabla]['recursos']
+            currTabla.append(quadruples[ip][3])
+            rec = dirFun[currTabla[-1]]['recursos']
             memoriaAux = Memoria() #Instancia clase
             dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
             memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
             memorias.append(memoriaAux) #Agregas memoria para contexto en ejecucion
             memorias[-1].setDicsAux("local") #Apuntar a los primeros valores.
-            stackParms = dirFun[currTabla]['listaParms']
+            stackParms = dirFun[currTabla[-1]]['listaParms']
             ip+=1
         elif(codOp == 20): # EndFunc
             # memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
-            currTabla = "global"
+            currTabla.pop() #regresa a un contexo antes
             ip = stackExe.pop()
 
         elif(codOp == 21): # Param
@@ -134,7 +136,7 @@ def ejecuta():
             dirHost = memorias[-1].getDirParm(int(quadruples[ip][1])) #A que dir va
             #Checar tipo 
             if(memorias[-1].getTipoByDir(int(dirHost)) != stackParms[int(quadruples[ip][3])-1]):
-                print("Error:", currTabla, "tipo de parametros no coincide con declaracion.")
+                print("Error:", currTabla[-1], "tipo de parametros no coincide con declaracion.")
                 sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
             ip+=1

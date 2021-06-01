@@ -7,12 +7,11 @@
 global None 2_0_0 2_0_0_0
 test entero None 1 entero 2_1_0 0_0_0_0
 ### QUADS ###
-15 None None 7
+15 None None 6
 12 20500 None 23501
 12 21500 None 25000
 13 None None 25000
 13 None None 23500
-13 None None 10001
 18 None None 20501
 20 None None None
 19 None None test

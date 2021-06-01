@@ -377,9 +377,17 @@ def p_llamadaParam(p):
     quads.quadruples[quads.getID()].setResult(p[1])
     
 def p_auxExp(p):
-    ''' auxExp :  exp  mandaParam
-                |  exp  mandaParam COMMA auxExp
+    ''' auxExp :  exp mandaParam
+                | exp mandaParam COMMA auxExp
     '''
+
+# def p_lpFondo(p):
+#     ''' lpFondo : '''
+#     quads.operator_push("(")
+
+# def p_rpFondo(p):
+#     ''' rpFondo : '''
+#     quads.operator_push(")")
 
 def p_mandaParam(p):
     ''' mandaParam : '''

@@ -8,7 +8,6 @@ entero funcion test(entero x) {
     z = 4.2;
     escribe(z);
     escribe(x);
-    escribe(a);
     regresa(1000);
 }
 

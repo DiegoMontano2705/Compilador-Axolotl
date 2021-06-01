@@ -17,8 +17,8 @@ pruebaTest void None 8 None 1_0_0 1_0_0_0
 pruebaDos entero None 11 entero_flotante_char 2_1_1 2_0_0_0
 ### QUADS ###
 15 None None 15
-13 None None 23500
 13 None None 23501
+13 None None 23500
 20 None None None
 12 20500 None 23501
 12 20501 None 10002

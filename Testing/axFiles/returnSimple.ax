@@ -4,6 +4,7 @@ entero funcion pruebaUno(entero x) {
     variables entero : a, b, c;
     a = 100;
     b = 200;
+    escribe(x);
     si (a>0) entonces {
         regresa(300);
     }
@@ -14,6 +15,6 @@ entero funcion pruebaUno(entero x) {
 principal() {
     variables entero : z, a;
     a = 100;
-    z = pruebaUno(a+1);
+    z = pruebaUno((a+1));
     escribe(z);
 }

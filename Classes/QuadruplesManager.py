@@ -158,6 +158,12 @@ class QuadruplesManager:
             self.generateQuadruple(operator)
             op = self.pilaOperators.get_nowait()
 
+    #Genera cuadruplos hasta que se encuentra =, sirve para resolver parametros.
+    def solveQuadruplesParms(self, op):
+        while(not op == "="):
+            self.generateQuadruple(op)
+            op = self.pilaOperators.get_nowait()
+
     #genera cuadruplos de las listas mientras ya no haya valores a entrar.
     def fillQuadruples(self):
         while(not self.pilaOperators.empty()):
@@ -207,6 +213,11 @@ class QuadruplesManager:
                 self.quadruples.append(q)
 
             elif(operator == 'Param'):
+                
+                #Si hay cosas que resolver en parametros, resuelve hasta el =.
+                if(self.pilaOperators.qsize() >1): 
+                    self.solveQuadruplesParms(self.pilaOperators.get_nowait())
+
                 left_op = self.pilaOperands.get_nowait()
                 if(left_op != None):
                     id_Final = (self.getID() + 1)
