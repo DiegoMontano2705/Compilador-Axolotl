@@ -151,6 +151,7 @@ def p_programa(p):
     ''' programa : startProg ID SEMICOLON main
                 | startProg ID SEMICOLON programaAux main
     '''
+    #                | startProg ID SEMICOLON dec_vars programaAux main
     superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
     superTabla.deleteTablaVars("global") #Borrar tabla variables globales
@@ -177,8 +178,8 @@ def p_programaAux(p):
                         | dec_vars programaAux
                         | funciones programaAux
                         | clases
-                        | dec_vars
                         | funciones
+                        | dec_vars
     '''
 ######################################################################################
 #Declarar Variables
@@ -186,20 +187,11 @@ def p_programaAux(p):
 def p_dec_vars(p):
     ''' dec_vars : VARIABLES form_vars
     '''
-
+    
 def p_form_vars(p):
-    ''' form_vars : typeAuxId COLON form_vars_aux SEMICOLON form_vars
-                    | typeAuxId COLON form_vars_aux SEMICOLON 
+    ''' form_vars : typeAuxId COLON form_vars_aux SEMICOLON
     '''
-
-### Dec_vars en estatutos
-def p_dec_vars_est(p):
-    ''' dec_vars_est : VARIABLES form_vars_est
-    '''
-
-def p_form_vars_est(p):
-    ''' form_vars_est : typeAuxId COLON form_vars_aux SEMICOLON '''
-
+    
 def p_form_vars_aux(p):
     ''' form_vars_aux : ID
                     | ID COMMA form_vars_aux
@@ -255,10 +247,10 @@ def p_claseId(p):
 ######################################################################################
 #Funciones
 
-# def p_funcionesAux(p):
-#     ''' funcionesAux : funciones
-#                         | funciones funcionesAux
-#     '''
+#def p_funcionesAux(p):
+#    ''' funcionesAux : funciones
+#                        | funciones funcionesAux
+#    '''
 
 def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux endFunction
@@ -526,7 +518,7 @@ def p_estatutosAux(p):
 
 def p_estatutos(p):
     ''' estatutos : asign_vars
-                    | dec_vars_est
+                    | dec_vars
                     | llamada_fun
                     | lectura
                     | escritura

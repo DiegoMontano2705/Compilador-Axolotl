@@ -1,0 +1,24 @@
+### CTES ###
+20500 77
+21500 4.2
+20501 10
+20502 115
+### dirFun ###
+global None 2_0_2 2_0_0_0
+test entero None 1 entero 2_1_0 0_0_0_0
+### QUADS ###
+15 None None 6
+12 20500 None 23501
+12 21500 None 25000
+13 None None 25000
+13 None None 23500
+13 None None 10000
+20 None None None
+12 20501 None 10001
+12 20502 None 10000
+19 None None test
+21 10001 None 1
+17 1 None test
+12 14501 None 14500
+13 None None 14500
+22 None None None
