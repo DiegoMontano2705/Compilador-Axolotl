@@ -10,6 +10,7 @@ entero funcion test(entero x) {
     escribe(z);
     escribe(x);
     escribe(a);
+    regresa(1000);
 }
 
 principal() {

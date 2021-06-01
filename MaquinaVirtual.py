@@ -107,9 +107,9 @@ def ejecuta():
             #Final de contexto
             # memorias[-1].printMemory()
             memorias.pop() #termina el contexto y se libera memoria local.
-            currTabla = "global"
+            # currTabla = "global"
             ip = stackExe.pop()
-            memorias[0].setValMemory(int(quadruples[ip][1]), val) #Asignar valor al temporal return
+            memorias[-1].setValMemory(int(quadruples[ip][1]), val) #Asignar valor al temporal return
             
         elif(codOp == 19): # ERA
             currTabla = quadruples[ip][3]

@@ -532,13 +532,13 @@ def p_estatutos(p):
 #Expresiones
 
 def p_exp(p):
-    ''' exp : OR
+    ''' exp : orId
             | t_exp
     ''' 
     p[0] = p[1]
 
 def p_t_exp(p):
-    ''' t_exp : AND
+    ''' t_exp : andId
                 | g_exp
     '''
     p[0] = p[1]
@@ -589,8 +589,15 @@ def p_f(p): #lpid y rpid para identificar ().
 #Auxiliares identificadores expresion
 def p_equalId(p):
     ''' equalId : EQUAL '''
-    # print("=")
     quads.operator_push("=")
+
+def p_orId(p):
+    ''' orId : OR '''
+    quads.operator_push("|")
+
+def p_andId(p):
+    ''' andId : AND '''
+    quads.operator_push("&")
 
 def p_plusId(p):
     ''' plusId : PLUS '''
