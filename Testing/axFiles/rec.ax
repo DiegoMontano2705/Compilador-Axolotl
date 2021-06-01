@@ -1,20 +1,30 @@
 programa rec;
-variables entero: a;
-variables char : dhd, kjdj;
+variables entero : a, b;
 
-entero funcion test(entero x) {
-    variables flotante : z;
-    variables entero : alfa;
-    alfa = 77;
-    z = 4.2;
-    escribe(z);
-    escribe(x);
-    escribe(a);
+%% Fibonnaci with recursion
+entero funcion fib(entero x){
+    
+    si (x == 0 | x == 1) entonces{
+        regresa(0);
+    }
+
+    %%si (x == 1) entonces{
+      %%  regresa(1);
+    %%}
+
+    %%x = x - 1;
+    %%a = fib(x);
+    %%escribe(a);
+    %%x = x - 2;
+    %%b = fib(x);
+
+    %%regresa(a+b);
+    %%regresa(fib(x-1) + fib(x-2));
 }
 
 principal() {
-    variables entero : i;
-    i = 10;
-    a = 115;
-    escribe(test(i));
+    variables entero : n,ans;
+    n = 9;
+    ans = fib(0);
+    escribe(ans);
 }

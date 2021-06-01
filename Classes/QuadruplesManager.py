@@ -16,7 +16,7 @@ from Classes.Temporal import *
 #from Temporal import *
 
 
-opUntil = ['>', '<', '>=', '<=', '=']
+opUntil = ['>', '<', '>=', '<=', '=', '|', '&']
 opCond_Loops = ['GoToF', 'GoTo', 'GoToV']
 opModules = ['EndFunc','Return']
 opCallFunc = ['GoSub', 'Era', 'Param']
