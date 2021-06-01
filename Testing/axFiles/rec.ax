@@ -1,6 +1,5 @@
 programa rec;
-variables entero: a;
-variables char : dhd, kjdj;
+variables entero : a, b;
 
 entero funcion test(entero x) {
     variables flotante : z;
@@ -14,8 +13,8 @@ entero funcion test(entero x) {
 }
 
 principal() {
-    variables entero : i;
-    i = 10;
-    a = 115;
-    escribe(test(i));
+    variables entero : n,ans;
+    n = 9;
+    ans = fib(0);
+    escribe(ans);
 }

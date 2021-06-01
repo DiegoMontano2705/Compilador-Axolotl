@@ -532,16 +532,20 @@ def p_estatutos(p):
 #Expresiones
 
 def p_exp(p):
-    ''' exp : orId
-            | t_exp
-    ''' 
-    p[0] = p[1]
-
-def p_t_exp(p):
-    ''' t_exp : andId
-                | g_exp
+    ''' exp : g_exp or g_exp
+            | g_exp and g_exp
+            | g_exp 
     '''
-    p[0] = p[1]
+
+def p_or(p):
+    ''' or : OR
+    ''' 
+    quads.operator_push("|")
+
+def p_and(p):
+    ''' and : AND
+    '''
+    quads.operator_push("&")
 
 def p_g_exp(p):
     ''' g_exp : m_exp greaterThanId m_exp
