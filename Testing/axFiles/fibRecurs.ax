@@ -5,26 +5,15 @@ variables entero : a, b;
 entero funcion fib(entero x){
     
     si (x == 0 | x == 1) entonces{
-        regresa(0);
+        regresa(x);
     }
 
-    %%si (x == 1) entonces{
-      %%  regresa(1);
-    %%}
-
-    %%x = x - 1;
-    %%a = fib(x);
-    %%escribe(a);
-    %%x = x - 2;
-    %%b = fib(x);
-
-    %%regresa(a+b);
     %%regresa(fib(x-1) + fib(x-2));
 }
 
 principal() {
     variables entero : n,ans;
     n = 9;
-    ans = fib(0);
+    ans = fib(n);
     escribe(ans);
 }

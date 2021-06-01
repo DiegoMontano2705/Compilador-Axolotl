@@ -2,10 +2,10 @@
 20500 100
 20501 200
 20502 0
-20503 1010
-20504 500
+20503 300
+20504 1
 ### dirFun ###
-global None 1_0_0 2_0_0_0
+global None 2_0_0 3_0_0_0
 pruebaUno entero None 1 entero 4_0_0 0_0_0_1
 ### QUADS ###
 15 None None 7
@@ -16,10 +16,12 @@ pruebaUno entero None 1 entero 4_0_0 0_0_0_1
 18 None None 20503
 13 None None 23502
 20 None None None
+12 20500 None 10000
 19 None None pruebaUno
 21 20504 None 1
 17 1 None pruebaUno
 12 14501 None 14500
-12 14500 None 10000
-13 None None 10000
+1 10000 14500 14502
+12 14502 None 10001
+13 None None 10001
 22 None None None

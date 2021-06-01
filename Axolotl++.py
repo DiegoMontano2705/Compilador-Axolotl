@@ -356,7 +356,7 @@ def p_idAssignId(p):
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
                     | llamadaParam auxExp RP endParam SEMICOLON
-                    | llamadaParam auxExp RP endParam
+                    | llamadaParam auxExp  RP endParam
     '''
     quads.operator_push('GoSub')
     #Obtener ID del procedimiento y su direccion en donde se encuentra
@@ -377,8 +377,8 @@ def p_llamadaParam(p):
     quads.quadruples[quads.getID()].setResult(p[1])
     
 def p_auxExp(p):
-    ''' auxExp : exp mandaParam
-                | exp mandaParam COMMA auxExp
+    ''' auxExp :  exp  mandaParam
+                |  exp  mandaParam COMMA auxExp
     '''
 
 def p_mandaParam(p):
@@ -594,14 +594,6 @@ def p_f(p): #lpid y rpid para identificar ().
 def p_equalId(p):
     ''' equalId : EQUAL '''
     quads.operator_push("=")
-
-def p_orId(p):
-    ''' orId : OR '''
-    quads.operator_push("|")
-
-def p_andId(p):
-    ''' andId : AND '''
-    quads.operator_push("&")
 
 def p_plusId(p):
     ''' plusId : PLUS '''

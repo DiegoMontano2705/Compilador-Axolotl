@@ -5,14 +5,15 @@ entero funcion pruebaUno(entero x) {
     a = 100;
     b = 200;
     si (a>0) entonces {
-        regresa(1010);
+        regresa(300);
     }
     escribe(b);
 }
 
 %%test comment
 principal() {
-    variables entero : z;
-    z = pruebaUno(500);
+    variables entero : z, a;
+    a = 100;
+    z = pruebaUno(a+1);
     escribe(z);
 }

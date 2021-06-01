@@ -13,8 +13,5 @@ entero funcion test(entero x) {
 }
 
 principal() {
-    variables entero : n,ans;
-    n = 9;
-    ans = fib(0);
-    escribe(ans);
+    escribe(test(10));
 }

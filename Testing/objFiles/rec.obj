@@ -3,25 +3,21 @@
 21500 4.2
 20501 1000
 20502 10
-20503 115
 ### dirFun ###
-global None 4_0_0 2_0_0_0
-fib entero None 1 entero 1_0_0 0_0_0_3
+global None 2_0_0 2_0_0_0
+test entero None 1 entero 2_1_0 0_0_0_0
 ### QUADS ###
 15 None None 7
 12 20500 None 23501
 12 21500 None 25000
 13 None None 25000
 13 None None 23500
-13 None None 10000
+13 None None 10001
 18 None None 20501
 20 None None None
-12 20502 None 10001
-12 20503 None 10000
 19 None None test
-21 10001 None 1
+21 20502 None 1
 17 1 None test
 12 14501 None 14500
-12 14500 None 10002
-13 None None 10002
+13 None None 14500
 22 None None None

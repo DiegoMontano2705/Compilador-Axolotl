@@ -1,9 +1,9 @@
-# 
+#
 #     Clase Quadruples: estructura de datos para generacion de quadruples.  .
 #     Compiladores
 #     Diego Fernando Montaño Pérez
-#     Jose Alberto Gonzalez 
-# 
+#     Jose Alberto Gonzalez
+#
 from queue import LifoQueue
 import sys
 import queue
@@ -11,9 +11,9 @@ import queue
 from Classes.Quadruples import *
 from Classes.Semantica import *
 from Classes.Temporal import *
-#from Quadruples import *
-#from Semantica import *
-#from Temporal import *
+# from Quadruples import *
+# from Semantica import *
+# from Temporal import *
 
 
 opUntil = ['>', '<', '>=', '<=', '=', '|', '&']
@@ -42,10 +42,10 @@ class QuadruplesManager:
 
     def setID(self,idNum):
         self.idNum = idNum
-    
+
     def getContParam(self):
         return self.contParams
-    
+
     def getListaQuads(self):
         return self.quadruples
 
@@ -68,13 +68,13 @@ class QuadruplesManager:
     #Reset a contador de tmps
     def clearTmps(self):
         self.tmp.clear()
-        
+
     #set endprog
     def setEndProg(self):
         self.quadruples
         q = Quadruples(None,"endprog",None,None,None)
-        self.quadruples.append(q) 
-    
+        self.quadruples.append(q)
+
     #set return Quad
     def setRetornoFuncion(self, nomFun, tipoRetorno):
         result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
@@ -84,7 +84,7 @@ class QuadruplesManager:
         self.quadruples.append(q)
         self.pilaOperands.put(result)
         self.pilaTypes.put(tipoRetorno)
-    
+
     #set Era
     def setEra(self, nomFun):
         self.quadruples
@@ -94,11 +94,11 @@ class QuadruplesManager:
 
 
 ######################################################################################
-#operator push 
+#operator push
 
     #Inspeccionar si ya se tiene almacenado un tipo similar.
     def operator_push(self,op):
-        if(op == '('):
+        if(op == ')'):
             self.solveQuadruplesUntil(op)
         elif(op in opUntil):
             self.fillQuadruples()
@@ -110,7 +110,7 @@ class QuadruplesManager:
             self.generateQuadruple(op)
         else:
             self.pilaOperators.put(op)
-            
+
 ######################################################################################
 # id push
     # ingresa a id.Name a la PilaO y id.Type a PilaT.
@@ -118,8 +118,8 @@ class QuadruplesManager:
         #push id & type
         self.pilaOperands.put(idName)
         self.pilaTypes.put(idType)
-        
-        if(not self.pilaOperators.empty()): 
+
+        if(not self.pilaOperators.empty()):
             #check pasados operators
             pilaOperatorsTop = self.pilaOperators.get_nowait() #Que operador esta top stack.
             self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
@@ -133,19 +133,19 @@ class QuadruplesManager:
                     self.pilaOperators.put(pilaOperators2) #agregar de nuevo el operador a la stack
                     self.pilaOperators.put(pilaOperatorsTop) #agregar de nuevo el operador a la stack
                     if((pilaOperatorsTop == "+" or pilaOperatorsTop == "-") and (pilaOperators2 == "+" or pilaOperators2 == "-")):
-                        self.pilaOperands.get_nowait()     
-                        self.pilaTypes.get_nowait() 
+                        self.pilaOperands.get_nowait()
+                        self.pilaTypes.get_nowait()
                         self.pilaOperators.get_nowait()
                         operator = self.pilaOperators.get_nowait()
                         self.generateQuadruple(operator)
                         self.pilaOperands.put(idName)
                         self.pilaTypes.put(idType)
                         self.pilaOperators.put(pilaOperatorsTop)
-    
+
     #Solo se usara en print(escribe)
     def string_push(self, strAux):
         strAux = strAux.replace(" ", "_") #solve problem with spaces
-        self.pilaOperands.put(strAux[1:-1]) #without " " 
+        self.pilaOperands.put(strAux[1:-1]) #without " "
 
 
 ######################################################################################
@@ -163,7 +163,7 @@ class QuadruplesManager:
         while(not self.pilaOperators.empty()):
             operator = self.pilaOperators.get_nowait()
             self.generateQuadruple(operator)
-    
+
     # genera el cuadruplo y lo guarda en la pila de quadruplos.
     def generateQuadruple(self,operator):
         if(not (operator=="(" or operator==")")):
@@ -197,8 +197,8 @@ class QuadruplesManager:
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
             #elif(operator == 'read'):
-                
-            
+
+
             ## Modulos
             elif(operator == 'EndFunc' or operator == 'Era' or operator == 'GoSub'):
                 id_Final = (self.getID() + 1)
@@ -207,14 +207,14 @@ class QuadruplesManager:
                 self.quadruples.append(q)
 
             elif(operator == 'Param'):
-                #self.print_stack()
-                left_op = left_op = self.pilaOperands.get_nowait()
+                left_op = self.pilaOperands.get_nowait()
                 if(left_op != None):
                     id_Final = (self.getID() + 1)
                     self.setContParam(self.getContParam()+1)
                     q = Quadruples(id_Final,operator,left_op, None,self.getContParam())
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
+
             #####
             else:
                 right_op = self.pilaOperands.get_nowait()
@@ -223,17 +223,17 @@ class QuadruplesManager:
                 left_type = self.pilaTypes.get_nowait()
                 # print("my operator", operator)
                 result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
-                if(result_type != None):    
+                if(result_type != None):
                     id_Final = (self.getID() + 1)
                     if(operator == '='):
                         q = Quadruples(id_Final,operator, right_op, None,left_op )
                         self.setID(self.getID() + 1)
-                        self.quadruples.append(q) 
+                        self.quadruples.append(q)
                     else:
                         result = self.tmp.next(result_type, self.currTabla) #preparar temporal
                         q = Quadruples(id_Final,operator, left_op, right_op, result)
                         self.setID(self.getID() + 1)
-                        self.quadruples.append(q) 
+                        self.quadruples.append(q)
                         self.pilaOperands.put(result)
                         self.pilaTypes.put(result_type)
 
@@ -247,7 +247,7 @@ class QuadruplesManager:
         print("pilaOperators: ")
         while not self.pilaOperators.empty():
             print(self.pilaOperators.get(), end=" ")
-        print('\n')   
+        print('\n')
 
     #print for testing
     def print_quadruples(self):
@@ -259,14 +259,18 @@ class QuadruplesManager:
         myfile.close()
 
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #    qm = QuadruplesManager()
-#     #A - ( B + C) * D * E ->
-#     #+ B C t0
-#     #* t0 D t1
-#     #* t1 E t2
-#     #- A t2 t3
-
+#    qm.id_push("A", "float")
+#    qm.operator_push("*")
+#    qm.operator_push("(")
+#    qm.id_push("B", "float")
+#    qm.operator_push("+")
+#    qm.id_push("C", "float")
+#    qm.operator_push(")")
+#    # qm.print_stacks()
+#    qm.fillQuadruples()
+#    qm.print_quadruples()
 
 #     # if(A + B > C){  # GOTOF t3 8
 #     #   C * D
@@ -274,11 +278,11 @@ class QuadruplesManager:
 #     # else {
 #     # C + D
 #     # }
-    
+
 #     # #Test Conditional
 #     # qm.id_push("A", "float")
 #     # qm.operator_push("*")                    #Op GOTOF
-#     # qm.id_push("B", "float")                 #id 
+#     # qm.id_push("B", "float")                 #id
 #     # ##First If                              QUAD * A B T0
 #     # qm.operator_push("GoToF")
 #     # qm.id_push("C", "float")
@@ -359,4 +363,4 @@ class QuadruplesManager:
 
 
 
-    
+
