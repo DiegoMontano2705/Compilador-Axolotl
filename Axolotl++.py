@@ -175,10 +175,10 @@ def p_endprog(p):
 def p_programaAux(p):
     ''' programaAux : clases programaAux
                         | dec_vars programaAux
-                        | funcionesAux programaAux
+                        | funciones programaAux
                         | clases
                         | dec_vars
-                        | funcionesAux
+                        | funciones
     '''
 ######################################################################################
 #Declarar Variables
@@ -229,12 +229,12 @@ def p_typeAuxId(p):
 def p_clases(p):
     ''' clases : CLASE claseId LCB RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId LCB METODOS funcionesAux RCB SEMICOLON
-                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId LCB METODOS funciones RCB SEMICOLON
+                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
                 | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funcionesAux RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funciones RCB SEMICOLON
+                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
     '''
     #Borrar tabla de vars
     currTabla = superTabla.get_currentTablaId()
@@ -255,10 +255,10 @@ def p_claseId(p):
 ######################################################################################
 #Funciones
 
-def p_funcionesAux(p):
-    ''' funcionesAux : funciones
-                        | funciones funcionesAux
-    '''
+# def p_funcionesAux(p):
+#     ''' funcionesAux : funciones
+#                         | funciones funcionesAux
+#     '''
 
 def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux endFunction

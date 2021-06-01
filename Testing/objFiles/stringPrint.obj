@@ -1,14 +1,12 @@
 ### CTES ###
 20500 10
-20501 500
-20502 100
+20501 100
 ### dirFun ###
 global None 2_0_0 0_0_0_0
 ### QUADS ###
 15 None None 0
 12 20500 None 10001
-13 None None 20501
 13 None None holaaaa
-12 20502 None 10000
+12 20501 None 10000
 13 None None 10000
 22 None None None

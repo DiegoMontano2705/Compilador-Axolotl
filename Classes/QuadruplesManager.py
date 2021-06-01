@@ -80,6 +80,7 @@ class QuadruplesManager:
         result = self.tmp.next(tipoRetorno, self.currTabla) #preparar temporal
         val = self.tmp.next(tipoRetorno, self.currTabla) #temporal con el valor.
         q = Quadruples(None,'=',val,None,result)
+        self.setID(self.getID()+1)
         self.quadruples.append(q)
         self.pilaOperands.put(result)
         self.pilaTypes.put(tipoRetorno)
@@ -88,6 +89,7 @@ class QuadruplesManager:
     def setEra(self, nomFun):
         self.quadruples
         q = Quadruples(None,'Era',nomFun,None, None)
+        self.setID(self.getID()+1)
         self.quadruples.append(q)
 
 
@@ -251,7 +253,7 @@ class QuadruplesManager:
         myfile = open('quads.txt', 'w')
         for i in range(len(self.quadruples)):
             #quad = self.quadruples[i].printQuad()
-            #myfile.write("%s \n" % self.quadruples[i].printQuad())
+            # myfile.write("%s \n" % self.quadruples[i].printQuad())
             myfile.write("%s %s %s %s %s \n" % (self.quadruples[i].getID(), self.quadruples[i].getOperator() ,self.quadruples[i].getLeftOp(),self.quadruples[i].getRightOp(), self.quadruples[i].getResult()))
         myfile.close()
 

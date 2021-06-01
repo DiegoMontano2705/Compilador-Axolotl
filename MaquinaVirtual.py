@@ -65,6 +65,7 @@ def ejecuta():
             res = int(quadruples[ip][3])
             calcula(izq, codOp, der, res)
             ip+=1
+            # memorias[-1].printMemory()
         elif(codOp == 12): # =
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
             res = int(quadruples[ip][3])

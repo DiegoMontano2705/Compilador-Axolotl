@@ -1,17 +1,22 @@
 programa fibRecurs;
+variables entero : a,b;
 
 %% Fibonnaci with recursion
-entero funcion fib(entero x) {
-    si (x < 1) entonces{
+entero funcion fib(entero x){
+    si (x < 2) entonces{
         regresa(x);
     }
-    fib(x-2);
+    x = x - 1;
+    a = fib(x);
+    x = x - 2;
+    b = fib(x);
+    regresa(a+b);
+    %% regresa(fib(x-1) + fib(x-2));
 }
-
 
 principal() {
     variables entero : n,ans;
-    lee(n);
-    %% ans = fib(n);
-    escribe(fib(n));
+    n = 9;
+    ans = fib(n);
+    escribe(ans);
 }
