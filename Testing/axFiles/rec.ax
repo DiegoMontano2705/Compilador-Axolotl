@@ -1,0 +1,20 @@
+programa rec;
+variables entero: a;
+variables char : dhd, kjdj;
+
+entero funcion test(entero x) {
+    variables flotante : z;
+    variables entero : alfa;
+    alfa = 77;
+    z = 4.2;
+    escribe(z);
+    escribe(x);
+    escribe(a);
+}
+
+principal() {
+    variables entero : i;
+    i = 10;
+    a = 115;
+    escribe(test(i));
+}

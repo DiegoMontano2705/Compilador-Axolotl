@@ -207,6 +207,7 @@ class QuadruplesManager:
                 self.quadruples.append(q)
 
             elif(operator == 'Param'):
+                #self.print_stack()
                 left_op = left_op = self.pilaOperands.get_nowait()
                 if(left_op != None):
                     id_Final = (self.getID() + 1)

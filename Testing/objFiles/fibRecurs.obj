@@ -1,16 +1,29 @@
 ### CTES ###
 20500 2
-20501 9
+20501 1
+20502 9
 ### dirFun ###
 global None 2_0_0 2_0_0_0
-fib entero None 1 entero 1_0_0 0_0_0_1
+fib entero None 1 entero 1_0_0 7_0_0_1
 ### QUADS ###
-15 None None 4
+15 None None 16
 5 23500 20500 32500
 16 32500 None 3
 18 None None 23500
+19 None None fib
+21 20501 None 1
+17 1 None fib
+12 28001 None 28000
+19 None None fib
+2 23500 28000 28002
+1 28002 23500 28003
+21 20500 None 1
+17 1 None fib
+12 28005 None 28004
+2 28003 28004 28006
+18 None None 28006
 20 None None None
-12 20501 None 10001
+12 20502 None 10001
 19 None None fib
 21 10001 None 1
 17 1 None fib
