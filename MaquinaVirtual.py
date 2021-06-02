@@ -77,11 +77,11 @@ def ejecuta():
     #Mientras no encuentre fin del programa.
     while codOp != 23: #Mientras no encuentre EndProg
         codOp = int(quadruples[ip][0]) #Codigo de operacion
-        
+
         if(codOp>=0 and codOp<=11): #operacion aritmetica
             if(dirFun[currTabla[-1]]['scope'] == "metodo"): #buscar en memoria local y objetos
-                izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
-                der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
+                izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memoriaObjetos[int(currObjeto)]) #checar ambas memorias
+                der = memorias[-1].getValMemory(int(quadruples[ip][2]), memoriaObjetos[int(currObjeto)])
             else: #buscar en memoria local y global
                 izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
                 der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
@@ -98,11 +98,18 @@ def ejecuta():
                 memorias[-1].setValMemory(res, val)
             ip+=1
         elif(codOp == 13): # print
-            try: #if not work with value, so its a string
-                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])  
-            except: #work with strings
-                strAux = str(quadruples[ip][3:][0])
-                val = strAux.replace("_", " ") #solve problem with spaces
+            if(dirFun[currTabla[-1]]['scope'] == "metodo"): #en caso de ser objeto
+                try: #if not work with value, so its a string
+                    val = memorias[-1].getValMemory(int(quadruples[ip][3]), memoriaObjetos[int(currObjeto)]) #checar ambas memorias  
+                except: #work with strings
+                    strAux = str(quadruples[ip][3:][0])
+                    val = strAux.replace("_", " ") #solve problem with spaces
+            else:
+                try: #if not work with value, so its a string
+                    val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])  
+                except: #work with strings
+                    strAux = str(quadruples[ip][3:][0])
+                    val = strAux.replace("_", " ") #solve problem with spaces
             print(val)
             ip+=1
         elif(codOp == 14): # read
@@ -116,6 +123,7 @@ def ejecuta():
             else:
                 ip = ipAux + 1
         elif(codOp == 16): # GoToF
+            #opcio objetos
             val = bool(memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]))
             if (not val): #si es falso, ve a quadruplo
                 ip = int(quadruples[ip][3])+1
@@ -125,7 +133,10 @@ def ejecuta():
             stackExe.append(ip+1) #Saber a donde tiene que regresar al finalizar func.
             ip = int(quadruples[ip][1])
         elif(codOp == 18): # return
-            val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])
+            if(dirFun[currTabla[-1]]['scope'] == "metodo"):
+                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memoriaObjetos[int(currObjeto)])
+            else:
+                val = memorias[-1].getValMemory(int(quadruples[ip][3]), memorias[0])
             tipo = memorias[-1].getTipoByDir(int(quadruples[ip][3]))
             if(tipo != dirFun[currTabla[-1]]['return']): #validar tipo de retorno
                 print("Error: tipo de retorno no coincide con valor regresado.")
@@ -140,6 +151,7 @@ def ejecuta():
             
         elif(codOp == 19): # ERA
             currTabla.append(quadruples[ip][3])
+            currObjeto = quadruples[ip][1]
             rec = dirFun[currTabla[-1]]['recursos']
             memoriaAux = Memoria() #Instancia clase
             dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
