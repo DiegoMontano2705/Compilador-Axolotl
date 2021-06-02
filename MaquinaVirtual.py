@@ -58,7 +58,7 @@ def ejecuta():
     currTabla.append("global")
 
     #Mientras no encuentre fin del programa.
-    while codOp != 22: #Mientras no encuentre EndProg
+    while codOp != 23: #Mientras no encuentre EndProg
         codOp = int(quadruples[ip][0]) #Codigo de operacion
         if(codOp>=0 and codOp<=11): #operacion aritmetica
             izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
@@ -140,7 +140,7 @@ def ejecuta():
                 sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
             ip+=1
-        elif(codOp == 22): # endprog
+        elif(codOp == 23): # endprog
             print("fin del programa :) - Axolotl")
         
     
@@ -161,21 +161,38 @@ def prepararData(data):
         values = data[index].split()
         #Reservar memoria global
         if(values[0] == "global"): #tabla global
-            listAux = [values[2].split("_"), values[3].split("_")] #lista a reservar
+            listAux = [values[1].split("_"), values[2].split("_")] #lista a reservar
             dicAux = memorias[0].reservarMemoria("global", listAux)
             memorias[0].mergeMemories(dicAux) #Agregar reservas a memoria principal   
-        else:
-            # print(values)
+        elif(values[0] == "class"): #recrear tabla de clase
+            recVars = values[2].split("_")
+            recTmps = values[3].split("_")
+            dirFun[values[1]] = {
+                'scope' : 'clase',
+                'recursos' : [recVars, recTmps]
+            }
+        elif("method_" in values[0]): #recrear tabla method
             listaParms = values[4].split("_")
             recVars = values[5].split("_")
             recTmps = values[6].split("_")
+            dirFun[values[1]] = {
+                'scope' : 'metodo',
+                'clase' : values[0].replace("method_", ""),
+                'return' : values[2],
+                'quadInicio': values[3],
+                'listaParms' : listaParms,
+                'recursos' : [recVars, recTmps]
+            }
+        else:
+            listaParms = values[3].split("_")
+            recVars = values[4].split("_")
+            recTmps = values[5].split("_")
             dirFun[values[0]] = {
                 'return': values[1],
-                'dirInicio':values[2],
-                'quadInicio':values[3],
+                'quadInicio':values[2],
                 'listaParms' : listaParms,
                 'recursos' : [recVars, recTmps],
-                'valorRetorno' : 0
+                'scope': "funcion"
             }
              
     #QUADS

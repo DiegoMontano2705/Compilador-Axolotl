@@ -4,7 +4,7 @@
 20502 1
 20503 2
 ### dirFun ###
-global None 5_0_0 2_0_0_3
+global 5_0_0 2_0_0_3 None
 ### QUADS ###
 15 None None 0
 12 20500 None 10003
@@ -29,4 +29,4 @@ global None 5_0_0 2_0_0_3
 12 10000 None 10001
 13 None None 10000
 15 None None 7
-22 None None None
+23 None None None

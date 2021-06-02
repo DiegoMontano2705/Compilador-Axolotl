@@ -36,7 +36,8 @@ cod_operacion = {
     'Era' : 19,
     'EndFunc' : 20,
     'Param' : 21,
-    'endprog': 22
+    'EraObjeto' : 22, 
+    'endprog': 23
 }
 ######################################################################################
 #Tokens
@@ -44,7 +45,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE',
     'ID','EQUAL','GREATER_THAN', 'GREATER_EQUAL_THAN', 'SMALLER_THAN', 'SMALLER_EQUAL_THAN', 'IS_EQUAL','AND','OR',
     'DIFFERENT','LP','RP','LCB','RCB','LSB','RSB',
-    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'COMMENT',
+    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'ARROW',
 ]
 
 ######################################################################################
@@ -76,6 +77,7 @@ t_CTEI = r'[0-9]+'
 t_CTEF = r'[0-9]+\.[0-9]+'
 #t_CTEC = r'"([^\\"\n]+|\\.)"'
 t_STRING = r'"([^\\"\n]+|\\.)*"'
+t_ARROW = r'->'
 
 reserved = {
     'si' : 'IF',
@@ -93,7 +95,6 @@ reserved = {
     'void' : 'VOID',
     'regresa' : 'RETURN',
     'atributos' : 'ATRIBUTOS',
-    'hereda' : 'HEREDA',
     'metodos' : 'METODOS',
     'clase' : 'CLASE',
     'funcion' : 'FUNCION',
@@ -171,7 +172,6 @@ def p_startmain(p):
 def p_endprog(p):
     ''' endprog : RCB '''
     quads.fillQuadruples() 
-    # quads.print_quadruples()
 
 def p_programaAux(p):
     ''' programaAux : clases programaAux
@@ -191,7 +191,7 @@ def p_dec_vars(p):
 def p_form_vars(p):
     ''' form_vars : typeAuxId COLON form_vars_aux SEMICOLON
     '''
-    
+
 def p_form_vars_aux(p):
     ''' form_vars_aux : ID
                     | ID COMMA form_vars_aux
@@ -200,11 +200,21 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
+    
     superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
     superTabla.addContRecursos(superTabla.get_currentTablaId(), currType) #Contabilizar recursos por funcion/clase
+    
+    #En caso de ser un objeto, mandar EraObjeto para reservar memoria ejecucion
+    if(not currType in ["entero", "flotante", "char", "bool", None]):
+        if(currTabla!="global"): #local
+            dirObjeto = superTabla.getDirIdTablaVars(currTabla,p[1]) 
+        else: #global
+            dirObjeto, _ = global_memoria.getDirMemory(str(p[1]))
+        quads.setEraObjeto(dirObjeto, currType)
+        # print(currTabla, p[1], currType, "vars")
 
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
@@ -223,14 +233,10 @@ def p_clases(p):
                 | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
                 | CLASE claseId LCB METODOS funciones RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funciones RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
     '''
     #Borrar tabla de vars
     currTabla = superTabla.get_currentTablaId()
-    superTabla.setListaTemporales(currTabla,quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
+    superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
     quads.setCurrTabla("global")
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
@@ -238,7 +244,7 @@ def p_clases(p):
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla(p[1], scope="class", dirInicio=None, metodosClase=None)
+    superTabla.crearTabla(p[1], scope="class", metodosClase=None)
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
@@ -246,11 +252,6 @@ def p_claseId(p):
 
 ######################################################################################
 #Funciones
-
-#def p_funcionesAux(p):
-#    ''' funcionesAux : funciones
-#                        | funciones funcionesAux
-#    '''
 
 def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux endFunction
@@ -303,6 +304,13 @@ def p_tipo_compuesto(p):
     ''' tipo_compuesto : ID
     '''
     p[0] = p[1]
+    #checar si es un objeto de Clase
+    try:
+        if(superTabla.getScopeFun(p[1]) != "class"):
+            print("Error:", p[1], "no tipo valido.")
+            sys.exit()
+    except:
+        print("Error:", p[1], "no es nombre de clase.")
 
 def p_parametros(p):
     ''' parametros : tipo_simple ID
@@ -318,8 +326,23 @@ def p_var(p):
     ''' var : idAssignId
             | idAssignId LSB CTEI COMMA CTEI RSB
             | idAssignId LSB CTEI RSB
-            | idAssignId POINT ID
+            | objetoAtributo
     '''
+    
+def p_objetoAtributo(p):
+    ''' objetoAtributo : idAssignId POINT ID'''
+    #manejar direcciones objetos
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    if(currTabla!="global"): #local
+        dirObjeto = superTabla.getDirIdTablaVars(currTabla,p[1]) 
+    else: #global
+        dirObjeto, _ = global_memoria.getDirMemory(str(p[1]))
+    #direccion para el atributo dentro de la clase.
+    dirAtributo = superTabla.getDirIdTablaVars(currTipo,p[3])
+    #checar tipo del atributo
+    tipoAtributo = superTabla.getTipoIdTablaVars(currTipo, p[3])
+    quads.id_push(str(dirObjeto)+"_"+str(dirAtributo), tipoAtributo)
 
 def p_asign_vars(p):
     ''' asign_vars : var equalId llamada_fun asignend 
@@ -335,23 +358,37 @@ def p_asignend(p):
 def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
-
-    #Validar que exista y extraer tipo.
-    if(superTabla.get_currentTablaId()!="global"):
-        dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
-        tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
-        if(dirVar == -1): #Si no esta local, buscar global
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    #Solo cuando no son objetos.
+    if(currTipo in ["entero", "flotante", "char", "bool", None]):
+        #Validar que exista y extraer tipo.
+        if(currTabla !="global"): 
+            #checar si es metodo y de que clase
+            currScope = superTabla.getScopeFun(currTabla)
+            if("method_" in currScope): #es un metodo de clase.
+                nomClase = currScope.replace("method_", "")
+                dirVar = superTabla.getDirIdTablaVars(nomClase,p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(nomClase, p[1])
+            else:
+                dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+                if(dirVar == -1): #Si no esta local, buscar global
+                    dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+        else:
+            #Checar global
             dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
-    else:
-        #Checar global
-        dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
 
-    # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
-    # print(p[1])
-    quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
+        # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+        # print(p[1])
+        quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
 #Estatutos
+
+#llamada metodo
+def p_llamada_metodo(p):
+    ''' llamada_metodo : ID ARROW llamada_fun'''
 
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
@@ -369,7 +406,8 @@ def p_llamada_fun(p):
         quads.setRetornoFuncion(p[1], tipoRetorno)
 
 def p_llamadaParam(p):
-    ''' llamadaParam : ID LP '''
+    ''' llamadaParam : ID LP 
+    '''
     p[0] = p[1]
     # superTabla.set_currentTablaId(nameFunc)
     quads.operator_push('Era')
@@ -380,14 +418,6 @@ def p_auxExp(p):
     ''' auxExp :  exp mandaParam
                 | exp mandaParam COMMA auxExp
     '''
-
-# def p_lpFondo(p):
-#     ''' lpFondo : '''
-#     quads.operator_push("(")
-
-# def p_rpFondo(p):
-#     ''' rpFondo : '''
-#     quads.operator_push(")")
 
 def p_mandaParam(p):
     ''' mandaParam : '''
@@ -405,7 +435,6 @@ def p_retorno_fun(p):
     if(superTabla.getTipoRetornoFun(currTabla) == "void"):
         print("Error:", currTabla, " return cuando es funcion void.")
         sys.exit()
-
 
 #Auxiliar para retorno
 def p_finRetorno(p):
@@ -534,6 +563,7 @@ def p_estatutos(p):
                     | rep_condicional
                     | retorno_fun
                     | rep_no_condicional
+                    | llamada_metodo
     '''
 
 ######################################################################################
@@ -730,15 +760,28 @@ def dirFunFormat():
     globalAux = dirAux["global"]
     dirAux.pop('global', None)
     #imprimir tabla global
-    print("global", globalAux["dirInicio"], "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
+    print("global",  "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]), contObjetosFormat(globalAux["dicObjetos"]))
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
         listParms = "_".join(val["listaParms"])
         if(not listParms): #if is empty
             listParms = None
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+        if(val['scope']!="global"):
+            if(val['scope']=="class"): #clase
+                print(val['scope'], key, "_".join(str(x) for x in val["recursos"]["vars"]), "_".join(str(x) for x in val["recursos"]["tmps"]), contObjetosFormat(val["dicObjetos"]))
+            else:
+                print(val['scope'], key, val['retorno'], val['quadIni'], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])), contObjetosFormat(val["dicObjetos"]))
+        else:
+            print(key, val["retorno"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])), contObjetosFormat(val["dicObjetos"]))
     
 
+#contador Objetos con formato para el .obj
+def contObjetosFormat(dic):
+    if(not dic):
+        return None
+    else:
+        for key, value in dic.items():
+            return str(key)+"_"+str(value)
 ######################################################################################
 #Creating praser
 yacc.yacc()
@@ -765,7 +808,7 @@ if __name__ == '__main__':
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
-# superTabla.printTablaVars("regresaValores")
-# superTabla.printTablaVars("creando")
-# superTabla.printListaParms("pruebaDos")
+# superTabla.printTablaVars("precioConDescuento")
+# superTabla.printTablaVars("Producto")
+# superTabla.printListaParms("precioConDescuento")
 

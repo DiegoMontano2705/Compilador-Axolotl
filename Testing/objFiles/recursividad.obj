@@ -3,8 +3,8 @@
 20501 1
 20502 10
 ### dirFun ###
-global None 0_0_0 0_0_0_0
-pruebaUno void None 1 entero 1_0_0 1_0_0_1
+global 0_0_0 0_0_0_0 None
+pruebaUno void 1 entero 1_0_0 1_0_0_1 None
 ### QUADS ###
 15 None None 9
 6 23500 20500 32500
@@ -19,4 +19,4 @@ pruebaUno void None 1 entero 1_0_0 1_0_0_1
 19 None None pruebaUno
 21 20502 None 1
 17 1 None pruebaUno
-22 None None None
+23 None None None

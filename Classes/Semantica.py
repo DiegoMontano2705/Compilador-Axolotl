@@ -8,7 +8,7 @@ import sys
 class Semantica:
 
     #Entero,+,-: 0
-    # Float, /: 1
+    # flotante, /: 1
     # Char,>,<,<=,>=: 2
     # Bool, =: 3
     # &, | : 4
@@ -20,25 +20,25 @@ class Semantica:
         self.cuboSemantico = (
                                 (   #+ / > = & * ==
                                     (0,1,3,0, -1, 0, 3), #entero entero
-                                    (-1,-1,-1,-1,-1,-1, -1), #entero float
+                                    (-1,-1,-1,-1,-1,-1, -1), #entero flotante
                                     (-1,-1,-1,-1,-1,-1, -1), #entero char
                                     (-1,-1,-1,-1,-1,-1, -1), #entero bool
                                 ),
                                 (
-                                    (-1,-1,-1,-1,-1,-1, -1), #float entero
-                                    (1,1,3,1,-1,1, 3), #float float
-                                    (-1,-1,-1,-1,-1,-1, -1), #float char
-                                    (-1,-1,-1,-1,-1,-1, -1), #float bool
+                                    (-1,-1,-1,-1,-1,-1, -1), #flotante entero
+                                    (1, 1, 3, 1, -1, 1, 3), #flotante flotante
+                                    (-1,-1,-1,-1,-1,-1, -1), #flotante char
+                                    (-1,-1,-1,-1,-1,-1, -1), #flotante bool
                                 ),
                                 (
                                     (-1,-1,-1,-1,-1,-1, -1), #char entero
-                                    (-1,-1,-1,-1,-1,-1, -1), #char float
+                                    (-1,-1,-1,-1,-1,-1, -1), #char flotante
                                     (-1,-1,-1,2,-1,-1, 3), #char char
                                     (-1,-1,-1,-1,-1,-1, -1), #char bool
                                 ),
                                 (
                                     (-1,-1,-1,-1,-1,-1, -1), #Bool entero
-                                    (-1,-1,-1,-1,-1,-1, -1), #Bool float
+                                    (-1,-1,-1,-1,-1,-1, -1), #Bool flotante
                                     (-1,-1,-1,-1,-1,-1, -1), #Bool char
                                     (-1,-1,3,3,3,-1, 3), #Bool bool
                                 ),
@@ -49,7 +49,7 @@ class Semantica:
         if(stm==0):
             return "entero"
         elif(stm==1):
-            return "float"
+            return "flotante"
         elif(stm==2):
             return "char"
         elif(stm==3):
@@ -63,7 +63,7 @@ class Semantica:
             return 0
         elif(stm=="*"): # * : 5
             return 5  
-        elif(stm=="float" or stm=="/"): # Float,*,/: 1
+        elif(stm=="flotante" or stm=="/"): # flotante,*,/: 1
             return 1
         elif(stm=="bool" or stm=="="): # Bool, =: 3
             return 3
@@ -81,8 +81,8 @@ class Semantica:
         leftOpCode = self.equivalent(leftOp)
         rightOpCode = self.equivalent(rightOp)
         opCode = self.equivalent(op)
-
         res = self.cuboSemantico[leftOpCode][rightOpCode][opCode]
+
         if(res >= 0):
             return self.equivalentReturn(res)
         else:
@@ -91,11 +91,11 @@ class Semantica:
 
 # def main():
 #     sem = Semantica()
-#     print(sem.resTipo("==", "float","float"))
-#     # print(sem.resTipo("=","float","float"))
-#     # print(sem.resTipo("+","float","float"))
+#     print(sem.resTipo("*", "flotante","flotante"))
+#     # print(sem.resTipo("=","flotante","flotante"))
+#     # print(sem.resTipo("+","flotante","flotante"))
 #     # print(sem.resTipo("&","bool","bool"))
-#     # print(sem.resTipo("=","entero","float"))
+#     # print(sem.resTipo("=","entero","flotante"))
  
 
 # main()

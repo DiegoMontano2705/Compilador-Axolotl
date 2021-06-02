@@ -18,6 +18,7 @@ class TablaManager:
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = None #Que tipo de variable se encuentra.
         self.nombrePrograma = None #Nombre del programa
+        
 ######################################################################################
     #sets and gets
     def get_currentTablaId(self):
@@ -43,6 +44,7 @@ class TablaManager:
 
     def set_currentScope(self, id):
         self.currentScope = id
+    
 ######################################################################################
 #CRUD TABLAS
 
@@ -51,9 +53,10 @@ class TablaManager:
         if(not self.dirFun.existRow(id)): #Si no existe se crea la tabla
             tablaAux = Tabla(id)
             listaParms = list() #Crear lista orden tipo de parametros.
+            dicObjetos = dict() #diccionario para contar objetos
             memoriaLocal = Memoria() #manejar memoria con dirs para vars.
             memoriaLocal.setDicsAux("local")
-            self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms, memoriaLocal=memoriaLocal) #Siempre se va a generar el pointer
+            self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms, memoriaLocal=memoriaLocal, dicObjetos=dicObjetos) #Siempre se va a generar el pointer
 
 
     #Al terminar, se elimina dirFun.
@@ -72,7 +75,12 @@ class TablaManager:
             self.dirFun.findRow(idTabla)["recursos"]["vars"][1] = self.dirFun.findRow(idTabla)["recursos"]["vars"][1]+1
         elif(tipo=="char"):
             self.dirFun.findRow(idTabla)["recursos"]["vars"][2] = self.dirFun.findRow(idTabla)["recursos"]["vars"][2]+1
-        
+        else: #contador para objetos
+            if(tipo not in self.dirFun.findRow(idTabla)["dicObjetos"]):
+                self.dirFun.findRow(idTabla)["dicObjetos"][tipo] = 1
+            else:
+                self.dirFun.findRow(idTabla)["dicObjetos"][tipo] = self.dirFun.findRow(idTabla)["dicObjetos"][tipo] + 1
+
     #Asigna lista de recursos temporales por contexto
     def setListaTemporales(self, idTabla, listaTmps):
         self.dirFun.findRow(idTabla)["recursos"]["tmps"] = listaTmps 
@@ -88,6 +96,10 @@ class TablaManager:
     #Regresa tipo de retorno de la funcion
     def getTipoRetornoFun(self, idTabla):
         return self.dirFun.findRow(idTabla)['retorno']
+
+    #Regresa scope de la funcion
+    def getScopeFun(self, idTabla):
+        return self.dirFun.findRow(idTabla)['scope']
 
 ######################################################################################
 #Manejo TablaVars
@@ -174,8 +186,8 @@ class TablaManager:
 #     dirFun.printDirFun()
 #     print("---specific tabla---")
 #     dirFun.insertRowToTabla("Global", "k", tipo="entero", dirVirutal=1001)
-#     dirFun.insertRowToTabla("Global", "x", tipo="float", dirVirutal=2001)
-#     dirFun.insertRowToTabla("Fun1", "k", tipo="float", dirVirutal=2002)
+#     dirFun.insertRowToTabla("Global", "x", tipo="flotante", dirVirutal=2001)
+#     dirFun.insertRowToTabla("Fun1", "k", tipo="flotante", dirVirutal=2002)
 #     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
 #     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
 #     dirFun.eraseRowToTabla("Global", "x")
