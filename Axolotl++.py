@@ -231,8 +231,8 @@ def p_typeAuxId(p):
 def p_clases(p):
     ''' clases : CLASE claseId LCB RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId LCB METODOS funciones RCB SEMICOLON
-                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | CLASE claseId LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
     #Borrar tabla de vars
     currTabla = superTabla.get_currentTablaId()
@@ -249,6 +249,11 @@ def p_claseId(p):
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
     
+#Recursion funciones en clases
+def p_funcionesAux(p):
+    ''' funcionesAux : funciones
+                     | funciones funcionesAux
+    '''
 
 ######################################################################################
 #Funciones
@@ -345,7 +350,8 @@ def p_objetoAtributo(p):
     quads.id_push(str(dirObjeto)+"_"+str(dirAtributo), tipoAtributo)
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId llamada_fun asignend 
+    ''' asign_vars : var equalId llamada_fun asignend
+                    | var equalId llamada_metodo asignend
                     | var equalId exp asignend SEMICOLON 
                     | var equalId CTEC asignend SEMICOLON 
     '''
@@ -389,6 +395,15 @@ def p_idAssignId(p):
 #llamada metodo
 def p_llamada_metodo(p):
     ''' llamada_metodo : ID ARROW llamada_fun'''
+    #Checar que objeto mando a llamar el metodo.
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    if(currTabla == "global"):
+        dirVar, _ = global_memoria.getDirMemory(str(p[1]))
+    else:
+        dirVar = superTabla.getDirIdTablaVars(currTipo,str(p[1])) 
+    #Asigna el dir objeto con el ERA.
+    quads.quadruples[quads.getID()-2].setLeftOp(dirVar)
 
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
@@ -624,6 +639,7 @@ def p_f(p): #lpid y rpid para identificar ().
             | ctec
             | var
             | llamada_fun
+            | llamada_metodo
     '''
     p[0] = p[1]
 

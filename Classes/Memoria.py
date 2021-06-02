@@ -110,7 +110,6 @@ class Memoria:
                     print("overflow memoria: globales enteras.")
                     sys.exit()
             elif(tipo == "flotante"):
-                print(self.flotantesAux)
                 if self.flotantesAux in range(G_F_INI, G_F_FIN):
                     self.memory[self.flotantesAux] = value
                     self.flotantesAux+=1

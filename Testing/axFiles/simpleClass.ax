@@ -1,25 +1,45 @@
 programa simpleClass;
 
+%%Clase producto
 clase Producto {
     atributos
         flotante : descuento, precio;
     metodos
         flotante funcion precioConDescuento(){
-            regresa(precio+precio*descuento);
+            escribe(precio-precio*descuento);
         } 
+
+        flotante funcion getPrecio(){
+            escribe(precio);
+        } 
+
+        flotante funcion getDescuento(){
+            escribe(descuento);
+        } 
+        
 };
 
-entero funcion pruebaUno(){
-    variables entero : z;
-    z = 100;
-    regresa(10);
-}
-
 principal() {
+    %%declarar vars
     variables Producto : galletas, doritos;
-    variables flotante : res;
-    
-    %%galletas.precio = 20.0;  
-    %%galletas.descuento = 0.25;
-    %%galletas->precioConDescuento();
+    %%Asignar valores
+    galletas.precio = 20.0;  
+    galletas.descuento = 0.25;
+    doritos.precio = 15.5;
+    doritos.descuento = 0.10;
+    %%llamar metodos
+    escribe("-----Galletas-----");
+    escribe("precio");
+    galletas->getPrecio();
+    escribe("descuento");
+    galletas->getDescuento();
+    escribe("Galletas con descuento :)");
+    galletas->precioConDescuento();
+    escribe("-----Doritos-----");
+    escribe("precio");
+    doritos->getPrecio();
+    escribe("descuento");
+    doritos->getDescuento();
+    escribe("Doritos con descuento :)");
+    doritos->precioConDescuento();
 }
