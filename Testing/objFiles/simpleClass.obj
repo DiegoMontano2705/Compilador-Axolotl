@@ -4,14 +4,20 @@
 21502 15.5
 21503 0.1
 ### dirFun ###
-global 0_1_0 0_4_0_0 Producto_2
+global 0_0_0 0_12_0_0 Producto_2
 class Producto 0_2_0 0_0_0_0 None
 method_Producto precioConDescuento flotante 1 None 0_0_0 0_2_0_0 None
+method_Producto getPrecio flotante 5 None 0_0_0 0_2_0_0 None
+method_Producto getDescuento flotante 7 None 0_0_0 0_2_0_0 None
 ### QUADS ###
-15 None None 4
+15 None None 8
 3 25000 25001 29500
 2 25000 29500 29501
 13 None None 29501
+20 None None None
+13 None None 25000
+20 None None None
+13 None None 25001
 20 None None None
 22 34000 None Producto
 22 34001 None Producto
@@ -19,10 +25,30 @@ method_Producto precioConDescuento flotante 1 None 0_0_0 0_2_0_0 None
 12 21501 None 34001_25001
 12 21502 None 34000_25000
 12 21503 None 34000_25001
+13 None None -----Galletas-----
+13 None None precio
+19 34001 None getPrecio
+17 5 None getPrecio
+12 16001 None 16000
+13 None None descuento
+19 34001 None getDescuento
+17 7 None getDescuento
+12 16003 None 16002
+13 None None Galletas_con_descuento_:)
 19 34001 None precioConDescuento
 17 1 None precioConDescuento
-12 16001 None 16000
+12 16005 None 16004
+13 None None -----Doritos-----
+13 None None precio
+19 34000 None getPrecio
+17 5 None getPrecio
+12 16007 None 16006
+13 None None descuento
+19 34000 None getDescuento
+17 7 None getDescuento
+12 16009 None 16008
+13 None None Doritos_con_descuento_:)
 19 34000 None precioConDescuento
 17 1 None precioConDescuento
-12 16003 None 16002
+12 16011 None 16010
 23 None None None

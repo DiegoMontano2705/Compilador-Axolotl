@@ -1,5 +1,6 @@
 programa simpleClass;
 
+%%Clase producto
 clase Producto {
     atributos
         flotante : descuento, precio;
@@ -7,15 +8,38 @@ clase Producto {
         flotante funcion precioConDescuento(){
             escribe(precio-precio*descuento);
         } 
+
+        flotante funcion getPrecio(){
+            escribe(precio);
+        } 
+
+        flotante funcion getDescuento(){
+            escribe(descuento);
+        } 
+        
 };
 
 principal() {
-    variables flotante : res;
+    %%declarar vars
     variables Producto : galletas, doritos;
+    %%Asignar valores
     galletas.precio = 20.0;  
     galletas.descuento = 0.25;
     doritos.precio = 15.5;
     doritos.descuento = 0.10;
+    %%llamar metodos
+    escribe("-----Galletas-----");
+    escribe("precio");
+    galletas->getPrecio();
+    escribe("descuento");
+    galletas->getDescuento();
+    escribe("Galletas con descuento :)");
     galletas->precioConDescuento();
+    escribe("-----Doritos-----");
+    escribe("precio");
+    doritos->getPrecio();
+    escribe("descuento");
+    doritos->getDescuento();
+    escribe("Doritos con descuento :)");
     doritos->precioConDescuento();
 }

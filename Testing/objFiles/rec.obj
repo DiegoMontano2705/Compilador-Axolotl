@@ -4,8 +4,8 @@
 20501 1000
 20502 10
 ### dirFun ###
-global None 2_0_0 2_0_0_0
-test entero None 1 entero 2_1_0 0_0_0_0
+global 2_0_0 2_0_0_0 None
+test entero 1 entero 2_1_0 0_0_0_0 None
 ### QUADS ###
 15 None None 6
 12 20500 None 23501
@@ -19,4 +19,4 @@ test entero None 1 entero 2_1_0 0_0_0_0
 17 1 None test
 12 14501 None 14500
 13 None None 14500
-22 None None None
+23 None None None

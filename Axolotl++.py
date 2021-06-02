@@ -231,8 +231,8 @@ def p_typeAuxId(p):
 def p_clases(p):
     ''' clases : CLASE claseId LCB RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId LCB METODOS funciones RCB SEMICOLON
-                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
+                | CLASE claseId LCB METODOS funcionesAux RCB SEMICOLON
+                | CLASE claseId LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
     #Borrar tabla de vars
     currTabla = superTabla.get_currentTablaId()
@@ -249,6 +249,11 @@ def p_claseId(p):
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
     
+#Recursion funciones en clases
+def p_funcionesAux(p):
+    ''' funcionesAux : funciones
+                     | funciones funcionesAux
+    '''
 
 ######################################################################################
 #Funciones

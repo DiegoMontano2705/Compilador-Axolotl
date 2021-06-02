@@ -10,11 +10,11 @@
 20508 8
 20509 20
 ### dirFun ###
-global None 3_0_0 8_0_0_0
-pruebaCuatro void None 1 entero_entero 2_0_0 0_0_0_0
-pruebaUno void None 4 entero_flotante 2_1_0 0_0_0_0
-pruebaTest void None 8 None 1_0_0 1_0_0_0
-pruebaDos entero None 11 entero_flotante_char 2_1_1 2_0_0_0
+global 3_0_0 8_0_0_0 None
+pruebaCuatro void 1 entero_entero 2_0_0 0_0_0_0 None
+pruebaUno void 4 entero_flotante 2_1_0 0_0_0_0 None
+pruebaTest void 8 None 1_0_0 1_0_0_0 None
+pruebaDos entero 11 entero_flotante_char 2_1_1 2_0_0_0 None
 ### QUADS ###
 15 None None 15
 13 None None 23501
@@ -48,4 +48,4 @@ pruebaDos entero None 11 entero_flotante_char 2_1_1 2_0_0_0
 1 20509 20506 14507
 21 14507 None 2
 17 1 None pruebaCuatro
-22 None None None
+23 None None None
