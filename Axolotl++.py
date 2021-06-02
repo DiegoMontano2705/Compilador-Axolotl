@@ -345,7 +345,8 @@ def p_objetoAtributo(p):
     quads.id_push(str(dirObjeto)+"_"+str(dirAtributo), tipoAtributo)
 
 def p_asign_vars(p):
-    ''' asign_vars : var equalId llamada_fun asignend 
+    ''' asign_vars : var equalId llamada_fun asignend
+                    | var equalId llamada_metodo asignend
                     | var equalId exp asignend SEMICOLON 
                     | var equalId CTEC asignend SEMICOLON 
     '''
@@ -633,6 +634,7 @@ def p_f(p): #lpid y rpid para identificar ().
             | ctec
             | var
             | llamada_fun
+            | llamada_metodo
     '''
     p[0] = p[1]
 
