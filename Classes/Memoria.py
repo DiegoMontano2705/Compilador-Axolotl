@@ -12,7 +12,7 @@
 #Dir Globales 10,000 - 20,4999 => 1500 c/u
 G_E_INI=10000
 G_E_FIN=11499
-G_F_INI=115000
+G_F_INI=11500
 G_F_FIN=12999
 G_C_INI=13000
 G_C_FIN=14499
@@ -110,6 +110,7 @@ class Memoria:
                     print("overflow memoria: globales enteras.")
                     sys.exit()
             elif(tipo == "flotante"):
+                print(self.flotantesAux)
                 if self.flotantesAux in range(G_F_INI, G_F_FIN):
                     self.memory[self.flotantesAux] = value
                     self.flotantesAux+=1
