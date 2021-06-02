@@ -45,7 +45,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE',
     'ID','EQUAL','GREATER_THAN', 'GREATER_EQUAL_THAN', 'SMALLER_THAN', 'SMALLER_EQUAL_THAN', 'IS_EQUAL','AND','OR',
     'DIFFERENT','LP','RP','LCB','RCB','LSB','RSB',
-    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 
+    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'ARROW',
 ]
 
 ######################################################################################
@@ -77,6 +77,7 @@ t_CTEI = r'[0-9]+'
 t_CTEF = r'[0-9]+\.[0-9]+'
 #t_CTEC = r'"([^\\"\n]+|\\.)"'
 t_STRING = r'"([^\\"\n]+|\\.)*"'
+t_ARROW = r'->'
 
 reserved = {
     'si' : 'IF',
@@ -385,6 +386,10 @@ def p_idAssignId(p):
 ######################################################################################
 #Estatutos
 
+#llamada metodo
+def p_llamada_metodo(p):
+    ''' llamada_metodo : ID ARROW llamada_fun'''
+
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
                     | llamadaParam auxExp RP endParam SEMICOLON
@@ -401,7 +406,8 @@ def p_llamada_fun(p):
         quads.setRetornoFuncion(p[1], tipoRetorno)
 
 def p_llamadaParam(p):
-    ''' llamadaParam : ID LP '''
+    ''' llamadaParam : ID LP 
+    '''
     p[0] = p[1]
     # superTabla.set_currentTablaId(nameFunc)
     quads.operator_push('Era')
@@ -429,7 +435,6 @@ def p_retorno_fun(p):
     if(superTabla.getTipoRetornoFun(currTabla) == "void"):
         print("Error:", currTabla, " return cuando es funcion void.")
         sys.exit()
-
 
 #Auxiliar para retorno
 def p_finRetorno(p):
@@ -558,6 +563,7 @@ def p_estatutos(p):
                     | rep_condicional
                     | retorno_fun
                     | rep_no_condicional
+                    | llamada_metodo
     '''
 
 ######################################################################################

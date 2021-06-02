@@ -19,5 +19,5 @@ principal() {
     variables Producto : galletas, doritos;
     galletas.precio = 20.0;  
     galletas.descuento = 0.25;
-    
+    galletas->precioConDescuento();
 }

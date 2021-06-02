@@ -4,7 +4,7 @@
 21500 20.0
 21501 0.25
 ### dirFun ###
-global 0_0_0 0_0_0_0 Producto_2
+global 0_0_0 0_2_0_0 Producto_2
 class Producto 0_2_0 0_0_0_0 None
 method_Producto precioConDescuento flotante 1 None 0_0_0 0_2_0_0 None
 pruebaUno entero 5 None 1_0_0 0_2_0_0 None
@@ -21,4 +21,7 @@ pruebaUno entero 5 None 1_0_0 0_2_0_0 None
 22 34001 None Producto
 12 21500 None 34001_25000
 12 21501 None 34001_25001
+19 None None precioConDescuento
+17 1 None precioConDescuento
+12 16001 None 16000
 23 None None None
