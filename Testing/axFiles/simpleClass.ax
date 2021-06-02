@@ -11,10 +11,10 @@ clase Producto {
 };
 
 entero funcion pruebaUno(){
-    variables Producto : x;
+    variables Producto : z;
     regresa(10);
 }
 
 principal() {
-    variables Producto : x;
+    variables Producto : x, y;  
 }

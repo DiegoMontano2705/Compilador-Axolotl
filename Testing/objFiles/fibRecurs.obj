@@ -4,8 +4,8 @@
 20502 2
 20503 9
 ### dirFun ###
-global None 4_0_0 2_0_0_0
-fib entero None 1 entero 1_0_0 7_0_0_2
+global 4_0_0 2_0_0_0
+fib entero 1 entero 1_0_0 7_0_0_2
 ### QUADS ###
 15 None None 21
 9 23500 20500 32500

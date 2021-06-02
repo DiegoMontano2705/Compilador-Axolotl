@@ -153,7 +153,7 @@ def p_programa(p):
     #                | startProg ID SEMICOLON dec_vars programaAux main
     superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
-    # superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
     quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
@@ -249,7 +249,7 @@ def p_funciones(p):
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
-    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
     
@@ -729,21 +729,28 @@ def dirFunFormat():
     globalAux = dirAux["global"]
     dirAux.pop('global', None)
     #imprimir tabla global
-    print("global",  "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
+    print("global",  "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]), contObjetosFormat(globalAux["dicObjetos"]))
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
         listParms = "_".join(val["listaParms"])
         if(not listParms): #if is empty
             listParms = None
         if(val['scope']!="global"):
-            if(val['scope']=="class"):
-                print(val['scope'], key, "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
+            if(val['scope']=="class"): #clase
+                print(val['scope'], key, "_".join(str(x) for x in val["recursos"]["vars"]), "_".join(str(x) for x in val["recursos"]["tmps"]), contObjetosFormat(val["dicObjetos"]))
             else:
-                print(val['scope'], key, val['retorno'], val['quadIni'], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+                print(val['scope'], key, val['retorno'], val['quadIni'], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])), contObjetosFormat(val["dicObjetos"]))
         else:
-            print(key, val["retorno"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+            print(key, val["retorno"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])), contObjetosFormat(val["dicObjetos"]))
     
 
+#contador Objetos con formato para el .obj
+def contObjetosFormat(dic):
+    if(not dic):
+        return None
+    else:
+        for key, value in dic.items():
+            return str(key)+"_"+str(value)
 ######################################################################################
 #Creating praser
 yacc.yacc()
@@ -764,11 +771,11 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-global_memoria.printMemory()
+# global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
-superTabla.printTablaVars("pruebaUno")
+# superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
 # superTabla.printTablaVars("precioConDescuento")
 # superTabla.printTablaVars("Producto")
