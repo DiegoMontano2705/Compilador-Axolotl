@@ -389,6 +389,15 @@ def p_idAssignId(p):
 #llamada metodo
 def p_llamada_metodo(p):
     ''' llamada_metodo : ID ARROW llamada_fun'''
+    #Checar que objeto mando a llamar el metodo.
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    if(currTabla == "global"):
+        dirVar, _ = global_memoria.getDirMemory(str(p[1]))
+    else:
+        dirVar = superTabla.getDirIdTablaVars(currTipo,str(p[1])) 
+    #Asigna el dir objeto con el ERA.
+    quads.quadruples[quads.getID()-2].setLeftOp(dirVar)
 
 def p_llamada_fun(p):
     ''' llamada_fun : llamadaParam RP endParam SEMICOLON
