@@ -697,23 +697,23 @@ def crearOutFile():
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     root = ROOT_DIR+"/Testing/objFiles/"
     nombreProg = superTabla.get_nombrePrograma() 
-    # with open(root+nombreProg+".obj", 'w') as f:
-    #     sys.stdout = f #cambiar standar output to the file
-    #     # print ctes in file
-    #     print("### CTES ###")
-    #     for key, value in ctes_memoria.getMemory().items():
-    #         print(key,value)
-    #     print("### dirFun ###")
-    #     dirFunFormat() #Desplegar tabla de funciones
-    #     #print quads in file
-    #     print("### QUADS ###")
-    #     listaQuads = quads.getListaQuads()
-    #     for i in range(len(listaQuads)):
-    #         #print con codigo de operacion
-    #         print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-    #         # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-    #     #print 
-    #     sys.stdout = original_stdout #resete standar output
+    with open(root+nombreProg+".obj", 'w') as f:
+        sys.stdout = f #cambiar standar output to the file
+        # print ctes in file
+        print("### CTES ###")
+        for key, value in ctes_memoria.getMemory().items():
+            print(key,value)
+        print("### dirFun ###")
+        dirFunFormat() #Desplegar tabla de funciones
+        #print quads in file
+        print("### QUADS ###")
+        listaQuads = quads.getListaQuads()
+        for i in range(len(listaQuads)):
+            #print con codigo de operacion
+            print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+        #print 
+        sys.stdout = original_stdout #resete standar output
 
 #Darle formato a tabla de funciones
 def dirFunFormat():
@@ -727,7 +727,13 @@ def dirFunFormat():
         listParms = "_".join(val["listaParms"])
         if(not listParms): #if is empty
             listParms = None
-        print(key, val["retorno"], val["dirInicio"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+        if(val['scope']!="global"):
+            if(val['scope']=="class"):
+                print(val['scope'], key, "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
+            else:
+                print(val['scope'], key, val['retorno'], val['quadIni'], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+        else:
+            print(key, val["retorno"], val["dirInicio"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
     
 
 ######################################################################################
