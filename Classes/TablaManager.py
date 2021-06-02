@@ -18,6 +18,7 @@ class TablaManager:
         self.currentTablaId = "global" #Tabla en la que se encuentra.
         self.currentType = None #Que tipo de variable se encuentra.
         self.nombrePrograma = None #Nombre del programa
+        
 ######################################################################################
     #sets and gets
     def get_currentTablaId(self):
@@ -43,6 +44,7 @@ class TablaManager:
 
     def set_currentScope(self, id):
         self.currentScope = id
+    
 ######################################################################################
 #CRUD TABLAS
 

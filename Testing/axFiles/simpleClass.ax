@@ -6,17 +6,15 @@ clase Producto {
 
     metodos
         flotante funcion precioConDescuento(){
-            %%descuento = precio * 0.20;
-            %%regresa(precio-descuento);
             regresa(precio);
         } 
 };
 
 entero funcion pruebaUno(){
+    variables Producto : x;
     regresa(10);
 }
 
 principal() {
-    variables entero : x;
-    x = 10;
+    variables Producto : x;
 }

@@ -153,7 +153,7 @@ def p_programa(p):
     #                | startProg ID SEMICOLON dec_vars programaAux main
     superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
-    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    # superTabla.deleteTablaVars("global") #Borrar tabla variables globales
     quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
@@ -198,12 +198,13 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
+    # print(currTabla, p[1], currType, "vars")
     superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
     superTabla.addContRecursos(superTabla.get_currentTablaId(), currType) #Contabilizar recursos por funcion/clase
-
+    
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB
@@ -248,7 +249,7 @@ def p_funciones(p):
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
-    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
     
@@ -292,6 +293,13 @@ def p_tipo_compuesto(p):
     ''' tipo_compuesto : ID
     '''
     p[0] = p[1]
+    #checar si es un objeto de Clase
+    try:
+        if(superTabla.getScopeFun(p[1]) != "class"):
+            print("Error:", p[1], "no tipo valido.")
+            sys.exit()
+    except:
+        print("Error:", p[1], "no es nombre de clase.")
 
 def p_parametros(p):
     ''' parametros : tipo_simple ID
@@ -721,7 +729,7 @@ def dirFunFormat():
     globalAux = dirAux["global"]
     dirAux.pop('global', None)
     #imprimir tabla global
-    print("global", globalAux["dirInicio"], "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
+    print("global",  "_".join(str(x) for x in globalAux["recursos"]["vars"]), "_".join(str(x) for x in globalAux["recursos"]["tmps"]))
     #imprimir demas funciones/clases
     for key, val in dirAux.items():
         listParms = "_".join(val["listaParms"])
@@ -733,7 +741,7 @@ def dirFunFormat():
             else:
                 print(val['scope'], key, val['retorno'], val['quadIni'], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
         else:
-            print(key, val["retorno"], val["dirInicio"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
+            print(key, val["retorno"], val["quadIni"], listParms, "_".join((str(int) for int in val["recursos"]["vars"])), "_".join((str(int) for int in val["recursos"]["tmps"])))
     
 
 ######################################################################################
@@ -756,11 +764,11 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-# global_memoria.printMemory()
+global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
-# superTabla.printTablaVars("pruebaUno")
+superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
 # superTabla.printTablaVars("precioConDescuento")
 # superTabla.printTablaVars("Producto")

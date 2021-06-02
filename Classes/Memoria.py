@@ -46,6 +46,11 @@ L_TMP_C_INI=31000
 L_TMP_C_FIN=32499
 L_TMP_B_INI=32500
 L_TMP_B_FIN=33999
+#Objetos 34000 - 35999 1,000 c/u
+G_OBJETOS_INI = 34000
+G_OBJETOS_FIN = 34999
+L_OBJETOS_INI = 35000
+L_OBJETOS_FIN = 35999
 
 import sys
 
@@ -61,6 +66,7 @@ class Memoria:
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
         self.tmpBoolAux = 0 #tempora_bool\
+        self.objetoAux = 0 #objeto
 
 
 #######################################################      
@@ -74,6 +80,7 @@ class Memoria:
             self.tmpFlotanteAux = G_TMP_F_INI
             self.tmpCharAux = G_TMP_C_INI
             self.tmpBoolAux = G_TMP_B_INI
+            self.objetoAux = G_OBJETOS_INI
         elif tipoMemoria == "constantes":
             self.enterosAux = CTE_E_INI
             self.flotantesAux = CTE_F_INI
@@ -86,6 +93,7 @@ class Memoria:
             self.tmpFlotanteAux = L_TMP_F_INI
             self.tmpCharAux = L_TMP_C_INI
             self.tmpBoolAux = L_TMP_B_INI
+            self.objetoAux = L_OBJETOS_INI
     
 
 #######################################################
@@ -114,6 +122,13 @@ class Memoria:
                     self.charAux+=1
                 else:
                     print("overflow memoria: globales chars.")
+                    sys.exit()
+            else:
+                if self.objetoAux in range(G_OBJETOS_INI, G_OBJETOS_FIN):
+                    self.memory[self.objetoAux] = value
+                    self.objetoAux+=1
+                else:
+                    print("overflow memoria: globales objetos.")
                     sys.exit()
         elif(contexto == "tmps"): #temporales
             if(tipo=="entero"):
@@ -204,6 +219,13 @@ class Memoria:
                         return (self.charAux-1)
                     else:
                         print("overflow memoria: locales chars.")
+                        sys.exit()
+                else:
+                    if self.objetoAux in range(L_OBJETOS_INI, L_OBJETOS_FIN):
+                        self.objetoAux+=1
+                        return (self.objetoAux-1)
+                    else:
+                        print("overflow memoria: locales objetos.")
                         sys.exit()
             elif(contexto == "tmps"): #temporales
                 if(tipo=="entero"):
