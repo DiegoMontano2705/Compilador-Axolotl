@@ -1,0 +1,22 @@
+programa factorialLoop;
+
+principal(){
+    variables entero : i, fact, n;
+    fact = 1;
+    escribe("Ingresa un numero:");
+    lee(n);
+
+    si (n < 0) entonces {
+        fact = 0;
+    }
+    si (n == 0) entonces {
+        fact = 1;
+    } sino {
+        desde i = 0; hasta i < n; hacer i = i + 1; {
+            fact = fact*i;
+        }
+    }
+    escribe("Resultado");
+    escribe(fact);
+
+}

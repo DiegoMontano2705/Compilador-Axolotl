@@ -2,7 +2,6 @@
 20500 0
 20501 1
 20502 2
-20503 9
 ### dirFun ###
 global 4_0_0 2_0_0_0 None
 fib entero 1 entero 1_0_0 7_0_0_2 None
@@ -29,7 +28,7 @@ fib entero 1 entero 1_0_0 7_0_0_2 None
 1 28002 28004 28006
 18 None None 28006
 20 None None None
-12 20503 None 10003
+14 None None 10003
 19 None None fib
 21 10003 None 1
 17 1 None fib

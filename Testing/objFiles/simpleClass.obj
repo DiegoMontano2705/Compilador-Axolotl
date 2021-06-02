@@ -1,4 +1,8 @@
 ### CTES ###
+20500 1
+20501 2
+20502 3
+20503 4
 21500 20.0
 21501 0.25
 21502 15.5
@@ -9,8 +13,9 @@ class Producto 0_2_0 0_0_0_0 None
 method_Producto precioConDescuento flotante 1 None 0_0_0 0_2_0_0 None
 method_Producto getPrecio flotante 5 None 0_0_0 0_2_0_0 None
 method_Producto getDescuento flotante 7 None 0_0_0 0_2_0_0 None
+mensaje void 9 entero 1_0_0 0_0_0_4 None
 ### QUADS ###
-15 None None 8
+15 None None 23
 3 25000 25001 29500
 2 25000 29500 29501
 13 None None 29501
@@ -19,14 +24,30 @@ method_Producto getDescuento flotante 7 None 0_0_0 0_2_0_0 None
 20 None None None
 13 None None 25001
 20 None None None
+9 23500 20500 32500
+16 32500 None 12
+13 None None -----Galletas-----
+13 None None precio
+9 23500 20501 32501
+16 32501 None 15
+13 None None Galletas_con_descuento_:
+9 23500 20502 32502
+16 32502 None 19
+13 None None -----Doritos-----
+13 None None precio
+9 23500 20503 32503
+16 32503 None 22
+13 None None Doritos_con_descuento_:
+20 None None None
 22 34000 None Producto
 22 34001 None Producto
 12 21500 None 34001_25000
 12 21501 None 34001_25001
 12 21502 None 34000_25000
 12 21503 None 34000_25001
-13 None None -----Galletas-----
-13 None None precio
+19 None None mensaje
+21 20500 None 1
+17 9 None mensaje
 19 34001 None getPrecio
 17 5 None getPrecio
 12 16001 None 16000
@@ -34,12 +55,15 @@ method_Producto getDescuento flotante 7 None 0_0_0 0_2_0_0 None
 19 34001 None getDescuento
 17 7 None getDescuento
 12 16003 None 16002
-13 None None Galletas_con_descuento_:)
+19 None None mensaje
+21 20501 None 1
+17 9 None mensaje
 19 34001 None precioConDescuento
 17 1 None precioConDescuento
 12 16005 None 16004
-13 None None -----Doritos-----
-13 None None precio
+19 None None mensaje
+21 20502 None 1
+17 9 None mensaje
 19 34000 None getPrecio
 17 5 None getPrecio
 12 16007 None 16006
@@ -47,7 +71,9 @@ method_Producto getDescuento flotante 7 None 0_0_0 0_2_0_0 None
 19 34000 None getDescuento
 17 7 None getDescuento
 12 16009 None 16008
-13 None None Doritos_con_descuento_:)
+19 None None mensaje
+21 20503 None 1
+17 9 None mensaje
 19 34000 None precioConDescuento
 17 1 None precioConDescuento
 12 16011 None 16010
