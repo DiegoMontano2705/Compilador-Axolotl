@@ -315,8 +315,23 @@ def p_var(p):
     ''' var : idAssignId
             | idAssignId LSB CTEI COMMA CTEI RSB
             | idAssignId LSB CTEI RSB
-            | idAssignId POINT ID
+            | objetoAtributo
     '''
+    
+def p_objetoAtributo(p):
+    ''' objetoAtributo : idAssignId POINT ID'''
+    #manejar direcciones objetos
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    if(currTabla!="global"): #local
+        dirObjeto = superTabla.getDirIdTablaVars(currTabla,p[1]) 
+    else: #global
+        dirObjeto, _ = global_memoria.getDirMemory(str(p[1]))
+    #direccion para el atributo dentro de la clase.
+    dirAtributo = superTabla.getDirIdTablaVars(currTipo,p[3])
+    #checar tipo del atributo
+    tipoAtributo = superTabla.getTipoIdTablaVars(currTipo, p[3])
+    quads.id_push(str(dirObjeto)+"_"+str(dirAtributo), tipoAtributo)
 
 def p_asign_vars(p):
     ''' asign_vars : var equalId llamada_fun asignend 
@@ -332,30 +347,30 @@ def p_asignend(p):
 def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
-
     currTabla = superTabla.get_currentTablaId()
-    #Validar que exista y extraer tipo.
-    if(currTabla !="global"):
-        
-        #checar si es metodo y de que clase
-        currScope = superTabla.getScopeFun(currTabla)
-        if("method_" in currScope): #es un metodo de clase.
-            nomClase = currScope.replace("method_", "")
-            dirVar = superTabla.getDirIdTablaVars(nomClase,p[1]) 
-            tipoVar = superTabla.getTipoIdTablaVars(nomClase, p[1])
-
+    currTipo = superTabla.get_currentType()
+    #Solo cuando no son objetos.
+    if(currTipo in ["entero", "flotante", "char", "bool", None]):
+        #Validar que exista y extraer tipo.
+        if(currTabla !="global"): 
+            #checar si es metodo y de que clase
+            currScope = superTabla.getScopeFun(currTabla)
+            if("method_" in currScope): #es un metodo de clase.
+                nomClase = currScope.replace("method_", "")
+                dirVar = superTabla.getDirIdTablaVars(nomClase,p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(nomClase, p[1])
+            else:
+                dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+                if(dirVar == -1): #Si no esta local, buscar global
+                    dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
         else:
-            dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
-            tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
-            if(dirVar == -1): #Si no esta local, buscar global
-                dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
-    else:
-        #Checar global
-        dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+            #Checar global
+            dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
 
-    # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
-    # print(p[1])
-    quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
+        # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+        # print(p[1])
+        quads.id_push(dirVar, tipoVar) #Agregar dirs con varTipo
 
 ######################################################################################
 #Estatutos

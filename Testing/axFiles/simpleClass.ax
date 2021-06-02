@@ -6,15 +6,19 @@ clase Producto {
 
     metodos
         flotante funcion precioConDescuento(){
-            regresa(precio);
+            regresa(10.5);
         } 
 };
 
 entero funcion pruebaUno(){
-    variables Producto : z;
+    variables entero : z;
+    z = 100;
     regresa(10);
 }
 
 principal() {
-    variables Producto : x, y;  
+    variables Producto : galletas, doritos;
+    galletas.precio = 20.0;  
+    doritos.precio = 20.45;
+
 }

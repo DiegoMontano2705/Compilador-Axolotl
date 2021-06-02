@@ -233,7 +233,7 @@ if __name__ == '__main__':
             f.close()
             print("Ejecutando", file, "...")
             prepararData(data)
-            # ejecuta()
+            ejecuta()
             # testing()
         except EOFError:
             print(EOFError)

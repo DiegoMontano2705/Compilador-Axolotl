@@ -5,8 +5,8 @@
 20503 300
 20504 1
 ### dirFun ###
-global None 2_0_0 3_0_0_0
-pruebaUno entero None 1 entero 4_0_0 0_0_0_1
+global 2_0_0 3_0_0_0 None
+pruebaUno entero 1 entero 4_0_0 0_0_0_1 None
 ### QUADS ###
 15 None None 8
 12 20500 None 23503

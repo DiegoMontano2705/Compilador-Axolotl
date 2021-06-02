@@ -1,14 +1,21 @@
 ### CTES ###
-20500 10
+21500 10.5
+20500 100
+20501 10
+21501 20.0
+21502 20.45
 ### dirFun ###
 global 0_0_0 0_0_0_0 Producto_2
 class Producto 0_2_0 0_0_0_0 None
 method_Producto precioConDescuento flotante 1 None 0_0_0 0_0_0_0 None
-pruebaUno entero 3 None 0_0_0 0_0_0_0 Producto_1
+pruebaUno entero 3 None 1_0_0 0_0_0_0 None
 ### QUADS ###
-15 None None 4
-18 None None 25000
+15 None None 5
+18 None None 21500
 20 None None None
-18 None None 20500
+12 20500 None 23500
+18 None None 20501
 20 None None None
+12 21501 None 34001_25000
+12 21502 None 34000_25000
 22 None None None
