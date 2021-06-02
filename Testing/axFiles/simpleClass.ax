@@ -3,10 +3,9 @@ programa simpleClass;
 clase Producto {
     atributos
         flotante : descuento, precio;
-
     metodos
         flotante funcion precioConDescuento(){
-            regresa(10.5);
+            regresa(precio+precio*descuento);
         } 
 };
 
@@ -19,6 +18,6 @@ entero funcion pruebaUno(){
 principal() {
     variables Producto : galletas, doritos;
     galletas.precio = 20.0;  
-    doritos.precio = 20.45;
-
+    galletas.descuento = 0.25;
+    
 }

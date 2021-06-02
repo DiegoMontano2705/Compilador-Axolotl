@@ -36,7 +36,8 @@ cod_operacion = {
     'Era' : 19,
     'EndFunc' : 20,
     'Param' : 21,
-    'endprog': 22
+    'EraObjeto' : 22, 
+    'endprog': 23
 }
 ######################################################################################
 #Tokens
@@ -198,13 +199,22 @@ def p_form_vars_aux(p):
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
-    # print(currTabla, p[1], currType, "vars")
+    
     superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
     superTabla.addContRecursos(superTabla.get_currentTablaId(), currType) #Contabilizar recursos por funcion/clase
     
+    #En caso de ser un objeto, mandar EraObjeto para reservar memoria ejecucion
+    if(not currType in ["entero", "flotante", "char", "bool", None]):
+        if(currTabla!="global"): #local
+            dirObjeto = superTabla.getDirIdTablaVars(currTabla,p[1]) 
+        else: #global
+            dirObjeto, _ = global_memoria.getDirMemory(str(p[1]))
+        quads.setEraObjeto(dirObjeto, currType)
+        # print(currTabla, p[1], currType, "vars")
+
 def p_form_vars_aux2(p):
     ''' form_vars_aux2 : LSB CTEI RSB
                         | LSB CTEI COMMA CTEI RSB

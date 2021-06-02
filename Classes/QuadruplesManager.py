@@ -92,6 +92,11 @@ class QuadruplesManager:
         self.setID(self.getID()+1)
         self.quadruples.append(q)
 
+    #set EraObjeto
+    def setEraObjeto(self, dirObjeto, nomFun):
+        q = Quadruples(None, 'EraObjeto', dirObjeto, None, nomFun)
+        self.setID(self.getID()+1)
+        self.quadruples.append(q)
 
 ######################################################################################
 #operator push

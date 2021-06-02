@@ -58,7 +58,7 @@ def ejecuta():
     currTabla.append("global")
 
     #Mientras no encuentre fin del programa.
-    while codOp != 22: #Mientras no encuentre EndProg
+    while codOp != 23: #Mientras no encuentre EndProg
         codOp = int(quadruples[ip][0]) #Codigo de operacion
         if(codOp>=0 and codOp<=11): #operacion aritmetica
             izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
@@ -140,7 +140,7 @@ def ejecuta():
                 sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
             ip+=1
-        elif(codOp == 22): # endprog
+        elif(codOp == 23): # endprog
             print("fin del programa :) - Axolotl")
         
     
