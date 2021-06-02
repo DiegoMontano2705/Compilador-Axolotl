@@ -1,0 +1,20 @@
+programa factorialRecurs;
+
+entero funcion fact(entero n){
+    variables entero : a,f;
+    si(n == 0) entonces{
+        regresa(1);
+    }
+    a = n - 1;
+    f = fact(a)
+    regresa(n * f);
+}
+
+principal(){
+    variables entero : ans, n;
+    escribe("teclear numero:");
+    lee(n);
+    ans = fact(n);
+    escribe("Respuesta:");
+    escribe(ans);
+}

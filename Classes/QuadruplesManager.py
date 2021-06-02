@@ -185,18 +185,14 @@ class QuadruplesManager:
                     id_Final = (self.getID() + 1)
                     q = Quadruples(id_Final,operator, left_op, None, None)
                     self.setID(self.getID() + 1)
-                    #self.pilaSaltos.put(self.getID()) #Guardas id del if en pila de saltos
                     self.quadruples.append(q)
                 else:
-                    raise Exception("Error Type-mismatch: Valor no es booleano")
-                    #print("Error Type-mismatch: Value not boolean :",left_op )
-                    #sys.exit()
-
+                    raise Exception("Error Type-mismatch - Valor no es booleano")
+ 
             elif(operator == "GoTo" or operator == 'GoToV'):
                 id_Final = (self.getID() + 1)
                 q = Quadruples(id_Final,operator,None, None,None)
                 self.setID(self.getID() + 1)
-                #self.pilaSaltos.put(self.getID()) #Guardas id del else en pila de saltos
                 self.quadruples.append(q)
 
             ## print, write y return
@@ -207,7 +203,14 @@ class QuadruplesManager:
                     q = Quadruples(id_Final,operator,None, None,left_op)
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
-            #elif(operator == 'read'):
+                else : #Manejo de errores
+                    if (operator == 'Print'):
+                        operator = 'escribe'
+                    if (operator == 'Return'):
+                        operator = 'regresa'
+                    if (operator == 'Read'):
+                        operator = 'lee'             
+                    raise Exception("Error operacion - Valor para "+operator+" no existe")
 
 
             ## Modulos
@@ -216,9 +219,7 @@ class QuadruplesManager:
                 q = Quadruples(id_Final,operator,None, None,None)
                 self.setID(self.getID() + 1)
                 self.quadruples.append(q)
-
             elif(operator == 'Param'):
-                
                 #Si hay cosas que resolver en parametros, resuelve hasta el =.
                 if(self.pilaOperators.qsize() >1): 
                     self.solveQuadruplesParms(self.pilaOperators.get_nowait())
@@ -230,14 +231,18 @@ class QuadruplesManager:
                     q = Quadruples(id_Final,operator,left_op, None,self.getContParam())
                     self.setID(self.getID() + 1)
                     self.quadruples.append(q)
-
-            #####
+                else:
+                    operator = 'lee'             
+                    raise Exception("Error operacion - Valor para "+operator+" no existe")
+            ##### Sumas, restas, multiplicaciones, divisiones e igualacion
             else:
-                right_op = self.pilaOperands.get_nowait()
-                right_type = self.pilaTypes.get_nowait()
-                left_op = self.pilaOperands.get_nowait()
-                left_type = self.pilaTypes.get_nowait()
-                # print("my operator", operator)
+                try:
+                    right_op = self.pilaOperands.get_nowait()
+                    right_type = self.pilaTypes.get_nowait()
+                    left_op = self.pilaOperands.get_nowait()
+                    left_type = self.pilaTypes.get_nowait()
+                except:         
+                    raise Exception("Error operacion - Error en operacion "+operator+" no existe")
                 result_type = self.semantica.resTipo(operator, left_type, right_type) #Es posible la operacion? y que retorna?
                 if(result_type != None):
                     id_Final = (self.getID() + 1)
@@ -273,110 +278,4 @@ class QuadruplesManager:
             # myfile.write("%s \n" % self.quadruples[i].printQuad())
             myfile.write("%s %s %s %s %s \n" % (self.quadruples[i].getID(), self.quadruples[i].getOperator() ,self.quadruples[i].getLeftOp(),self.quadruples[i].getRightOp(), self.quadruples[i].getResult()))
         myfile.close()
-
-
-# if __name__ == '__main__':
-#    qm = QuadruplesManager()
-#    qm.id_push("A", "flotante")
-#    qm.operator_push("*")
-#    qm.operator_push("(")
-#    qm.id_push("B", "flotante")
-#    qm.operator_push("+")
-#    qm.id_push("C", "flotante")
-#    qm.operator_push(")")
-#    # qm.print_stacks()
-#    qm.fillQuadruples()
-#    qm.print_quadruples()
-
-#     # if(A + B > C){  # GOTOF t3 8
-#     #   C * D
-#     # }
-#     # else {
-#     # C + D
-#     # }
-
-#     # #Test Conditional
-#     # qm.id_push("A", "flotante")
-#     # qm.operator_push("*")                    #Op GOTOF
-#     # qm.id_push("B", "flotante")                 #id
-#     # ##First If                              QUAD * A B T0
-#     # qm.operator_push("GoToF")
-#     # qm.id_push("C", "flotante")
-#     # qm.operator_push("+")
-#     # qm.id_push("D", "flotante")
-#     # # Else
-#     # qm.operator_push("GoTo")
-#     # qm.id_push("E", "flotante")
-#     # qm.operator_push("-")
-#     # qm.id_push("F", "flotante")
-#     # qm.fillQuadruples()
-#     # qm.print_stack()
-#     # qm.print_quadruples()
-
-#     #Test Conditional
-# #    qm.operator_push('(')
-# #    qm.id_push("A", "flotante")
-# #    qm.operator_push(">")
-# #    qm.id_push("B", "flotante")
-# #    qm.operator_push("-")
-# #    qm.id_push("D", "flotante")
-# #    qm.operator_push(')')
-#     ##First If
-# #    qm.operator_push('GoToF')
-# #    qm.id_push("F", "flotante")
-# #    qm.operator_push("+")
-# #    qm.id_push("G", "flotante")
-#     ## Else
-# #    qm.operator_push('GoTo')
-# #    qm.id_push("H", "flotante")
-# #    qm.operator_push("*")
-# #    qm.id_push("I", "flotante")
-
-
-
-# #     #Test operations
-# #    qm.id_push("A", "flotante")
-# #    qm.operator_push("=")
-# #    qm.id_push("B", "flotante")
-# #    qm.operator_push("*")
-# #    qm.id_push("C", "flotante")
-# #    qm.operator_push("+")
-# #    qm.id_push("D", "flotante")
-# #    qm.operator_push("-")
-# #    qm.id_push("E", "flotante")
-# #    qm.fillQuadruples()
-# #    qm.print_quadruples()
-
-#      #Test print
-#     # qm.id_push("A", "flotante")
-#     # qm.operator_push("=")
-#     # qm.id_push("B", "flotante")
-#     # qm.operator_push("*")
-#     # qm.id_push("C", "flotante")
-#     # qm.operator_push("+")
-#     # qm.id_push("D", "flotante")
-#     # qm.operator_push("-")
-#     # qm.id_push("E", "flotante")
-#     # qm.operator_push('print')
-
-#     #Test constantes
-#    qm.id_push("a", "entero")
-#    qm.operator_push("=")
-#    qm.id_push("4", "entero")
-#    qm.fillQuadruples()
-#    qm.id_push("b", "entero")
-#    qm.operator_push("=")
-#    qm.id_push("5", "entero")
-#    qm.operator_push("+")
-#    qm.id_push("5", "entero")
-#    qm.operator_push("+")
-#    qm.id_push("4", "entero")
-#    qm.operator_push("-")
-#    qm.id_push("2", "entero")
-#    qm.fillQuadruples()
-#    qm.print_quadruples()
-
-
-
-
 

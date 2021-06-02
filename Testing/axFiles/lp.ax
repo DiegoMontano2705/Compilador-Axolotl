@@ -1,5 +1,0 @@
-programa lp;
-
-principal(){
-    escribe(2*(1+1*3));
-}

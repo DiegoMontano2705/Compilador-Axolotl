@@ -1,0 +1,31 @@
+### CTES ###
+20500 0
+20501 1
+### dirFun ###
+global 2_0_0 2_0_0_0 None
+fact entero 1 entero 3_0_0 4_0_0_1 None
+### QUADS ###
+15 None None 13
+9 23500 20500 32500
+16 32500 None 3
+18 None None 20501
+2 23500 20501 28000
+12 28000 None 23502
+19 None None fact
+21 23502 None 1
+17 1 None fact
+12 28002 None 28001
+12 28001 None 23501
+3 23500 23501 28003
+18 None None 28003
+20 None None None
+13 None None teclear_numero:
+14 None None 10000
+19 None None fact
+21 10000 None 1
+17 1 None fact
+12 14501 None 14500
+12 14500 None 10001
+13 None None Respuesta:
+13 None None 10001
+23 None None None

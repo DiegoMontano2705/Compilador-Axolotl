@@ -1,0 +1,28 @@
+### CTES ###
+20500 1
+20501 0
+### dirFun ###
+global 3_0_0 2_0_0_3 None
+### QUADS ###
+15 None None 0
+12 20500 None 10001
+13 None None Ingresa_un_numero:
+14 None None 10000
+5 10000 20501 19000
+16 19000 None 6
+12 20501 None 10001
+9 10000 20501 19001
+16 19001 None 10
+12 20500 None 10001
+15 None None 18
+12 20501 None 10002
+5 10002 10000 19002
+16 19002 None 18
+1 10002 20500 14500
+12 14500 None 10002
+3 10001 10002 14501
+12 14501 None 10001
+15 None None 12
+13 None None Resultado
+13 None None 10001
+23 None None None

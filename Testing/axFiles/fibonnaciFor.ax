@@ -3,7 +3,7 @@ programa fibonnaciFor;
 %% Fibonnaci with for loop
 principal() {
     variables entero : i,n,t1,t2,nxt;
-    n = 9;
+    lee(n);
     nxt = 0;
     t1 = 0;
     t2 = 1;

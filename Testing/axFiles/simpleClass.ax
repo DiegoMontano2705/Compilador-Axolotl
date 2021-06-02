@@ -19,27 +19,48 @@ clase Producto {
         
 };
 
+%% funcion para guardar mensajes
+void funcion mensaje(entero i){
+    si (i == 1) entonces {
+        escribe("-----Galletas-----");
+        escribe("precio");
+    } 
+    si (i == 2) entonces {
+        escribe("Galletas con descuento :");
+    } 
+    si (i == 3) entonces {
+        escribe("-----Doritos-----");
+        escribe("precio");
+    } 
+    si (i == 4) entonces {
+        escribe("Doritos con descuento :");
+    } 
+
+}
+
 principal() {
-    %%declarar vars
+    %% Declarar vars
     variables Producto : galletas, doritos;
+    
     %%Asignar valores
     galletas.precio = 20.0;  
     galletas.descuento = 0.25;
+
+    %%escribe(descuento);
     doritos.precio = 15.5;
     doritos.descuento = 0.10;
-    %%llamar metodos
-    escribe("-----Galletas-----");
-    escribe("precio");
+    
+    %% Llamar metodos
+    mensaje(1);
     galletas->getPrecio();
     escribe("descuento");
     galletas->getDescuento();
-    escribe("Galletas con descuento :)");
+    mensaje(2);
     galletas->precioConDescuento();
-    escribe("-----Doritos-----");
-    escribe("precio");
+    mensaje(3);
     doritos->getPrecio();
     escribe("descuento");
     doritos->getDescuento();
-    escribe("Doritos con descuento :)");
+    mensaje(4);
     doritos->precioConDescuento();
 }
