@@ -89,6 +89,10 @@ class TablaManager:
     def getTipoRetornoFun(self, idTabla):
         return self.dirFun.findRow(idTabla)['retorno']
 
+    #Regresa scope de la funcion
+    def getScopeFun(self, idTabla):
+        return self.dirFun.findRow(idTabla)['scope']
+
 ######################################################################################
 #Manejo TablaVars
     #Crea una row en Tabla existente y almacena en tabla interna.
@@ -174,8 +178,8 @@ class TablaManager:
 #     dirFun.printDirFun()
 #     print("---specific tabla---")
 #     dirFun.insertRowToTabla("Global", "k", tipo="entero", dirVirutal=1001)
-#     dirFun.insertRowToTabla("Global", "x", tipo="float", dirVirutal=2001)
-#     dirFun.insertRowToTabla("Fun1", "k", tipo="float", dirVirutal=2002)
+#     dirFun.insertRowToTabla("Global", "x", tipo="flotante", dirVirutal=2001)
+#     dirFun.insertRowToTabla("Fun1", "k", tipo="flotante", dirVirutal=2002)
 #     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
 #     dirFun.getTabla("Fun1").insertRowValue("k", "value", "lol")
 #     dirFun.eraseRowToTabla("Global", "x")

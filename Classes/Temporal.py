@@ -38,7 +38,7 @@ class Temporal:
             #contadores de temporales globales
             if(tipo=="entero"):
                 self.tmpGlobalEntero+=1
-            elif(tipo=="float"):
+            elif(tipo=="flotante"):
                 self.tmpGlobalFloat+=1
             elif(tipo=="char"):
                 self.tmpGlobalChar+=1
@@ -56,7 +56,7 @@ class Temporal:
                 val = self.memoriaLocal.getLocalDirVirtual(tipo, "tmps")
             if(tipo=="entero"):
                 self.tmpLocalEntero+=1
-            elif(tipo=="float"):
+            elif(tipo=="flotante"):
                 self.tmpLocalFloat+=1
             elif(tipo=="char"):
                 self.tmpLocalChar+=1

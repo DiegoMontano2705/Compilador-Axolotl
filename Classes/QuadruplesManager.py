@@ -272,12 +272,12 @@ class QuadruplesManager:
 
 # if __name__ == '__main__':
 #    qm = QuadruplesManager()
-#    qm.id_push("A", "float")
+#    qm.id_push("A", "flotante")
 #    qm.operator_push("*")
 #    qm.operator_push("(")
-#    qm.id_push("B", "float")
+#    qm.id_push("B", "flotante")
 #    qm.operator_push("+")
-#    qm.id_push("C", "float")
+#    qm.id_push("C", "flotante")
 #    qm.operator_push(")")
 #    # qm.print_stacks()
 #    qm.fillQuadruples()
@@ -291,67 +291,67 @@ class QuadruplesManager:
 #     # }
 
 #     # #Test Conditional
-#     # qm.id_push("A", "float")
+#     # qm.id_push("A", "flotante")
 #     # qm.operator_push("*")                    #Op GOTOF
-#     # qm.id_push("B", "float")                 #id
+#     # qm.id_push("B", "flotante")                 #id
 #     # ##First If                              QUAD * A B T0
 #     # qm.operator_push("GoToF")
-#     # qm.id_push("C", "float")
+#     # qm.id_push("C", "flotante")
 #     # qm.operator_push("+")
-#     # qm.id_push("D", "float")
+#     # qm.id_push("D", "flotante")
 #     # # Else
 #     # qm.operator_push("GoTo")
-#     # qm.id_push("E", "float")
+#     # qm.id_push("E", "flotante")
 #     # qm.operator_push("-")
-#     # qm.id_push("F", "float")
+#     # qm.id_push("F", "flotante")
 #     # qm.fillQuadruples()
 #     # qm.print_stack()
 #     # qm.print_quadruples()
 
 #     #Test Conditional
 # #    qm.operator_push('(')
-# #    qm.id_push("A", "float")
+# #    qm.id_push("A", "flotante")
 # #    qm.operator_push(">")
-# #    qm.id_push("B", "float")
+# #    qm.id_push("B", "flotante")
 # #    qm.operator_push("-")
-# #    qm.id_push("D", "float")
+# #    qm.id_push("D", "flotante")
 # #    qm.operator_push(')')
 #     ##First If
 # #    qm.operator_push('GoToF')
-# #    qm.id_push("F", "float")
+# #    qm.id_push("F", "flotante")
 # #    qm.operator_push("+")
-# #    qm.id_push("G", "float")
+# #    qm.id_push("G", "flotante")
 #     ## Else
 # #    qm.operator_push('GoTo')
-# #    qm.id_push("H", "float")
+# #    qm.id_push("H", "flotante")
 # #    qm.operator_push("*")
-# #    qm.id_push("I", "float")
+# #    qm.id_push("I", "flotante")
 
 
 
 # #     #Test operations
-# #    qm.id_push("A", "float")
+# #    qm.id_push("A", "flotante")
 # #    qm.operator_push("=")
-# #    qm.id_push("B", "float")
+# #    qm.id_push("B", "flotante")
 # #    qm.operator_push("*")
-# #    qm.id_push("C", "float")
+# #    qm.id_push("C", "flotante")
 # #    qm.operator_push("+")
-# #    qm.id_push("D", "float")
+# #    qm.id_push("D", "flotante")
 # #    qm.operator_push("-")
-# #    qm.id_push("E", "float")
+# #    qm.id_push("E", "flotante")
 # #    qm.fillQuadruples()
 # #    qm.print_quadruples()
 
 #      #Test print
-#     # qm.id_push("A", "float")
+#     # qm.id_push("A", "flotante")
 #     # qm.operator_push("=")
-#     # qm.id_push("B", "float")
+#     # qm.id_push("B", "flotante")
 #     # qm.operator_push("*")
-#     # qm.id_push("C", "float")
+#     # qm.id_push("C", "flotante")
 #     # qm.operator_push("+")
-#     # qm.id_push("D", "float")
+#     # qm.id_push("D", "flotante")
 #     # qm.operator_push("-")
-#     # qm.id_push("E", "float")
+#     # qm.id_push("E", "flotante")
 #     # qm.operator_push('print')
 
 #     #Test constantes

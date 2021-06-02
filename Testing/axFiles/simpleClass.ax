@@ -1,0 +1,17 @@
+programa simpleClass;
+
+clase Producto {
+    atributos
+        flotante : descuento, precio;
+
+    metodos
+        flotante funcion precioConDescuento(){
+            regresa(precio-(precio*descuento));
+            %%regresa(precio);
+        } 
+};
+
+principal() {
+    variables entero : x;
+    x = 10;
+}

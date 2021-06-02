@@ -44,7 +44,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE',
     'ID','EQUAL','GREATER_THAN', 'GREATER_EQUAL_THAN', 'SMALLER_THAN', 'SMALLER_EQUAL_THAN', 'IS_EQUAL','AND','OR',
     'DIFFERENT','LP','RP','LCB','RCB','LSB','RSB',
-    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 'COMMENT',
+    'CTEI','CTEF','CTEC','COMMA','POINT','SEMICOLON','COLON', 'STRING', 
 ]
 
 ######################################################################################
@@ -93,7 +93,6 @@ reserved = {
     'void' : 'VOID',
     'regresa' : 'RETURN',
     'atributos' : 'ATRIBUTOS',
-    'hereda' : 'HEREDA',
     'metodos' : 'METODOS',
     'clase' : 'CLASE',
     'funcion' : 'FUNCION',
@@ -171,7 +170,6 @@ def p_startmain(p):
 def p_endprog(p):
     ''' endprog : RCB '''
     quads.fillQuadruples() 
-    # quads.print_quadruples()
 
 def p_programaAux(p):
     ''' programaAux : clases programaAux
@@ -191,7 +189,7 @@ def p_dec_vars(p):
 def p_form_vars(p):
     ''' form_vars : typeAuxId COLON form_vars_aux SEMICOLON
     '''
-    
+
 def p_form_vars_aux(p):
     ''' form_vars_aux : ID
                     | ID COMMA form_vars_aux
@@ -223,14 +221,10 @@ def p_clases(p):
                 | CLASE claseId LCB ATRIBUTOS form_vars RCB SEMICOLON
                 | CLASE claseId LCB METODOS funciones RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB METODOS funciones RCB SEMICOLON
-                | CLASE claseId SMALLER_THAN HEREDA ID GREATER_THAN LCB ATRIBUTOS form_vars METODOS funciones RCB SEMICOLON
     '''
     #Borrar tabla de vars
     currTabla = superTabla.get_currentTablaId()
-    superTabla.setListaTemporales(currTabla,quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
+    superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
     quads.setCurrTabla("global")
     superTabla.set_currentScope("global") #A la hora de salir de la clase, vuleve a estar en un scope global.
 
@@ -238,7 +232,7 @@ def p_clases(p):
 def p_claseId(p):
     ''' claseId : ID '''
     p[0] = p[1]
-    superTabla.crearTabla(p[1], scope="class", dirInicio=None, metodosClase=None)
+    superTabla.crearTabla(p[1], scope="class", metodosClase=None)
     superTabla.set_currentScope("method_"+p[1]) #Reconocer funciones dentro de clase
     superTabla.set_currentTablaId(p[1]) #Reconocer en que clase me encuentro.
     quads.setCurrTabla(p[1])
@@ -246,11 +240,6 @@ def p_claseId(p):
 
 ######################################################################################
 #Funciones
-
-#def p_funcionesAux(p):
-#    ''' funcionesAux : funciones
-#                        | funciones funcionesAux
-#    '''
 
 def p_funciones(p):
     ''' funciones : funcionIdAux LP RP LCB estatutosAux endFunction
@@ -336,12 +325,22 @@ def p_idAssignId(p):
     ''' idAssignId : ID '''
     p[0] = p[1]
 
+    currTabla = superTabla.get_currentTablaId()
     #Validar que exista y extraer tipo.
-    if(superTabla.get_currentTablaId()!="global"):
-        dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
-        tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
-        if(dirVar == -1): #Si no esta local, buscar global
-            dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+    if(currTabla !="global"):
+        
+        #checar si es metodo y de que clase
+        currScope = superTabla.getScopeFun(currTabla)
+        if("method_" in currScope): #es un metodo de clase.
+            nomClase = currScope.replace("method_", "")
+            dirVar = superTabla.getDirIdTablaVars(nomClase,p[1]) 
+            tipoVar = superTabla.getTipoIdTablaVars(nomClase, p[1])
+
+        else:
+            dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
+            tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+            if(dirVar == -1): #Si no esta local, buscar global
+                dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
     else:
         #Checar global
         dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
@@ -380,14 +379,6 @@ def p_auxExp(p):
     ''' auxExp :  exp mandaParam
                 | exp mandaParam COMMA auxExp
     '''
-
-# def p_lpFondo(p):
-#     ''' lpFondo : '''
-#     quads.operator_push("(")
-
-# def p_rpFondo(p):
-#     ''' rpFondo : '''
-#     quads.operator_push(")")
 
 def p_mandaParam(p):
     ''' mandaParam : '''
@@ -706,23 +697,23 @@ def crearOutFile():
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     root = ROOT_DIR+"/Testing/objFiles/"
     nombreProg = superTabla.get_nombrePrograma() 
-    with open(root+nombreProg+".obj", 'w') as f:
-        sys.stdout = f #cambiar standar output to the file
-        # print ctes in file
-        print("### CTES ###")
-        for key, value in ctes_memoria.getMemory().items():
-            print(key,value)
-        print("### dirFun ###")
-        dirFunFormat() #Desplegar tabla de funciones
-        #print quads in file
-        print("### QUADS ###")
-        listaQuads = quads.getListaQuads()
-        for i in range(len(listaQuads)):
-            #print con codigo de operacion
-            print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-            # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
-        #print 
-        sys.stdout = original_stdout #resete standar output
+    # with open(root+nombreProg+".obj", 'w') as f:
+    #     sys.stdout = f #cambiar standar output to the file
+    #     # print ctes in file
+    #     print("### CTES ###")
+    #     for key, value in ctes_memoria.getMemory().items():
+    #         print(key,value)
+    #     print("### dirFun ###")
+    #     dirFunFormat() #Desplegar tabla de funciones
+    #     #print quads in file
+    #     print("### QUADS ###")
+    #     listaQuads = quads.getListaQuads()
+    #     for i in range(len(listaQuads)):
+    #         #print con codigo de operacion
+    #         print("%s %s %s %s" % (cod_operacion[listaQuads[i].getOperator()] ,listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+    #         # print("%s %s %s %s %s" % (listaQuads[i].getID(), listaQuads[i].getOperator(),listaQuads[i].getLeftOp(),listaQuads[i].getRightOp(), listaQuads[i].getResult()))
+    #     #print 
+    #     sys.stdout = original_stdout #resete standar output
 
 #Darle formato a tabla de funciones
 def dirFunFormat():
@@ -765,7 +756,7 @@ if __name__ == '__main__':
 # superTabla.printTablaVars("global")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
-# superTabla.printTablaVars("regresaValores")
-# superTabla.printTablaVars("creando")
-# superTabla.printListaParms("pruebaDos")
+# superTabla.printTablaVars("precioConDescuento")
+# superTabla.printTablaVars("Producto")
+# superTabla.printListaParms("precioConDescuento")
 
