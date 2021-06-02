@@ -21,6 +21,8 @@ memorias.append(memoriaPrincipal) #Agregar memoria principal
 quadruples = [] #Maneja cuadruplos
 dirFun  = {} #Recrear dir funciones.
 currTabla = [] #Lista de contexto
+memoriaObjetos = {} #Memoria para objetos y manejo de su contexto.
+currObjeto = "" #Saber con que objeto estoy trabajando.
 #######################################################   
 #Operaciones del programa
 
@@ -49,6 +51,21 @@ def calcula(izq, op, der, dirRes):
     elif(op == 11): # |
         memorias[-1].setValMemory(dirRes, (izq or der))
 
+#Asignacion de objetos
+def asignacionObjetos(leftOper, rightOper):
+    if("_" in leftOper): #variable recibe valor de objeto 
+        print("objeto izquierdo")
+    elif("_" in rightOper): #se asigna valor a objeto
+        direcciones = rightOper.split("_")
+        dirObjeto = int(direcciones[0]) #dir objeto
+        dirAtributo = int(direcciones[1]) #dirAtributo
+        dirValor = int(leftOper) #direccion valor
+        valor = memorias[-1].getValMemory(dirValor, memorias[0]) #obtener valor a asignar.
+        memoriaObjetos[dirObjeto].setValMemory(dirAtributo, valor)
+        # memoriaObjetos[dirObjeto].printMemory()
+    else: #asignacion de objeto a objeto
+        pass
+
 #######################################################   
 #ejecutar programa
 def ejecuta():
@@ -60,17 +77,25 @@ def ejecuta():
     #Mientras no encuentre fin del programa.
     while codOp != 23: #Mientras no encuentre EndProg
         codOp = int(quadruples[ip][0]) #Codigo de operacion
+        
         if(codOp>=0 and codOp<=11): #operacion aritmetica
-            izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
-            der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
+            if(dirFun[currTabla[-1]]['scope'] == "metodo"): #buscar en memoria local y objetos
+                izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar ambas memorias
+                der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
+            else: #buscar en memoria local y global
+                izq = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
+                der = memorias[-1].getValMemory(int(quadruples[ip][2]), memorias[0])
             res = int(quadruples[ip][3])
             calcula(izq, codOp, der, res)
             ip+=1
             # memorias[-1].printMemory()
         elif(codOp == 12): # =
-            val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
-            res = int(quadruples[ip][3])
-            memorias[-1].setValMemory(res, val)
+            if("_" in quadruples[ip][1] or "_" in quadruples[ip][3]):
+                asignacionObjetos(quadruples[ip][1], quadruples[ip][3])
+            else: #Si no esta trabajando con objetos
+                val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0])
+                res = int(quadruples[ip][3])
+                memorias[-1].setValMemory(res, val)
             ip+=1
         elif(codOp == 13): # print
             try: #if not work with value, so its a string
@@ -128,7 +153,6 @@ def ejecuta():
             memorias.pop() #termina el contexto y se libera memoria local.
             currTabla.pop() #regresa a un contexo antes
             ip = stackExe.pop()
-
         elif(codOp == 21): # Param
             val = memorias[-1].getValMemory(int(quadruples[ip][1]), memorias[0]) #checar en la memoria local y global.
             if(val == None): #En caso de no encontrar, buscar contexto anterior. Recursividad.
@@ -139,6 +163,16 @@ def ejecuta():
                 print("Error:", currTabla[-1], "tipo de parametros no coincide con declaracion.")
                 sys.exit()
             memorias[-1].setValMemory(dirHost, val) #asigna valor a memoria local del contexto.
+            ip+=1
+        elif(codOp == 22): #Era objetos
+            #Separa memoria para sus atributos.
+            rec = dirFun[quadruples[ip][3]]['recursos']
+            memoriaAux = Memoria() #Instancia clase
+            dicAux = memoriaAux.reservarMemoria("local", rec) #Reserva recursos
+            memoriaAux.mergeMemories(dicAux) #Agregar recursos a memoria
+            # memoriaAux.printMemory()
+            #Guardas memoria con espacios de atributos en la memoria de objetos.
+            memoriaObjetos[int(quadruples[ip][1])] = memoriaAux 
             ip+=1
         elif(codOp == 23): # endprog
             print("fin del programa :) - Axolotl")
@@ -163,7 +197,10 @@ def prepararData(data):
         if(values[0] == "global"): #tabla global
             listAux = [values[1].split("_"), values[2].split("_")] #lista a reservar
             dicAux = memorias[0].reservarMemoria("global", listAux)
-            memorias[0].mergeMemories(dicAux) #Agregar reservas a memoria principal   
+            memorias[0].mergeMemories(dicAux) #Agregar reservas a memoria principal 
+            dirFun["global"] = {
+                'scope':'global'
+            }  
         elif(values[0] == "class"): #recrear tabla de clase
             recVars = values[2].split("_")
             recTmps = values[3].split("_")
