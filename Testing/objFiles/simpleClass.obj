@@ -4,7 +4,7 @@
 21502 15.5
 21503 0.1
 ### dirFun ###
-global 0_0_0 0_12_0_0 Producto_2
+global 0_1_0 0_12_0_0 Producto_2
 class Producto 0_2_0 0_0_0_0 None
 method_Producto precioConDescuento flotante 1 None 0_0_0 0_2_0_0 None
 method_Producto getPrecio flotante 5 None 0_0_0 0_2_0_0 None

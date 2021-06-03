@@ -21,6 +21,7 @@ clase Producto {
 
 principal() {
     %%declarar vars
+    variables flotante : res;
     variables Producto : galletas, doritos;
     %%Asignar valores
     galletas.precio = 20.0;  

@@ -155,7 +155,7 @@ def p_programa(p):
     #                | startProg ID SEMICOLON dec_vars programaAux main
     superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
-    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    # superTabla.deleteTablaVars("global") #Borrar tabla variables globales
     quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
@@ -265,7 +265,7 @@ def p_funciones(p):
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
-    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
     
@@ -818,7 +818,7 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-# global_memoria.printMemory()
+global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
 # superTabla.printTablaVars("global")
