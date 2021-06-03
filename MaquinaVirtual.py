@@ -53,9 +53,7 @@ def calcula(izq, op, der, dirRes):
 
 #Asignacion de objetos
 def asignacionObjetos(leftOper, rightOper):
-    if("_" in leftOper): #variable recibe valor de objeto 
-        print("objeto izquierdo")
-    elif("_" in rightOper): #se asigna valor a objeto
+    if("_" in rightOper): #se asigna valor a objeto
         direcciones = rightOper.split("_")
         dirObjeto = int(direcciones[0]) #dir objeto
         dirAtributo = int(direcciones[1]) #dirAtributo
@@ -63,8 +61,6 @@ def asignacionObjetos(leftOper, rightOper):
         valor = memorias[-1].getValMemory(dirValor, memorias[0]) #obtener valor a asignar.
         memoriaObjetos[dirObjeto].setValMemory(dirAtributo, valor)
         # memoriaObjetos[dirObjeto].printMemory()
-    else: #asignacion de objeto a objeto
-        pass
 
 #######################################################   
 #ejecutar programa
