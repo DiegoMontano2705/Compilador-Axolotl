@@ -1,11 +1,11 @@
 # 
-#     Clase Memoria: Crea y maneja direcciones virutales para la memoria.
+#     Clase Memoria: Crea y maneja direcciones virutales para la memoria compilacion y ejecucion.
 #     Compiladores
 #     Diego Fernando Montaño Pérez
 #     Jose Alberto Gonzalez 
 # 
-
-#DIRS MEMORIA VIRTUAL
+######################################################################################
+#DIRS MEMORIA 
 #G=GLOBAL; CTE=CONSTANTE; TMP=TEMPORAL;
 #E=ENTERO; F=FLOTANTE; C=CHAR; B=BOOL; 
 #INI=INICIA; FIN=TERMINA; 

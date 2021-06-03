@@ -135,12 +135,12 @@ def t_COMMENT(t):
 #t_ignore = r' '
 t_ignore=' \t\r\n\f\v' 
 
-
+######################################################################################
 #Building managers
 quads = QuadruplesManager()
 lex.lex() #Building the lexer
-superTabla = TablaManager()
-superTabla.crearTabla("global", dirInicio=None)
+superTabla = TablaManager() #Manejador de tablas
+superTabla.crearTabla("global", dirInicio=None) #Crear tabla global en el manejador.
 ctes_memoria = Memoria() #crear memoria para constantes
 ctes_memoria.setDicsAux("constantes") #Asignar direcciones default
 global_memoria = Memoria() #crear memoria para globales
@@ -234,7 +234,7 @@ def p_clases(p):
                 | CLASE claseId LCB METODOS funcionesAux RCB SEMICOLON
                 | CLASE claseId LCB ATRIBUTOS form_vars METODOS funcionesAux RCB SEMICOLON
     '''
-    #Borrar tabla de vars
+    #Operaciones despues de salir de la clase.
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales()) #set recursos tmps utilizados
     quads.setCurrTabla("global")
@@ -276,7 +276,7 @@ def p_endFunction(p):
 
 def p_funcionIdAux(p):
     ''' funcionIdAux : tipo_retorno FUNCION ID'''
-    #crear memoria
+    #Crear tabla con la informacion de la funcion
     superTabla.crearTabla(p[3], scope=superTabla.get_currentScope(), retorno=p[1], dirInicio=None, pointerParams=None, quadIni= quads.getID()+1)
     superTabla.set_currentTablaId(p[3]) #Reconocer en que tabla se encuentra
     quads.setCurrTabla(p[3])
@@ -561,7 +561,8 @@ def p_rep_no_end(p):
     quads.quadruples[false].setResult(quads.getID())
 
 ### end For loop
-
+######################################################################################
+#Estatutos
 
 def p_estatutosAux(p):
     ''' estatutosAux : estatutos estatutosAux
@@ -643,7 +644,7 @@ def p_f(p): #lpid y rpid para identificar ().
     '''
     p[0] = p[1]
 
-
+######################################################################################
 #Auxiliares identificadores expresion
 def p_equalId(p):
     ''' equalId : EQUAL '''
