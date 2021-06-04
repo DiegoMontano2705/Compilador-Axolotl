@@ -248,7 +248,7 @@ def p_form_vars_aux2(p):
         size2 = int(p[5])
         if(size1>0 and size2>0):
             #reservar memoria si es global
-            superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
+            # superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
             if(currTabla == "global"):
                 global_memoria.setGlobalVal(p[1], currType, "vars") #reservar dir para id.
                 superTabla.addContRecursos(currTabla, currType)
@@ -373,15 +373,44 @@ def p_parametros(p):
 
 def p_var(p):
     ''' var : idAssignId
-            | idAssignId LSB CTEI COMMA CTEI RSB
+            | matrix
             | vector
             | objetoAtributo
     '''
 
+#asignar matrix
+def p_matrix(p):
+    ''' matrix : idAssignId LSB CTEI COMMA CTEI RSB '''
+    print(p[1])
+
 #asignar vector
 def p_vector(p):
     ''' vector : idAssignId LSB CTEI RSB '''
-    print(p[1])
+    currTabla = superTabla.get_currentTablaId()
+    currTipo = superTabla.get_currentType()
+    #Solo cuando no son objetos.
+    if(currTipo in ["entero", "flotante", "char", "bool", None]):
+        #Validar que exista y extraer tipo.
+        if(currTabla !="global"): 
+            #checar si es metodo y de que clase
+            currScope = superTabla.getScopeFun(currTabla)
+            if("method_" in currScope): #es un metodo de clase.
+                nomClase = currScope.replace("method_", "")
+                dirVar = superTabla.getDirIdTablaVars(nomClase,p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(nomClase, p[1])
+            else:
+                dirVar = superTabla.getDirIdTablaVars(superTabla.get_currentTablaId(),p[1]) 
+                tipoVar = superTabla.getTipoIdTablaVars(superTabla.get_currentTablaId(), p[1])
+                if(dirVar == -1): #Si no esta local, buscar global
+                    dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+        else:
+            #Checar global
+            dirVar, tipoVar = global_memoria.getDirMemory(str(p[1]))
+
+        # quads.id_push(p[1], tipoVar) #Agregar id con varTipo
+        # print(p[1])
+        quads.id_push(int(dirVar)+int(p[3])+1, tipoVar) #Agregar dirs con varTipo
+    
 
 
 def p_objetoAtributo(p):
@@ -872,7 +901,7 @@ if __name__ == '__main__':
 # global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
-superTabla.printTablaVars("simple")
+# superTabla.printTablaVars("simple")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
 # superTabla.printTablaVars("precioConDescuento")

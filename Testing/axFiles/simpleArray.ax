@@ -1,10 +1,12 @@
 programa simpleArray;
 
 entero funcion simple(){
-    variables entero : x[2,2];
+    variables entero : x[2];
+    x[0] = 10;
 }
 
 principal(){
-    variables entero : y[2,2];
+    variables entero : y[2];
+    y[0] = 2;
     %%variables entero : z;
 }
