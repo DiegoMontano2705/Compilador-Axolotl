@@ -155,7 +155,7 @@ def p_programa(p):
     #                | startProg ID SEMICOLON dec_vars programaAux main
     superTabla.setListaTemporales("global", quads.getRecursosTmpsGlobales()) #Asignar temporales globales usados en el programa
     superTabla.set_nombrePrograma(p[2]) #Nombre del programa
-    superTabla.deleteTablaVars("global") #Borrar tabla variables globales
+    # superTabla.deleteTablaVars("global") #Borrar tabla variables globales
     quads.setEndProg() #Agregar end of program.
 
 def p_startProg(p):
@@ -195,16 +195,19 @@ def p_form_vars(p):
 def p_form_vars_aux(p):
     ''' form_vars_aux : ID
                     | ID COMMA form_vars_aux
-                    | ID form_vars_aux2
-                    | ID form_vars_aux2 COMMA form_vars_aux
+                    | form_vars_aux2
+                    | form_vars_aux2 COMMA form_vars_aux
     '''
     currTabla = superTabla.get_currentTablaId()
     currType = superTabla.get_currentType()
+
     
-    superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
     #Guardar variables globales
     if(currTabla == "global"):
         global_memoria.setGlobalVal(p[1], currType, "vars")
+    elif(p[1] != None): 
+        superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
+    
     superTabla.addContRecursos(superTabla.get_currentTablaId(), currType) #Contabilizar recursos por funcion/clase
     
     #En caso de ser un objeto, mandar EraObjeto para reservar memoria ejecucion
@@ -216,10 +219,48 @@ def p_form_vars_aux(p):
         quads.setEraObjeto(dirObjeto, currType)
         # print(currTabla, p[1], currType, "vars")
 
+#Manejo de arreglos
 def p_form_vars_aux2(p):
-    ''' form_vars_aux2 : LSB CTEI RSB
-                        | LSB CTEI COMMA CTEI RSB
+    ''' form_vars_aux2 : ID LSB CTEI RSB
+                        | ID LSB CTEI COMMA CTEI RSB
     '''
+    currTabla = superTabla.get_currentTablaId()
+    currType = superTabla.get_currentType()
+    #try arreglo simple
+    if(len(p)<6):
+        size = int(p[3])
+        superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
+        if(int(p[3])>0):
+            #reservar memoria si es global
+            if(currTabla == "global"):
+                global_memoria.setGlobalVal(p[1], currType, "vars") #reservar dir para id.
+                for i in range(0, size):
+                    global_memoria.setGlobalVal(None, currType, "vars") #reservar espacios para array.
+                    superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
+            else:
+                for i in range(0, size):
+                    superTabla.insertRowToTablaVar(currTabla, p[1]+"_"+str(i), currType, "vars") #agregar var y tipo en su respectiva tabla
+        else:
+            print("Error: indice tiene que ser mayor a 0.")
+    else:
+        size1 = int(p[3])
+        size2 = int(p[5])
+        if(size1>0 and size2>0):
+            #reservar memoria si es global
+            superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
+            if(currTabla == "global"):
+                global_memoria.setGlobalVal(p[1], currType, "vars") #reservar dir para id.
+                for i in range(1, size1*size2):
+                    global_memoria.setGlobalVal(None, currType, "vars") #reservar espacios para array.
+                    superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
+            else:
+                superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
+                for i in range(0, size1):
+                    for j in range(0, size2):
+                        superTabla.insertRowToTablaVar(currTabla, p[1]+"_"+str(i)+"_"+str(j), currType, "vars") #agregar var y tipo en su respectiva tabla
+        else:
+            print("Error: indice tiene que ser mayor a 0.")
+    
 
 def p_typeAuxId(p):
     ''' typeAuxId : tipo'''
@@ -265,7 +306,7 @@ def p_funciones(p):
     currTabla = superTabla.get_currentTablaId()
     superTabla.setListaTemporales(currTabla, quads.getRecursosTmpsLocales())
     superTabla.setListaParms(currTabla) #Asignar orden correcto de parametros.
-    superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
+    # superTabla.deleteTablaVars(currTabla) #Borrar su tabla de variables
     superTabla.set_currentTablaId("global")
     quads.setCurrTabla("global")
     
@@ -819,10 +860,10 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-# global_memoria.printMemory()
+global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
-# superTabla.printTablaVars("global")
+superTabla.printTablaVars("lol")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
 # superTabla.printTablaVars("precioConDescuento")

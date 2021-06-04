@@ -1,0 +1,59 @@
+### CTES ###
+20500 3
+20501 2
+20502 0
+20503 1
+### dirFun ###
+global 3_0_0 7_0_0_0 None
+patito entero 1 entero 2_0_0 1_0_0_0 None
+pelos entero 5 entero 2_0_0 3_0_0_0 None
+fact entero 14 entero 3_0_0 4_0_0_1 None
+### QUADS ###
+15 None None 26
+3 23500 20500 28000
+12 28000 None 23501
+18 None None 23501
+20 None None None
+3 23500 20501 28000
+12 28000 None 23500
+19 None None patito
+21 23500 None 1
+17 1 None patito
+12 28002 None 28001
+12 28001 None 23501
+18 None None 23501
+20 None None None
+9 23500 20502 32500
+16 32500 None 16
+18 None None 20503
+2 23500 20503 28000
+12 28000 None 23502
+19 None None fact
+21 23502 None 1
+17 14 None fact
+12 28002 None 28001
+12 28001 None 23501
+3 23500 23501 28003
+18 None None 28003
+20 None None None
+13 None None teclear_numero:
+14 None None 10001
+19 None None fact
+21 10001 None 1
+17 14 None fact
+12 14501 None 14500
+12 14500 None 10002
+13 None None Respuesta:
+13 None None 10002
+19 None None fact
+19 None None pelos
+21 20503 None 1
+17 5 None pelos
+12 14503 None 14502
+3 14502 20501 14504
+21 14504 None 1
+17 14 None fact
+12 14506 None 14505
+12 14505 None 10000
+13 None None 10000
+23 None None None

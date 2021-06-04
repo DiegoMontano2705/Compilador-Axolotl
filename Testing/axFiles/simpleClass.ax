@@ -45,7 +45,7 @@ principal() {
     %%Asignar valores
     galletas.precio = 20.0;  
     galletas.descuento = 0.25;
-
+    
     %%escribe(descuento);
     doritos.precio = 15.5;
     doritos.descuento = 0.10;

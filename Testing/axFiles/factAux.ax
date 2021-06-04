@@ -1,0 +1,36 @@
+programa factAux;
+
+entero funcion patito(entero x){
+    variables entero : z;
+    z = x * 3;
+    regresa(z);
+}
+
+entero funcion pelos(entero x){
+    variables entero : y;
+    x = x * 2;
+    y = patito(x);
+    regresa(y); 
+}
+
+
+entero funcion fact(entero n){
+    variables entero : a,f;
+    si(n == 0) entonces{
+        regresa(1);
+    }
+    a = n - 1;
+    f = fact(a);
+    regresa(n*f);
+}
+
+principal(){
+    variables entero : ans, n, w;
+    escribe("teclear numero:");
+    lee(n);
+    ans = fact(n);
+    escribe("Respuesta:");
+    escribe(ans);
+    w = fact(pelos(1) * 2); 
+    escribe(w);
+}

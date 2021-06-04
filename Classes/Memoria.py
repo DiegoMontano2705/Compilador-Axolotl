@@ -52,6 +52,7 @@ G_OBJETOS_FIN = 34999
 L_OBJETOS_INI = 35000
 L_OBJETOS_FIN = 35999
 
+
 import sys
 
 class Memoria:
@@ -65,7 +66,7 @@ class Memoria:
         self.tmpEnteroAux = 0 #temporal_entero
         self.tmpFlotanteAux = 0 #temporal_flotante
         self.tmpCharAux = 0 #temporal_char
-        self.tmpBoolAux = 0 #tempora_bool\
+        self.tmpBoolAux = 0 #tempora_bool
         self.objetoAux = 0 #objeto
 
 

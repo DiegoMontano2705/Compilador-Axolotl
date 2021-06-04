@@ -57,7 +57,7 @@ class TablaManager:
             memoriaLocal = Memoria() #manejar memoria con dirs para vars.
             memoriaLocal.setDicsAux("local")
             self.dirFun.insertRow(id, **kwargs, recursos={"vars":[0,0,0],"tmps":[0,0,0,0]},tablaVar=tablaAux, listaParms=listaParms, memoriaLocal=memoriaLocal, dicObjetos=dicObjetos) #Siempre se va a generar el pointer
-
+    
 
     #Al terminar, se elimina dirFun.
     def deleteTablaVars(self, idTabla):

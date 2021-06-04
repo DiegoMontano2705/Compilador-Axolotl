@@ -6,8 +6,8 @@ entero funcion fact(entero n){
         regresa(1);
     }
     a = n - 1;
-    f = fact(a)
-    regresa(n * f);
+    f = fact(a);
+    regresa(n*f);
 }
 
 principal(){
