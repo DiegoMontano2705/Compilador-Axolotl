@@ -1,7 +1,7 @@
 ### CTES ###
 ### dirFun ###
-global 4_0_0 0_0_0_0 None
-lol entero 1 None 1_0_0 0_0_0_0 None
+global 5_0_0 0_0_0_0 None
+simple entero 1 None 5_0_0 0_0_0_0 None
 ### QUADS ###
 15 None None 1
 20 None None None

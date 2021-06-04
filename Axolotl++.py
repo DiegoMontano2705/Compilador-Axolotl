@@ -229,7 +229,6 @@ def p_form_vars_aux2(p):
     #try arreglo simple
     if(len(p)<6):
         size = int(p[3])
-        superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
         if(int(p[3])>0):
             #reservar memoria si es global
             if(currTabla == "global"):
@@ -238,8 +237,10 @@ def p_form_vars_aux2(p):
                     global_memoria.setGlobalVal(None, currType, "vars") #reservar espacios para array.
                     superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
             else:
+                superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
                 for i in range(0, size):
                     superTabla.insertRowToTablaVar(currTabla, p[1]+"_"+str(i), currType, "vars") #agregar var y tipo en su respectiva tabla
+                    superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
         else:
             print("Error: indice tiene que ser mayor a 0.")
     else:
@@ -250,6 +251,7 @@ def p_form_vars_aux2(p):
             superTabla.insertRowToTablaVar(currTabla, p[1], currType, "vars") #agregar var y tipo en su respectiva tabla
             if(currTabla == "global"):
                 global_memoria.setGlobalVal(p[1], currType, "vars") #reservar dir para id.
+                superTabla.addContRecursos(currTabla, currType)
                 for i in range(1, size1*size2):
                     global_memoria.setGlobalVal(None, currType, "vars") #reservar espacios para array.
                     superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
@@ -258,6 +260,7 @@ def p_form_vars_aux2(p):
                 for i in range(0, size1):
                     for j in range(0, size2):
                         superTabla.insertRowToTablaVar(currTabla, p[1]+"_"+str(i)+"_"+str(j), currType, "vars") #agregar var y tipo en su respectiva tabla
+                        superTabla.addContRecursos(currTabla, currType) #Contabilizar recursos por funcion/clase
         else:
             print("Error: indice tiene que ser mayor a 0.")
     
@@ -371,10 +374,16 @@ def p_parametros(p):
 def p_var(p):
     ''' var : idAssignId
             | idAssignId LSB CTEI COMMA CTEI RSB
-            | idAssignId LSB CTEI RSB
+            | vector
             | objetoAtributo
     '''
-    
+
+#asignar vector
+def p_vector(p):
+    ''' vector : idAssignId LSB CTEI RSB '''
+    print(p[1])
+
+
 def p_objetoAtributo(p):
     ''' objetoAtributo : idAssignId POINT ID'''
     #manejar direcciones objetos
@@ -860,10 +869,10 @@ if __name__ == '__main__':
 ######################################################################################
 #print testing
 # ctes_memoria.printMemory()
-global_memoria.printMemory()
+# global_memoria.printMemory()
 # print(superTabla.getRecursos("global"))
 # superTabla.printDirFun() #superTabla con funciones/clases/methodos
-superTabla.printTablaVars("lol")
+superTabla.printTablaVars("simple")
 # superTabla.printTablaVars("pruebaUno")
 # superTabla.printTablaVars("pruebaDos")
 # superTabla.printTablaVars("precioConDescuento")

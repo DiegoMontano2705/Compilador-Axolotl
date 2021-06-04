@@ -1,9 +1,10 @@
 programa simpleArray;
 
-entero funcion lol(){
-    variables entero : x[2];
+entero funcion simple(){
+    variables entero : x[2,2];
 }
 
 principal(){
-    variables entero : y[2];
+    variables entero : y[2,2];
+    %%variables entero : z;
 }
