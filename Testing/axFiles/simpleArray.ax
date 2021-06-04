@@ -1,12 +1,15 @@
 programa simpleArray;
 
-entero funcion simple(){
+void funcion simple(){
     variables entero : x[2];
     x[0] = 10;
+    escribe(x[0]);
 }
 
 principal(){
     variables entero : y[2];
-    y[0] = 2;
+    y[0] = 100;
+    escribe(y[0]+1);
+    simple();
     %%variables entero : z;
 }

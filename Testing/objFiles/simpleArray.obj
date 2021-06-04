@@ -1,12 +1,18 @@
 ### CTES ###
 20500 10
-20501 2
+20501 100
+20502 1
 ### dirFun ###
-global 3_0_0 0_0_0_0 None
-simple entero 1 None 3_0_0 0_0_0_0 None
+global 3_0_0 1_0_0_0 None
+simple void 1 None 3_0_0 0_0_0_0 None
 ### QUADS ###
-15 None None 2
+15 None None 3
 12 20500 None 23501
+13 None None 23501
 20 None None None
-12 20501 None 10002
+12 20501 None 10001
+1 10001 20502 14500
+13 None None 14500
+19 None None simple
+17 1 None simple
 23 None None None
