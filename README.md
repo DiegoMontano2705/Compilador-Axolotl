@@ -1,5 +1,4 @@
 ![Axoltol++](https://github.com/DiegoMontano2705/Compilador-Axolotl/blob/main/axolotl%2B%2B.JPG?rar=true)
-https://github.com/DiegoMontano2705/Compilador-Axolotl/blob/main/axolotl%2B%2B.JPG?rar=true
 # Compilador-Axolotl++
 Axolotl++ es un lenguaje de programación hecho en español basado de C++, creado para el manejo de objetos.
 
