@@ -6,6 +6,7 @@ Axolotl++ es un lenguaje de programación hecho en español basado de C++, cread
 unix:
 chmod +x run.sh
 1. ./run.sh (NombrePrograma)
+
 Sin unix:
 1. python3 Axolotl++.py (NombrePrograma).ax
 2. python3 MaquinaVirtual.py (NombrePrograma).obj
